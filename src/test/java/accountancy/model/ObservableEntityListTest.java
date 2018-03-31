@@ -78,9 +78,9 @@ public class ObservableEntityListTest {
         MockEntity entity2 = new MockEntity(5, "other title");
         MockEntity entity3 = new MockEntity(8, "mock title");
 
-        list.save(entity1);
-        list.save(entity2);
-        list.save(entity3);
+        list.add(entity1);
+        list.add(entity2);
+        list.add(entity3);
 
         ArrayList<Entity> actual = list.getAll();
         assertEquals(2, actual.size());
@@ -95,8 +95,8 @@ public class ObservableEntityListTest {
         MockEntity           entity1 = new MockEntity(5, "mock title");
         MockEntity entity3 = new MockEntity(8, "mock title");
 
-        list.save(entity1);
-        list.save(entity3);
+        list.add(entity1);
+        list.add(entity3);
 
         list.remove(5);
 
@@ -113,8 +113,8 @@ public class ObservableEntityListTest {
         MockEntity           entity1 = new MockEntity(5, "mock title");
         MockEntity entity3 = new MockEntity(8, "other title");
 
-        list.save(entity1);
-        list.save(entity3);
+        list.add(entity1);
+        list.add(entity3);
 
         assertEquals(entity1, list.getOne(5));
         assertEquals(entity3, list.getOne("other title"));
@@ -128,8 +128,8 @@ public class ObservableEntityListTest {
         MockEntity           entity1 = new MockEntity(5, "mock title");
         MockEntity entity3 = new MockEntity(8, "other title");
 
-        list.save(entity3);
-        list.save(entity1);
+        list.add(entity3);
+        list.add(entity1);
 
         String expected = "id: 5 - title: mock title\nid: 8 - title: other title\n";
         assertEquals(expected, list.toString());
@@ -144,7 +144,7 @@ public class ObservableEntityListTest {
         list.addObserver(observer);
         assertFalse(observer.hasBeenUpdated());
 
-        list.save(new MockEntity(5, "mock title"));
+        list.add(new MockEntity(5, "mock title"));
         assertTrue(observer.hasBeenUpdated());
 
         observer.resetMock();
@@ -162,7 +162,7 @@ public class ObservableEntityListTest {
         assertFalse(observer.hasBeenUpdated());
 
         list.removeObserver(observer);
-        list.save(new MockEntity(5, "mock title"));
+        list.add(new MockEntity(5, "mock title"));
         assertFalse(observer.hasBeenUpdated());
     }
 
@@ -176,9 +176,9 @@ public class ObservableEntityListTest {
         assertFalse(observer.hasBeenUpdated());
         list.startTransaction();
 
-        list.save(new MockEntity(5, "mock title"));
+        list.add(new MockEntity(5, "mock title"));
         assertFalse(observer.hasBeenUpdated());
-        list.save(new MockEntity(8, "mock title 2"));
+        list.add(new MockEntity(8, "mock title 2"));
         assertFalse(observer.hasBeenUpdated());
 
         list.commit();

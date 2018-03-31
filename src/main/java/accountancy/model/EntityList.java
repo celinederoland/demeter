@@ -14,13 +14,21 @@ public interface EntityList {
      * @param entity a representation of the searched entity
      * @return Entity
      */
-    Entity save(Entity entity);
+    Entity add(Entity entity);
 
     /**
      * Remove an entity from the list, searching by id
      * @param id the entity id
      */
     void remove(int id);
+
+    /**
+     *
+     * @return true if the list is empty
+     */
+    boolean isEmpty();
+
+    Entity getOne();
 
     /**
      * Find one saved entity by id

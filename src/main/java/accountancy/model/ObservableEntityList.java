@@ -9,14 +9,14 @@ import java.util.HashMap;
  */
 public abstract class ObservableEntityList extends ObservableModel implements EntityList {
 
-    private HashMap<Integer, Entity> entities;
+    protected HashMap<Integer, Entity> entities;
 
     public ObservableEntityList() {
 
         this.entities = new HashMap<>();
     }
 
-    public Entity save(Entity entity) {
+    public Entity add(Entity entity) {
 
         if (!this.entities.containsKey(entity.id())) {
             this.entities.put(entity.id(), entity);
@@ -32,6 +32,17 @@ public abstract class ObservableEntityList extends ObservableModel implements En
 
         this.entities.remove(id);
         this.publish();
+    }
+
+    public boolean isEmpty() {
+
+        return this.entities.isEmpty();
+    }
+
+    public Entity getOne() {
+
+        if (!this.entities.isEmpty()) return (new ArrayList<>(this.entities.values())).get(0);
+        return null;
     }
 
     public Entity getOne(int id) {

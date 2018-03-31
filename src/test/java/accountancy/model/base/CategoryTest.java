@@ -14,9 +14,9 @@ public class CategoryTest {
 
 
         Category category = new Category(12, "invoices");
-        category.subCategories().save(new SubCategory(1, "energy"));
-        category.subCategories().save(new SubCategory(2, "communications"));
-        category.subCategories().save(new SubCategory(3, "taxes"));
+        category.subCategories().add(new SubCategory(1, "energy"));
+        category.subCategories().add(new SubCategory(2, "communications"));
+        category.subCategories().add(new SubCategory(3, "taxes"));
 
         ArrayList<Entity> subCategories = category.subCategories().getAll();
         assertEquals(3, subCategories.size());
