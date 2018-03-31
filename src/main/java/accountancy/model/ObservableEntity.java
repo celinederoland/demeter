@@ -1,6 +1,9 @@
 package accountancy.model;
 
-public abstract class ObservableEntity extends ObservableModel {
+/**
+ * The representation of a basic model resource, with observable capacity
+ */
+public abstract class ObservableEntity extends ObservableModel implements Entity {
 
     private int    id;
     private String title;
@@ -16,13 +19,13 @@ public abstract class ObservableEntity extends ObservableModel {
         return this.id;
     }
 
-    public int id(int id) {
+    public Entity id(int id) {
 
         if (this.id != id) {
             this.id = id;
             this.publish();
         }
-        return id;
+        return this;
     }
 
     public String title() {
@@ -30,13 +33,13 @@ public abstract class ObservableEntity extends ObservableModel {
         return this.title;
     }
 
-    public String title(String title) {
+    public Entity title(String title) {
 
         if (!this.title.equals(title)) {
             this.title = title;
             this.publish();
         }
-        return title;
+        return this;
     }
 
     @Override

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public abstract class ObservableEntityList extends ObservableModel {
+/**
+ * Describe a list of basic model resources (typically a set of entries in one database table), with observable capacity
+ */
+public abstract class ObservableEntityList extends ObservableModel implements EntityList {
 
     private HashMap<Integer, Entity> entities;
 
@@ -13,7 +16,7 @@ public abstract class ObservableEntityList extends ObservableModel {
         this.entities = new HashMap<>();
     }
 
-    public Entity getOne(Entity entity) {
+    public Entity save(Entity entity) {
 
         if (!this.entities.containsKey(entity.id())) {
             this.entities.put(entity.id(), entity);

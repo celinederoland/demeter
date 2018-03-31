@@ -6,6 +6,9 @@ import accountancy.framework.Observer;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+/**
+ * Concrete implementation of the Observable interface
+ */
 public abstract class ObservableModel implements Observable {
 
     private boolean             hasUnpublishedChanges = false;
@@ -19,9 +22,11 @@ public abstract class ObservableModel implements Observable {
         }
     }
 
-    @Override public void removeObserver() {
+    @Override public void removeObserver(Observer observer) {
 
-        listObserver = new ArrayList<>();
+        if (this.listObserver.contains(observer)) {
+            this.listObserver.remove(observer);
+        }
     }
 
     @Override public void startTransaction() {

@@ -21,7 +21,7 @@ public interface Observable {
     /**
      * The observer won't be notified of changes anymore
      */
-    void removeObserver();
+    void removeObserver(Observer observer);
 
 
     /**
