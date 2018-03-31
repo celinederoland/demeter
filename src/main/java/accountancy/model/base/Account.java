@@ -2,7 +2,7 @@ package accountancy.model.base;
 
 import accountancy.model.ObservableEntity;
 
-public class Account extends ObservableEntity {
+public final class Account extends ObservableEntity {
 
     private Currency currency;
     private Bank     bank;
@@ -10,7 +10,7 @@ public class Account extends ObservableEntity {
 
     public Account(int id, String title, Currency currency, Bank bank, Type type) {
 
-        super(id,title);
+        super(id, title);
         this.currency = currency;
         this.bank = bank;
         this.type = type;

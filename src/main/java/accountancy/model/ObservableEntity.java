@@ -1,58 +1,61 @@
 package accountancy.model;
 
-import accountancy.framework.Observer;
+public abstract class ObservableEntity extends ObservableModel {
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-
-public abstract class ObservableEntity extends Entity {
-
-    protected boolean             hasUnpublishedChanges = false;
-    private   boolean             onTransaction         = false;
-    private   ArrayList<Observer> listObserver          = new ArrayList<>();
+    private int    id;
+    private String title;
 
     public ObservableEntity(int id, String title) {
 
-        super(id, title);
+        this.id = id;
+        this.title = title;
     }
 
-    @Override public void addObserver(Observer obs) {
+    public int id() {
 
-        if (!this.listObserver.contains(obs)) {
-            this.listObserver.add(obs);
+        return this.id;
+    }
+
+    public int id(int id) {
+
+        if (this.id != id) {
+            this.id = id;
+            this.publish();
         }
+        return id;
     }
 
-    @Override public void removeObserver() {
+    public String title() {
 
-        listObserver = new ArrayList<>();
+        return this.title;
     }
 
-    @Override public void startTransaction() {
+    public String title(String title) {
 
-        this.onTransaction = true;
-    }
-
-    @Override public void commit() {
-
-        this.onTransaction = false;
-        if (this.hasUnpublishedChanges) this.publish();
-    }
-
-    @Override public void publish() {
-
-        if(!this.onTransaction) {
-            try {
-                this.hasUnpublishedChanges = false;
-                for (Observer obs : this.listObserver) {
-                    obs.update();
-                }
-            } catch (ConcurrentModificationException e) {
-                e.printStackTrace();
-            }
-        } else {
-            this.hasUnpublishedChanges = true;
+        if (!this.title.equals(title)) {
+            this.title = title;
+            this.publish();
         }
+        return title;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        boolean sameSame = false;
+
+        if (object != null && object.getClass().equals(this.getClass())) {
+            sameSame = this.id == ((Entity) object).id();
+        }
+
+        return sameSame;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return this.title;
     }
 
 }
