@@ -1,0 +1,11 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+DELETE FROM accounts;
+DELETE FROM banks;
+DELETE FROM categories;
+DELETE FROM currencies;
+DELETE FROM entries;
+DELETE FROM types;
+DELETE FROM subcategories;
+
+SET FOREIGN_KEY_CHECKS = 1;

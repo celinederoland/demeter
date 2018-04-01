@@ -4,7 +4,7 @@ package accountancy.framework;
  * An implementation of the pattern Observer/Observable
  * We find the traditional methods addObserver and removeObserver
  * The method publish will notify all observers that a change happened
- *
+ * <p>
  * We introduce a variation with the startTransaction method, which allow us to stop the notifications during the transaction.
  * The aim is to avoid useless multiple consecutive updates of observers.
  */

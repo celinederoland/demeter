@@ -50,7 +50,7 @@ public class ObservableEntityTest {
     @Test
     public void addObserver() throws Exception {
 
-        MockObservableEntity entity = new MockObservableEntity(5, "mock title");
+        MockObservableEntity entity   = new MockObservableEntity(5, "mock title");
         MockObserver         observer = new MockObserver();
         entity.addObserver(observer);
         entity.id(12);
@@ -60,7 +60,7 @@ public class ObservableEntityTest {
     @Test
     public void removeObserver() throws Exception {
 
-        MockObservableEntity entity = new MockObservableEntity(5, "mock title");
+        MockObservableEntity entity   = new MockObservableEntity(5, "mock title");
         MockObserver         observer = new MockObserver();
         entity.addObserver(observer);
         entity.removeObserver(observer);
@@ -71,7 +71,7 @@ public class ObservableEntityTest {
     @Test
     public void startTransaction() throws Exception {
 
-        MockObservableEntity entity = new MockObservableEntity(5, "mock title");
+        MockObservableEntity entity   = new MockObservableEntity(5, "mock title");
         MockObserver         observer = new MockObserver();
         entity.startTransaction();
         entity.addObserver(observer);
@@ -82,7 +82,7 @@ public class ObservableEntityTest {
     @Test
     public void commit() throws Exception {
 
-        MockObservableEntity entity = new MockObservableEntity(5, "mock title");
+        MockObservableEntity entity   = new MockObservableEntity(5, "mock title");
         MockObserver         observer = new MockObserver();
         entity.startTransaction();
         entity.addObserver(observer);
@@ -112,14 +112,17 @@ public class ObservableEntityTest {
         private boolean update = false;
 
         @Override public void update() {
+
             update = true;
         }
 
         public boolean hasBeenUpdated() {
+
             return update;
         }
 
         public void resetMock() {
+
             this.update = false;
         }
     }

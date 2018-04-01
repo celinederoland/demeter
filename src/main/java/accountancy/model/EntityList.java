@@ -12,18 +12,19 @@ public interface EntityList {
      * If the entity exists yet, it is returned
      *
      * @param entity a representation of the searched entity
+     *
      * @return Entity
      */
     Entity add(Entity entity);
 
     /**
      * Remove an entity from the list, searching by id
+     *
      * @param id the entity id
      */
     void remove(int id);
 
     /**
-     *
      * @return true if the list is empty
      */
     boolean isEmpty();
@@ -34,6 +35,7 @@ public interface EntityList {
      * Find one saved entity by id
      *
      * @param id the entity id
+     *
      * @return Entity
      */
     Entity getOne(int id);
@@ -42,6 +44,7 @@ public interface EntityList {
      * Fine one saved entity by title
      *
      * @param title the entity title
+     *
      * @return Entity
      */
     Entity getOne(String title);

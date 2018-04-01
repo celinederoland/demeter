@@ -38,7 +38,7 @@ public class TransactionTest {
         dayToDay.subCategories().add(food);
         dayToDay.subCategories().add(medics);
 
-        Category    empty = new Category(14, "empty category");
+        Category empty = new Category(14, "empty category");
 
         Date now = new Date();
         Transaction transaction = new Transaction(

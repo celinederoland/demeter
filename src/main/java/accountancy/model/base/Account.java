@@ -12,11 +12,11 @@ public final class Account extends ObservableEntity {
     private Type     type;
 
     /**
-     * @param id number of this account
-     * @param title name of this account
+     * @param id       number of this account
+     * @param title    name of this account
      * @param currency currency used
-     * @param bank bank establishment
-     * @param type what is the aim of this account (eg current, save money, credit etc)
+     * @param bank     bank establishment
+     * @param type     what is the aim of this account (eg current, save money, credit etc)
      */
     public Account(int id, String title, Currency currency, Bank bank, Type type) {
 
@@ -28,6 +28,7 @@ public final class Account extends ObservableEntity {
 
     /**
      * currency getter
+     *
      * @return Currency
      */
     public Currency currency() {
@@ -37,7 +38,9 @@ public final class Account extends ObservableEntity {
 
     /**
      * currency fluent setter
+     *
      * @param currency the new currency
+     *
      * @return Account
      */
     public Account currency(Currency currency) {
@@ -51,6 +54,7 @@ public final class Account extends ObservableEntity {
 
     /**
      * bank getter
+     *
      * @return Bank
      */
     public Bank bank() {
@@ -60,7 +64,9 @@ public final class Account extends ObservableEntity {
 
     /**
      * bank fluent setter
+     *
      * @param bank the new bank
+     *
      * @return Bank
      */
     public Account bank(Bank bank) {
@@ -74,6 +80,7 @@ public final class Account extends ObservableEntity {
 
     /**
      * type getter
+     *
      * @return Type
      */
     public Type type() {
@@ -83,7 +90,9 @@ public final class Account extends ObservableEntity {
 
     /**
      * type fluent setter
+     *
      * @param type the new type
+     *
      * @return Type
      */
     public Account type(Type type) {

@@ -6,23 +6,23 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TransactionsTest {
 
     @Test
     public void getAll() throws Exception {
 
-        Date now = new Date();
-        Date tomorrow = new Date(now.getTime() + 1000*25*3600);
+        Date now      = new Date();
+        Date tomorrow = new Date(now.getTime() + 1000 * 25 * 3600);
 
-        Currency eur = new Currency(3, "EUR");
-        Bank myBank      = new Bank(4, "Be-My-Bank");
-        Type current = new Type(4, "current");
-        Account account      = new Account(12, "my current account", eur, myBank, current);
+        Currency eur     = new Currency(3, "EUR");
+        Bank     myBank  = new Bank(4, "Be-My-Bank");
+        Type     current = new Type(4, "current");
+        Account  account = new Account(12, "my current account", eur, myBank, current);
 
-        Category    invoices       = new Category(12, "invoices");
-        SubCategory energy         = new SubCategory(1, "energy");
+        Category    invoices = new Category(12, "invoices");
+        SubCategory energy   = new SubCategory(1, "energy");
         invoices.subCategories().add(energy);
 
         Transaction transaction1 = new Transaction(
@@ -33,7 +33,7 @@ public class TransactionsTest {
             6, "a transaction", 50.12, now, account, invoices, energy
         );
 
-        Transaction transaction3 =  new Transaction(
+        Transaction transaction3 = new Transaction(
             2, "a transaction", 50.12, tomorrow, account, invoices, energy
         );
 
