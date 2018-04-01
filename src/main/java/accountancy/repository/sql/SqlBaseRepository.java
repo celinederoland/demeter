@@ -1,6 +1,7 @@
 package accountancy.repository.sql;
 
 import accountancy.model.base.*;
+import accountancy.repository.BaseRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 /**
  * Request the database to CRUD the model
  */
-public final class BaseRepository extends Repository {
+public final class SqlBaseRepository extends Repository implements BaseRepository {
 
     private Accounts     accounts;
     private Banks        banks;
@@ -22,15 +23,12 @@ public final class BaseRepository extends Repository {
     private Types        types;
     private Transactions transactions;
 
-    public BaseRepository(ConnectionProvider connectionProvider) {
+    public SqlBaseRepository(ConnectionProvider connectionProvider) {
 
         super(connectionProvider);
     }
 
-    /**
-     * Retrieve all datas
-     */
-    public void findAll() {
+    @Override public void findAll() {
 
         Statement statement;
         ResultSet resultSet;
@@ -128,12 +126,7 @@ public final class BaseRepository extends Repository {
 
     }
 
-    /**
-     * The list of account types managed by the repo
-     *
-     * @return Types
-     */
-    public Types types() {
+    @Override public Types types() {
 
         if (this.types == null) {
             this.types = new Types();
@@ -141,12 +134,7 @@ public final class BaseRepository extends Repository {
         return this.types;
     }
 
-    /**
-     * The list of bank establishments managed by the repo
-     *
-     * @return Banks
-     */
-    public Banks banks() {
+    @Override public Banks banks() {
 
         if (this.banks == null) {
             this.banks = new Banks();
@@ -154,12 +142,7 @@ public final class BaseRepository extends Repository {
         return this.banks;
     }
 
-    /**
-     * The list of currencies managed by the repo
-     *
-     * @return Currencies
-     */
-    public Currencies currencies() {
+    @Override public Currencies currencies() {
 
         if (this.currencies == null) {
             this.currencies = new Currencies();
@@ -167,12 +150,7 @@ public final class BaseRepository extends Repository {
         return this.currencies;
     }
 
-    /**
-     * The list of accounts managed by the repo
-     *
-     * @return Accounts
-     */
-    public Accounts accounts() {
+    @Override public Accounts accounts() {
 
         if (this.accounts == null) {
             this.accounts = new Accounts();
@@ -180,13 +158,7 @@ public final class BaseRepository extends Repository {
         return this.accounts;
     }
 
-    /**
-     * The list of categories managed by the repo
-     * (the subcategories are accessed throw the categories)
-     *
-     * @return Categories
-     */
-    public Categories categories() {
+    @Override public Categories categories() {
 
         if (this.categories == null) {
             this.categories = new Categories();
@@ -194,12 +166,7 @@ public final class BaseRepository extends Repository {
         return this.categories;
     }
 
-    /**
-     * The list of transactions managed by the repo
-     *
-     * @return Transactions
-     */
-    public Transactions transactions() {
+    @Override public Transactions transactions() {
 
         if (this.transactions == null) {
             this.transactions = new Transactions();
@@ -207,12 +174,7 @@ public final class BaseRepository extends Repository {
         return this.transactions;
     }
 
-    /**
-     * Update a type
-     *
-     * @param type the modified type
-     */
-    public void save(Type type) {
+    @Override public void save(Type type) {
 
         PreparedStatement statement;
 
@@ -234,14 +196,7 @@ public final class BaseRepository extends Repository {
         }
     }
 
-    /**
-     * Create a new type in database
-     *
-     * @param type the new type with id 0
-     *
-     * @return the new type with it's id set
-     */
-    public Type create(Type type) {
+    @Override public Type create(Type type) {
 
         PreparedStatement statement;
         ResultSet         resultSet;
@@ -277,12 +232,7 @@ public final class BaseRepository extends Repository {
         return type;
     }
 
-    /**
-     * Update a currency
-     *
-     * @param currency the modified currency
-     */
-    public void save(Currency currency) {
+    @Override public void save(Currency currency) {
 
         PreparedStatement statement;
 
@@ -304,14 +254,7 @@ public final class BaseRepository extends Repository {
         }
     }
 
-    /**
-     * Create a new currency in database
-     *
-     * @param currency the new currency with id 0
-     *
-     * @return the new currency with it's id set
-     */
-    public Currency create(Currency currency) {
+    @Override public Currency create(Currency currency) {
 
         PreparedStatement statement;
         ResultSet         resultSet;
@@ -347,12 +290,7 @@ public final class BaseRepository extends Repository {
         return currency;
     }
 
-    /**
-     * Update a transaction
-     *
-     * @param transaction the modified transaction
-     */
-    public void save(Transaction transaction) {
+    @Override public void save(Transaction transaction) {
 
         PreparedStatement statement;
 
@@ -380,14 +318,7 @@ public final class BaseRepository extends Repository {
         }
     }
 
-    /**
-     * Create a new transaction in database
-     *
-     * @param transaction the new transaction with id 0
-     *
-     * @return the new transaction with it's id set
-     */
-    public Transaction create(Transaction transaction) {
+    @Override public Transaction create(Transaction transaction) {
 
         PreparedStatement statement;
         ResultSet         resultSet;
@@ -430,12 +361,7 @@ public final class BaseRepository extends Repository {
         return transaction;
     }
 
-    /**
-     * Update a category
-     *
-     * @param category the modified category
-     */
-    public void save(Category category) {
+    @Override public void save(Category category) {
 
         PreparedStatement statement;
 
@@ -457,14 +383,7 @@ public final class BaseRepository extends Repository {
         }
     }
 
-    /**
-     * Create a new category in database
-     *
-     * @param category the new category with id 0
-     *
-     * @return the new category with it's id set
-     */
-    public Category create(Category category) {
+    @Override public Category create(Category category) {
 
         PreparedStatement statement;
         ResultSet         resultSet;
@@ -500,12 +419,7 @@ public final class BaseRepository extends Repository {
         return category;
     }
 
-    /**
-     * Update a subCategory
-     *
-     * @param subCategory the modified subCategory
-     */
-    public void save(SubCategory subCategory) {
+    @Override public void save(SubCategory subCategory) {
 
         PreparedStatement statement;
 
@@ -527,15 +441,7 @@ public final class BaseRepository extends Repository {
         }
     }
 
-    /**
-     * Create a new subCategory in database, will definitely belong to the category specified
-     *
-     * @param subCategory the new subCategory with id 0
-     * @param category    the category it will belong to
-     *
-     * @return the new subCategory with it's id set
-     */
-    public SubCategory create(SubCategory subCategory, Category category) {
+    @Override public SubCategory create(SubCategory subCategory, Category category) {
 
         PreparedStatement statement;
         ResultSet         resultSet;
@@ -572,12 +478,7 @@ public final class BaseRepository extends Repository {
         return subCategory;
     }
 
-    /**
-     * Update a bank
-     *
-     * @param bank the modified bank
-     */
-    public void save(Bank bank) {
+    @Override public void save(Bank bank) {
 
         PreparedStatement statement;
 
@@ -599,14 +500,7 @@ public final class BaseRepository extends Repository {
         }
     }
 
-    /**
-     * Create a new bank in database
-     *
-     * @param bank the new bank with id 0
-     *
-     * @return the new bank with it's id set
-     */
-    public Bank create(Bank bank) {
+    @Override public Bank create(Bank bank) {
 
         PreparedStatement statement;
         ResultSet         resultSet;
@@ -642,12 +536,7 @@ public final class BaseRepository extends Repository {
         return bank;
     }
 
-    /**
-     * Update an account
-     *
-     * @param account the modified account
-     */
-    public void save(Account account) {
+    @Override public void save(Account account) {
 
         PreparedStatement statement;
 
@@ -672,14 +561,7 @@ public final class BaseRepository extends Repository {
         }
     }
 
-    /**
-     * Create a new account in database
-     *
-     * @param account the new account with id 0
-     *
-     * @return the new account with it's id set
-     */
-    public Account create(Account account) {
+    @Override public Account create(Account account) {
 
         PreparedStatement statement;
         ResultSet         resultSet;

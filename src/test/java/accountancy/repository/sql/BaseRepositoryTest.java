@@ -1,6 +1,7 @@
 package accountancy.repository.sql;
 
 import accountancy.model.base.*;
+import accountancy.repository.BaseRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class BaseRepositoryTest extends RepositoryTest {
         String       file         = "datas/fixture-base.sql";
         scriptRunner.runScript(new BufferedReader(new FileReader(file)));
 
-        repository = new BaseRepository(connectionProvider);
+        repository = new SqlBaseRepository(connectionProvider);
     }
 
     @Test
@@ -260,7 +261,7 @@ public class BaseRepositoryTest extends RepositoryTest {
         taxes.title("state tax");
         repository.save(taxes);
 
-        BaseRepository newRepository = new BaseRepository(connectionProvider);
+        BaseRepository newRepository = new SqlBaseRepository(connectionProvider);
         newRepository.findAll();
         assertEquals(3, newRepository.types().getAll().size());
         assertTrue(newRepository.types().getAll().contains(current));

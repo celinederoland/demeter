@@ -9,5 +9,4 @@ public abstract class Repository {
         this.connectionProvider = connectionProvider;
     }
 
-
 }
