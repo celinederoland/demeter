@@ -34,7 +34,7 @@ public class SqlSelection extends Repository implements Selection {
      *
      * @return ArrayList<Transaction>
      */
-    @Override public ArrayList<Transaction> getEntries() {
+    @Override public ArrayList<Transaction> getTransactions() {
 
         Statement              statement;
         ResultSet              resultSet;
@@ -152,10 +152,10 @@ public class SqlSelection extends Repository implements Selection {
         }
 
         if (start != null && !criteria.cumulative()) {
-            conditions.add("v.date >= '" + (new java.sql.Date(start.getTime() + 3600 * 3 * 1000)).toString() + "'");
+            conditions.add("v.date >= '" + (new java.sql.Date(start.getTime())).toString() + "'");
         }
         if (end != null) {
-            conditions.add("v.date < '" + (new java.sql.Date(end.getTime() + 3600 * 3 * 1000)).toString() + "'");
+            conditions.add("v.date < '" + (new java.sql.Date(end.getTime())).toString() + "'");
         }
 
         if (conditions.isEmpty()) {

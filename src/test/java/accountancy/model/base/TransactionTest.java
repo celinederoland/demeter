@@ -54,7 +54,7 @@ public class TransactionTest {
         transaction.account(otherAccount)
                    .category(dayToDay)
                    .amount(60)
-                   .date(new Date());
+                   .date(new Date(now.getTime() + 3600 * 1000));
 
         assertEquals(60, transaction.amount(), 0);
         assertEquals(otherAccount, transaction.account());

@@ -82,7 +82,7 @@ public class OneAxeSelection extends AxialSelection {
         for (String name : selections.keySet()) {
 
             Selection selection = selections.get(name);
-            datas.put(name, selection.getEntries());
+            datas.put(name, selection.getTransactions());
         }
 
         return datas;

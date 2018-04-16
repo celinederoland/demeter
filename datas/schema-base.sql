@@ -1,6 +1,6 @@
 SET foreign_key_checks = 0;
 
-DROP VIEW IF EXISTS view_accounts, view_entries, view_entries_structure;
+DROP VIEW IF EXISTS view_accounts, view_entries, view_entries_structure, view_entries_global;
 DROP TABLE IF EXISTS accounts, banks, categories, currencies, entries, types, subcategories,
 compound_selections_selections, compound_selections, selections,
 selections_accounts, selections_banks, selections_types,
@@ -170,5 +170,25 @@ CREATE VIEW view_entries_structure AS
     JOIN `compta`.`subcategories` ON ((`compta`.`subcategories`.`id` = `compta`.`entries`.`sub_category_id`))) JOIN
     `compta`.`categories` ON ((`compta`.`categories`.`id` = `compta`.`subcategories`.`category_id`))) JOIN
     `compta`.`view_accounts` ON ((`view_accounts`.`id` = `compta`.`entries`.`account_id`)));
+
+CREATE VIEW view_entries_global AS
+  SELECT
+    `compta`.`entries`.`id`                                                        AS `id`,
+    `compta`.`entries`.`title`                                                     AS `title`,
+    `compta`.`entries`.`amount`                                                    AS `amount`,
+    `compta`.`entries`.`date`                                                      AS `date`,
+    `compta`.`categories`.`id`                                                     AS `category_id`,
+    `compta`.`entries`.`sub_category_id`                                           AS `sub_category_id`,
+    `compta`.`entries`.`account_id`                                                AS `account_id`,
+    `view_accounts`.`bank_id`                                                      AS `bank_id`,
+    `view_accounts`.`currency_id`                                                  AS `currency_id`,
+    `view_accounts`.`type_id`                                                      AS `type_id`,
+    concat(`compta`.`categories`.`title`, ' - ', `compta`.`subcategories`.`title`) AS `category`,
+    concat(`view_accounts`.`bank_title`, ' - ', `view_accounts`.`title`, ' - ',
+           `view_accounts`.`currency_title`)                                       AS `account`
+  FROM `compta`.`entries`
+    JOIN `compta`.`subcategories` ON `compta`.`subcategories`.`id` = `compta`.`entries`.`sub_category_id`
+    JOIN `compta`.`categories` ON `compta`.`categories`.`id` = `compta`.`subcategories`.`category_id`
+    JOIN `compta`.`view_accounts` ON `view_accounts`.`id` = `compta`.`entries`.`account_id`;
 
 SET foreign_key_checks = 1;

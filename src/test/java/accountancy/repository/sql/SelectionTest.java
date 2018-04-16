@@ -54,7 +54,7 @@ import static org.junit.Assert.*;
                                             .addCategory((Category) repository.categories().getOne(2));
         Selection selection = new SqlSelection(connectionProvider, repository, criteria);
 
-        ArrayList<Transaction> transactions = selection.getEntries();
+        ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(5, transactions.size());
         assertTrue(transactions.contains((Transaction) repository.transactions().getOne(20)));
         assertTrue(transactions.contains((Transaction) repository.transactions().getOne(23)));
@@ -86,7 +86,7 @@ import static org.junit.Assert.*;
         //Define a wide criteria to take have full result
         Criteria               criteria        = new Criteria();
         Selection              selection       = new SqlSelection(connectionProvider, repository, criteria);
-        ArrayList<Transaction> allTransactions = selection.getEntries();
+        ArrayList<Transaction> allTransactions = selection.getTransactions();
         assertEquals(50, allTransactions.size(), 0);
 
         Date start = (new SimpleDateFormat("yyyy-MM-dd")).parse("2017-01-01");
@@ -105,7 +105,7 @@ import static org.junit.Assert.*;
                                             .excludeCategory((Category) repository.categories().getOne(2));
         Selection selection = new SqlSelection(connectionProvider, repository, criteria);
 
-        ArrayList<Transaction> inverseTransactions = selection.getEntries();
+        ArrayList<Transaction> inverseTransactions = selection.getTransactions();
         assertEquals(27, inverseTransactions.size());
         assertFalse(inverseTransactions.contains((Transaction) repository.transactions().getOne(20)));
         assertFalse(inverseTransactions.contains((Transaction) repository.transactions().getOne(23)));
@@ -129,7 +129,7 @@ import static org.junit.Assert.*;
                                             .setAbsolute();
         Selection selection = new SqlSelection(connectionProvider, repository, criteria);
 
-        ArrayList<Transaction> transactions = selection.getEntries();
+        ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(17, transactions.size());
 
         Date   start  = (new SimpleDateFormat("yyyy-MM-dd")).parse("2017-01-01");
@@ -149,7 +149,7 @@ import static org.junit.Assert.*;
 
         Selection selection = new SqlSelection(connectionProvider, repository, criteria);
 
-        ArrayList<Transaction> transactions = selection.getEntries();
+        ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(17, transactions.size());
 
         Date   start  = (new SimpleDateFormat("yyyy-MM-dd")).parse("2017-01-01");
@@ -181,7 +181,7 @@ import static org.junit.Assert.*;
 
         Selection selection = new SqlSelection(connectionProvider, repository, criteria);
 
-        ArrayList<Transaction> transactions = selection.getEntries();
+        ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(14, transactions.size());
 
         Date   start  = (new SimpleDateFormat("yyyy-MM-dd")).parse("2017-01-01");
@@ -212,7 +212,7 @@ import static org.junit.Assert.*;
 
         Selection selection = new SqlSelection(connectionProvider, repository, criteria);
 
-        ArrayList<Transaction> transactions = selection.getEntries();
+        ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(14, transactions.size());
 
         Date   start  = (new SimpleDateFormat("yyyy-MM-dd")).parse("2017-01-01");

@@ -7,7 +7,7 @@ import java.util.Date;
 
 public interface Selection {
 
-    ArrayList<Transaction> getEntries();
+    ArrayList<Transaction> getTransactions();
 
     double getAmount(Date start, Date end);
 }
