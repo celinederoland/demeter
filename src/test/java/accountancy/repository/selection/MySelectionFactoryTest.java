@@ -234,7 +234,6 @@ public class MySelectionFactoryTest extends RepositoryTest {
         ArrayList<AmountByDate> c8Amounts = accountsAmounts.get("B2 - C8");
         assertEquals(-14269.92, c8Amounts.get(7).amount(), 0);
         assertEquals(-10674.58, c8Amounts.get(8).amount(), 0);
-        System.out.println("end");
     }
 
 }
