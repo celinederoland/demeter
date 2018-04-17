@@ -19,8 +19,8 @@ import static java.util.stream.Collectors.joining;
  */
 public class SqlSelection extends Repository implements Selection {
 
-    private BaseRepository repository;
-    private Criteria       criteria;
+    private final BaseRepository repository;
+    private final Criteria       criteria;
 
     public SqlSelection(ConnectionProvider connectionProvider, BaseRepository repository, Criteria criteria) {
 

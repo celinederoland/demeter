@@ -8,7 +8,7 @@ import accountancy.model.ObservableEntity;
  */
 public final class Category extends ObservableEntity {
 
-    private SubCategories subCategories = new SubCategories();
+    private final SubCategories subCategories = new SubCategories();
 
     public Category(int id, String title) {
 

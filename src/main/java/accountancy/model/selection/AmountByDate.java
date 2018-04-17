@@ -7,8 +7,8 @@ import java.util.Date;
 
 public class AmountByDate {
 
-    private Date   start;
-    private double amount;
+    private final Date   start;
+    private final double amount;
 
     public AmountByDate(Date start, Date end, Selection selection) {
 

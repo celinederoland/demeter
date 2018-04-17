@@ -17,6 +17,6 @@ public class App {
         BaseRepository repository = new SqlBaseRepository(connectionProvider);
         repository.findAll();
 
-        SwingUtilities.invokeLater(MainWindow::new);
+        SwingUtilities.invokeLater(() -> new MainWindow(repository));
     }
 }

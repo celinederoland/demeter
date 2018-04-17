@@ -12,8 +12,8 @@ import java.util.LinkedHashMap;
 
 public class MySelectionFactory implements AxialSelectionFactory {
 
-    protected BaseRepository    repository;
-    protected SelectionProvider selectionFactory;
+    protected final BaseRepository    repository;
+    protected final SelectionProvider selectionFactory;
 
     public MySelectionFactory(SelectionProvider selectionFactory, BaseRepository repository) {
 
@@ -25,7 +25,7 @@ public class MySelectionFactory implements AxialSelectionFactory {
 
         if (repository.categories().getOne("Transferts") == null)
             repository.categories().add(new Category(0, "Transferts"));
-        int categoryTransfert = repository.categories().getOne("Transferts").id();
+        int categoryTransfer = repository.categories().getOne("Transferts").id();
 
         if (repository.categories().getOne("Revenus") == null)
             repository.categories().add(new Category(0, "Revenus"));
@@ -44,7 +44,7 @@ public class MySelectionFactory implements AxialSelectionFactory {
         OneAxeSelection inOut = new OneAxeSelection(Styles.BAR);
         Selection revenus = selectionFactory.makeSelection(
             (new Criteria())
-                .excludeCategory((Category) repository.categories().getOne(categoryTransfert))
+                .excludeCategory((Category) repository.categories().getOne(categoryTransfer))
                 .excludeType((Type) repository.types().getOne(typeCredit))
                 .setPositiveOnly()
         );
@@ -52,9 +52,9 @@ public class MySelectionFactory implements AxialSelectionFactory {
             (new Criteria())
                 .addType((Type) repository.types().getOne(typeEpargne))
         );
-        Selection depenses = selectionFactory.makeSelection(
+        Selection expenditures = selectionFactory.makeSelection(
             (new Criteria())
-                .excludeCategory((Category) repository.categories().getOne(categoryTransfert))
+                .excludeCategory((Category) repository.categories().getOne(categoryTransfer))
                 .excludeType((Type) repository.types().getOne(typeEpargne))
                 .excludeType((Type) repository.types().getOne(typeCredit))
                 .setNegativeOnly()
@@ -62,7 +62,7 @@ public class MySelectionFactory implements AxialSelectionFactory {
         );
         inOut.add("Revenus", revenus);
         inOut.add("Epargne", epargne);
-        inOut.add("Dépenses", depenses);
+        inOut.add("Dépenses", expenditures);
 
         selections.put("IO", inOut);
 
@@ -96,7 +96,7 @@ public class MySelectionFactory implements AxialSelectionFactory {
 
         OneAxeSelection categories = new OneAxeSelection(Styles.STACK);
         for (Entity category : repository.categories().getAll()) {
-            if (category.id() != categoryRevenus && category.id() != categoryTransfert) {
+            if (category.id() != categoryRevenus && category.id() != categoryTransfer) {
                 Selection selection = selectionFactory.makeSelection(
                     (new Criteria())
                         .addCategory((Category) category)
@@ -111,7 +111,7 @@ public class MySelectionFactory implements AxialSelectionFactory {
 
         TwoAxesSelection subCategories = new TwoAxesSelection(Styles.PIE);
         for (Entity category : repository.categories().getAll()) {
-            if (category.id() != categoryRevenus && category.id() != categoryTransfert) {
+            if (category.id() != categoryRevenus && category.id() != categoryTransfer) {
                 OneAxeSelection categorySubs = new OneAxeSelection(Styles.PIE);
                 for (Entity subCategory : ((Category) category).subCategories().getAll()) {
                     Selection selection = selectionFactory.makeSelection(

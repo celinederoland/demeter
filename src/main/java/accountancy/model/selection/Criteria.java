@@ -12,18 +12,18 @@ public class Criteria {
     private boolean absolute   = false;
     private boolean cumulative = false;
 
-    private ArrayList<Entity> categories           = new ArrayList<>();
-    private ArrayList<Entity> excludeCategories    = new ArrayList<>();
-    private ArrayList<Entity> subCategories        = new ArrayList<>();
-    private ArrayList<Entity> excludeSubCategories = new ArrayList<>();
-    private ArrayList<Entity> accounts             = new ArrayList<>();
-    private ArrayList<Entity> excludeAccounts      = new ArrayList<>();
-    private ArrayList<Entity> types                = new ArrayList<>();
-    private ArrayList<Entity> excludeTypes         = new ArrayList<>();
-    private ArrayList<Entity> banks                = new ArrayList<>();
-    private ArrayList<Entity> excludeBanks         = new ArrayList<>();
-    private ArrayList<Entity> currencies           = new ArrayList<>();
-    private ArrayList<Entity> excludeCurrencies    = new ArrayList<>();
+    private final ArrayList<Entity> categories           = new ArrayList<>();
+    private final ArrayList<Entity> excludeCategories    = new ArrayList<>();
+    private final ArrayList<Entity> subCategories        = new ArrayList<>();
+    private final ArrayList<Entity> excludeSubCategories = new ArrayList<>();
+    private final ArrayList<Entity> accounts             = new ArrayList<>();
+    private final ArrayList<Entity> excludeAccounts      = new ArrayList<>();
+    private final ArrayList<Entity> types                = new ArrayList<>();
+    private final ArrayList<Entity> excludeTypes         = new ArrayList<>();
+    private final ArrayList<Entity> banks                = new ArrayList<>();
+    private final ArrayList<Entity> excludeBanks         = new ArrayList<>();
+    private final ArrayList<Entity> currencies           = new ArrayList<>();
+    private final ArrayList<Entity> excludeCurrencies    = new ArrayList<>();
 
 
     /**

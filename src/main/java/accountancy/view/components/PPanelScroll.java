@@ -9,7 +9,7 @@ import java.awt.*;
 public class PPanelScroll extends PPanel {
 
     protected final BasicScrollBarUI ui;
-    protected       JScrollPane      scrollPane;
+    protected final JScrollPane      scrollPane;
 
     public PPanelScroll(Component content) {
 

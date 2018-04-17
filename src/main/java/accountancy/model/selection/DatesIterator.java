@@ -6,8 +6,8 @@ import java.util.GregorianCalendar;
 
 public class DatesIterator {
 
-    private Calendar calendar = (new GregorianCalendar());
-    private Date     now      = new Date();
+    private final Calendar calendar = (new GregorianCalendar());
+    private final Date     now      = new Date();
 
     public DatesIterator() {
 

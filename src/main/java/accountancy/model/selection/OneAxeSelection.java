@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
  */
 public class OneAxeSelection extends AxialSelection {
 
-    private LinkedHashMap<String, Selection> selections = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Selection> selections = new LinkedHashMap<>();
 
     public OneAxeSelection(Styles style) {
 
@@ -50,7 +50,7 @@ public class OneAxeSelection extends AxialSelection {
      */
     public LinkedHashMap<String, ArrayList<AmountByDate>> amounts() {
 
-        LinkedHashMap<String, ArrayList<AmountByDate>> datas = new LinkedHashMap<>();
+        LinkedHashMap<String, ArrayList<AmountByDate>> data = new LinkedHashMap<>();
         for (String name : selections.keySet()) {
 
             Selection               selection = selections.get(name);
@@ -61,10 +61,10 @@ public class OneAxeSelection extends AxialSelection {
                 amounts.add(new AmountByDate(iterator.current(), iterator.next(), selection));
             }
 
-            datas.put(name, amounts);
+            data.put(name, amounts);
         }
 
-        return datas;
+        return data;
     }
 
     /**
@@ -78,13 +78,13 @@ public class OneAxeSelection extends AxialSelection {
      */
     public LinkedHashMap<String, ArrayList<Transaction>> transactions() {
 
-        LinkedHashMap<String, ArrayList<Transaction>> datas = new LinkedHashMap<>();
+        LinkedHashMap<String, ArrayList<Transaction>> data = new LinkedHashMap<>();
         for (String name : selections.keySet()) {
 
             Selection selection = selections.get(name);
-            datas.put(name, selection.getTransactions());
+            data.put(name, selection.getTransactions());
         }
 
-        return datas;
+        return data;
     }
 }

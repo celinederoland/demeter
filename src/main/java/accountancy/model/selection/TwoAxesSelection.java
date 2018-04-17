@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
- * Represent a set of points of view on datas (ie : a set of criteria / selection)
+ * Represent a set of points of view on data (ie : a set of criteria / selection)
  * <p>
  * On a 1 axe selection, criteria are structures in a flat list like in this example :
  * - criteria 1 : all transactions from bank A
@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
  */
 public class TwoAxesSelection extends AxialSelection {
 
-    private LinkedHashMap<String, OneAxeSelection> selections = new LinkedHashMap<>();
+    private final LinkedHashMap<String, OneAxeSelection> selections = new LinkedHashMap<>();
 
     public TwoAxesSelection(Styles style) {
 
@@ -64,14 +64,14 @@ public class TwoAxesSelection extends AxialSelection {
      */
     public LinkedHashMap<String, LinkedHashMap<String, ArrayList<AmountByDate>>> amounts() {
 
-        LinkedHashMap<String, LinkedHashMap<String, ArrayList<AmountByDate>>> datas = new LinkedHashMap<>();
+        LinkedHashMap<String, LinkedHashMap<String, ArrayList<AmountByDate>>> data = new LinkedHashMap<>();
 
         for (String name : selections.keySet()) {
 
-            datas.put(name, selections.get(name).amounts());
+            data.put(name, selections.get(name).amounts());
         }
 
-        return datas;
+        return data;
     }
 
     /**
@@ -93,13 +93,13 @@ public class TwoAxesSelection extends AxialSelection {
      */
     public LinkedHashMap<String, LinkedHashMap<String, ArrayList<Transaction>>> transactions() {
 
-        LinkedHashMap<String, LinkedHashMap<String, ArrayList<Transaction>>> datas = new LinkedHashMap<>();
+        LinkedHashMap<String, LinkedHashMap<String, ArrayList<Transaction>>> data = new LinkedHashMap<>();
         for (String name : selections.keySet()) {
 
             OneAxeSelection selection = selections.get(name);
-            datas.put(name, selection.transactions());
+            data.put(name, selection.transactions());
         }
 
-        return datas;
+        return data;
     }
 }

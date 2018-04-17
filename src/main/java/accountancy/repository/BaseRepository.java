@@ -5,7 +5,7 @@ import accountancy.model.base.*;
 public interface BaseRepository {
 
     /**
-     * Retrieve all datas
+     * Retrieve all data
      */
     void findAll();
 

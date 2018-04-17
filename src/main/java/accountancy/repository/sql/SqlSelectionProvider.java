@@ -7,7 +7,7 @@ import accountancy.repository.SelectionProvider;
 
 public class SqlSelectionProvider extends Repository implements SelectionProvider {
 
-    protected BaseRepository baseRepository;
+    protected final BaseRepository baseRepository;
 
     public SqlSelectionProvider(ConnectionProvider connectionProvider, BaseRepository baseRepository) {
 

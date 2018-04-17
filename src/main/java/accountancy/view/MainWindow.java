@@ -1,5 +1,6 @@
 package accountancy.view;
 
+import accountancy.repository.BaseRepository;
 import accountancy.view.components.PPanel;
 import accountancy.view.components.PPanelVerticalScroll;
 import accountancy.view.config.Dimensions;
@@ -13,7 +14,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    public MainWindow() {
+    public MainWindow(BaseRepository repository) {
 
         this.setTitle("Comptabilité");
         this.setPreferredSize(Dimensions.MAIN);
@@ -27,7 +28,7 @@ public class MainWindow extends JFrame {
         mainPanel.add(new ActionsOuterPanel(), BorderLayout.NORTH);
         mainPanel.add(new PPanelVerticalScroll(new CategoriesOuterPanel()), BorderLayout.EAST);
         mainPanel.add(new PPanelVerticalScroll(new EntriesOuterPanel()), BorderLayout.CENTER);
-        mainPanel.add(new PPanelVerticalScroll(new AccountsOuterPanel()), BorderLayout.WEST);
+        mainPanel.add(new PPanelVerticalScroll(new AccountsOuterPanel(repository)), BorderLayout.WEST);
 
         this.setContentPane(mainPanel);
         this.pack();

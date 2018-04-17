@@ -110,4 +110,9 @@ public final class Account extends ObservableEntity {
 
         return this.bank.title() + " - " + this.title();
     }
+
+    public double balance() {
+
+        return 0;
+    }
 }

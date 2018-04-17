@@ -1,7 +1,7 @@
 package accountancy.model.selection;
 
 /**
- * Represent a set of points of view on datas (ie : a set of criteria / selection)
+ * Represent a set of points of view on data (ie : a set of criteria / selection)
  * Example :
  * - criteria 1 : all transactions from bank A with positive amount
  * - criteria 2 : all transactions from bank A with negative amount
@@ -28,7 +28,7 @@ package accountancy.model.selection;
  */
 public abstract class AxialSelection {
 
-    private Styles style;
+    private final Styles style;
 
     public AxialSelection(Styles style) {
 

@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public abstract class ObservableEntityList extends ObservableModel implements EntityList {
 
-    protected HashMap<Integer, Entity> entities;
+    protected final HashMap<Integer, Entity> entities;
 
     public ObservableEntityList() {
 
