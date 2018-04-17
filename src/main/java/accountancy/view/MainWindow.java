@@ -26,7 +26,7 @@ public class MainWindow extends JFrame {
         mainPanel.setLayout(new BorderLayout());
 
         mainPanel.add(new ActionsOuterPanel(), BorderLayout.NORTH);
-        mainPanel.add(new PPanelVerticalScroll(new CategoriesOuterPanel()), BorderLayout.EAST);
+        mainPanel.add(new PPanelVerticalScroll(new CategoriesOuterPanel(repository)), BorderLayout.EAST);
         mainPanel.add(new PPanelVerticalScroll(new EntriesOuterPanel()), BorderLayout.CENTER);
         mainPanel.add(new PPanelVerticalScroll(new AccountsOuterPanel(repository)), BorderLayout.WEST);
 

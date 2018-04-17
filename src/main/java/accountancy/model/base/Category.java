@@ -1,5 +1,6 @@
 package accountancy.model.base;
 
+import accountancy.framework.Observer;
 import accountancy.model.ObservableEntity;
 
 /**
@@ -13,6 +14,12 @@ public final class Category extends ObservableEntity {
     public Category(int id, String title) {
 
         super(id, title);
+    }
+
+    @Override public void addObserver(Observer observer) {
+
+        super.addObserver(observer);
+        subCategories.addObserver(observer);
     }
 
     public SubCategories subCategories() {
