@@ -42,12 +42,12 @@ public class EntriesInnerPanel extends PPanel implements Observer {
 
             PPanel last = null;
             for (Entity transaction : repository.transactions().getAll()) {
-                PPanel panelEntry = new EntryPanel((Transaction) transaction, repository);
+                PPanel panelEntry = new TransactionPanel((Transaction) transaction, repository);
                 last = panelEntry;
                 add(panelEntry);
             }
 
-            PPanel panelEntry = new EntryPanel(
+            PPanel panelEntry = new TransactionPanel(
                 new Transaction(
                     0, "", 0,
                     new Date(),

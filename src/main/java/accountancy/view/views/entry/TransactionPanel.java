@@ -16,7 +16,7 @@ import java.awt.event.FocusEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EntryPanel extends PPanel implements Observer {
+public class TransactionPanel extends PPanel implements Observer {
 
     private final ComboAccount        comboAccount;
     private final BaseRepository      repository;
@@ -28,7 +28,7 @@ public class EntryPanel extends PPanel implements Observer {
     private       ComboCategory       comboCategory;
     private       ComboSubCategory    comboSubCategory;
 
-    public EntryPanel(Transaction transaction, BaseRepository repository) {
+    public TransactionPanel(Transaction transaction, BaseRepository repository) {
 
         this.repository = repository;
         this.transaction = transaction;

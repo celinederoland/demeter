@@ -24,19 +24,19 @@ public class MySelectionFactory implements AxialSelectionFactory {
     @Override public LinkedHashMap<String, AxialSelection> selections() {
 
         if (repository.categories().getOne("Transferts") == null)
-            repository.categories().add(new Category(0, "Transferts"));
+            repository.categories().add(repository.create(new Category(0, "Transferts")));
         int categoryTransfer = repository.categories().getOne("Transferts").id();
 
         if (repository.categories().getOne("Revenus") == null)
-            repository.categories().add(new Category(0, "Revenus"));
+            repository.categories().add(repository.create(new Category(0, "Revenus")));
         int categoryRevenus = repository.categories().getOne("Revenus").id();
 
         if (repository.types().getOne("Epargne") == null)
-            repository.types().add(new Type(0, "Epargne"));
+            repository.types().add(repository.create(new Type(0, "Epargne")));
         int typeEpargne = repository.types().getOne("Epargne").id();
 
         if (repository.types().getOne("Crédit") == null)
-            repository.types().add(new Type(0, "Crédit"));
+            repository.types().add(repository.create(new Type(0, "Crédit")));
         int typeCredit = repository.types().getOne("Crédit").id();
 
         LinkedHashMap<String, AxialSelection> selections = new LinkedHashMap<>();
