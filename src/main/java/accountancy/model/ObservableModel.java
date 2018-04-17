@@ -1,7 +1,7 @@
 package accountancy.model;
 
-import accountancy.framework.Observable;
-import accountancy.framework.Observer;
+import accountancy.observer.Observable;
+import accountancy.observer.Observer;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;

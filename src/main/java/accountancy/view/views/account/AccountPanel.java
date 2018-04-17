@@ -1,10 +1,10 @@
 package accountancy.view.views.account;
 
-import accountancy.framework.Observer;
 import accountancy.model.base.Account;
 import accountancy.model.base.Bank;
 import accountancy.model.base.Currency;
 import accountancy.model.base.Type;
+import accountancy.observer.Observer;
 import accountancy.repository.BaseRepository;
 import accountancy.view.components.*;
 import accountancy.view.config.Dimensions;

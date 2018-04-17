@@ -1,6 +1,6 @@
 package accountancy.model;
 
-import accountancy.framework.Observer;
+import accountancy.observer.Observer;
 import org.junit.Test;
 
 import java.util.ArrayList;

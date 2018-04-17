@@ -1,7 +1,7 @@
 package accountancy.model.base;
 
-import accountancy.framework.Observer;
 import accountancy.model.ObservableEntity;
+import accountancy.observer.Observer;
 
 /**
  * Represent a category of expenditure

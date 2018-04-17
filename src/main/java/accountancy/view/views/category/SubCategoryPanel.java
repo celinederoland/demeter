@@ -1,8 +1,8 @@
 package accountancy.view.views.category;
 
-import accountancy.framework.Observer;
 import accountancy.model.base.Category;
 import accountancy.model.base.SubCategory;
+import accountancy.observer.Observer;
 import accountancy.repository.BaseRepository;
 import accountancy.view.components.AbstractMultiListener;
 import accountancy.view.components.PPanel;

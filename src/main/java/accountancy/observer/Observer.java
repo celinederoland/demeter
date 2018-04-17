@@ -1,4 +1,4 @@
-package accountancy.framework;
+package accountancy.observer;
 
 /**
  * An implementation of the pattern Observer/Observable

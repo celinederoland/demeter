@@ -1,11 +1,11 @@
 package accountancy.view.views.entry;
 
-import accountancy.framework.Observer;
 import accountancy.model.Entity;
 import accountancy.model.base.Account;
 import accountancy.model.base.Category;
 import accountancy.model.base.SubCategory;
 import accountancy.model.base.Transaction;
+import accountancy.observer.Observer;
 import accountancy.repository.BaseRepository;
 import accountancy.view.components.PLoader;
 import accountancy.view.components.PPanel;

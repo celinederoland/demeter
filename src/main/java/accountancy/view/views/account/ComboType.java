@@ -1,8 +1,8 @@
 package accountancy.view.views.account;
 
-import accountancy.framework.Observer;
 import accountancy.model.Entity;
 import accountancy.model.base.Type;
+import accountancy.observer.Observer;
 import accountancy.repository.BaseRepository;
 import accountancy.view.components.PCombo;
 

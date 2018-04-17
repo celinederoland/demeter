@@ -1,8 +1,8 @@
 package accountancy.view.views.entry;
 
 
-import accountancy.framework.Observer;
 import accountancy.model.base.Account;
+import accountancy.observer.Observer;
 import accountancy.view.components.PLabel;
 
 public class CurrencyLabel extends PLabel implements Observer {
