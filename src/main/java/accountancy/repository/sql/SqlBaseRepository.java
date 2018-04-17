@@ -126,6 +126,126 @@ public final class SqlBaseRepository extends Repository implements BaseRepositor
 
     }
 
+    @Override public void clean() {
+
+        Statement statement;
+        ResultSet resultSet;
+        try {
+
+            statement = this.connectionProvider.getConnection().createStatement();
+
+            resultSet = statement.executeQuery(
+                "SELECT accounts.id FROM accounts " +
+                "LEFT JOIN entries ON entries.account_id = accounts.id " +
+                "WHERE entries.id IS NULL "
+            );
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                this.accounts().remove(id);
+            }
+
+            resultSet = statement.executeQuery(
+                "SELECT types.id FROM types " +
+                "LEFT JOIN accounts ON accounts.type_id = types.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                this.types().remove(id);
+            }
+
+            resultSet = statement.executeQuery(
+                "SELECT currencies.id FROM currencies " +
+                "LEFT JOIN accounts ON accounts.currency_id = currencies.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                this.currencies().remove(id);
+            }
+
+            resultSet = statement.executeQuery(
+                "SELECT banks.id FROM banks " +
+                "LEFT JOIN accounts ON accounts.bank_id = banks.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                this.banks().remove(id);
+            }
+
+            resultSet = statement.executeQuery(
+                "SELECT subcategories.id, subcategories.category_id FROM subcategories " +
+                "LEFT JOIN entries ON entries.sub_category_id = subcategories.id " +
+                "WHERE entries.id IS NULL "
+            );
+
+            while (resultSet.next()) {
+                int id         = resultSet.getInt("id");
+                int categoryId = resultSet.getInt("category_id");
+                ((Category) this.categories().getOne(categoryId)).subCategories().remove(id);
+            }
+
+            resultSet = statement.executeQuery(
+                "SELECT categories.id FROM categories " +
+                "LEFT JOIN subcategories ON subcategories.category_id = categories.id " +
+                "WHERE subcategories.id IS NULL"
+            );
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                this.categories().remove(id);
+            }
+
+            statement.executeUpdate(
+                "DELETE accounts FROM accounts " +
+                "LEFT JOIN entries ON entries.account_id = accounts.id " +
+                "WHERE entries.id IS NULL "
+            );
+
+            statement.executeUpdate(
+                "DELETE types FROM types " +
+                "LEFT JOIN accounts ON accounts.type_id = types.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
+            statement.executeUpdate(
+                "DELETE currencies FROM currencies " +
+                "LEFT JOIN accounts ON accounts.currency_id = currencies.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
+            statement.executeUpdate(
+                "DELETE banks FROM banks " +
+                "LEFT JOIN accounts ON accounts.bank_id = banks.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
+            statement.executeUpdate(
+                "DELETE subcategories FROM subcategories " +
+                "LEFT JOIN entries ON entries.sub_category_id = subcategories.id " +
+                "WHERE entries.id IS NULL "
+            );
+
+            statement.executeUpdate(
+                "DELETE categories FROM categories " +
+                "LEFT JOIN subcategories ON subcategories.category_id = categories.id " +
+                "WHERE subcategories.id IS NULL"
+            );
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+
+            System.out.println(ex.getMessage());
+        }
+    }
+
     @Override public Types types() {
 
         if (this.types == null) {

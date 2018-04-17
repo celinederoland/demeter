@@ -7,6 +7,7 @@ import accountancy.model.base.Category;
 import accountancy.model.base.SubCategory;
 import accountancy.model.base.Transaction;
 import accountancy.repository.BaseRepository;
+import accountancy.view.components.PLoader;
 import accountancy.view.components.PPanel;
 import accountancy.view.components.PTitle;
 import accountancy.view.config.Dimensions;
@@ -30,6 +31,7 @@ public class EntriesInnerPanel extends PPanel implements Observer {
 
         SwingUtilities.invokeLater(() -> {
 
+            PLoader loader = new PLoader("Loading ...");
             removeAll();
 
             PTitle title = new PTitle("Entrées");
@@ -59,6 +61,7 @@ public class EntriesInnerPanel extends PPanel implements Observer {
 
             revalidate();
             repaint();
+            loader.dispose();
         });
     }
 

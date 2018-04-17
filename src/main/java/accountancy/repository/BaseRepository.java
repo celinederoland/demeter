@@ -10,6 +10,11 @@ public interface BaseRepository {
     void findAll();
 
     /**
+     * Clean unused data
+     */
+    void clean();
+
+    /**
      * The list of account types managed by the repo
      *
      * @return Types
@@ -164,4 +169,5 @@ public interface BaseRepository {
      * @return the new account with it's id set
      */
     Account create(Account account);
+
 }
