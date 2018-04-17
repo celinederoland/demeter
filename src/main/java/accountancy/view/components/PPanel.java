@@ -41,5 +41,11 @@ public class PPanel extends JPanel {
         this(paddingLeft, paddingTop, Colors.BACKGROUND);
     }
 
+    public void setFixedSize(Dimension d) {
+
+        this.setMinimumSize(d);
+        this.setPreferredSize(d);
+        this.setMaximumSize(d);
+    }
 
 }
