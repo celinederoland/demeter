@@ -125,70 +125,75 @@ FOREIGN KEY (type_id) REFERENCES types (id);
 
 CREATE VIEW view_accounts AS
   SELECT
-    `compta`.`accounts`.`id`          AS `id`,
-    `compta`.`accounts`.`title`       AS `title`,
-    `compta`.`accounts`.`bank_id`     AS `bank_id`,
-    `compta`.`accounts`.`currency_id` AS `currency_id`,
-    `compta`.`accounts`.`type_id`     AS `type_id`,
-    `compta`.`banks`.`title`          AS `bank_title`,
-    `compta`.`currencies`.`title`     AS `currency_title`,
-    `compta`.`types`.`title`          AS `type_title`
-  FROM (((`compta`.`accounts`
-    JOIN `compta`.`banks` ON ((`compta`.`banks`.`id` = `compta`.`accounts`.`bank_id`))) JOIN `compta`.`currencies`
-      ON ((`compta`.`currencies`.`id` = `compta`.`accounts`.`currency_id`))) JOIN `compta`.`types`
-      ON ((`compta`.`types`.`id` = `compta`.`accounts`.`type_id`)));
+    `accountancy`.`accounts`.`id`          AS `id`,
+    `accountancy`.`accounts`.`title`       AS `title`,
+    `accountancy`.`accounts`.`bank_id`     AS `bank_id`,
+    `accountancy`.`accounts`.`currency_id` AS `currency_id`,
+    `accountancy`.`accounts`.`type_id`     AS `type_id`,
+    `accountancy`.`banks`.`title`          AS `bank_title`,
+    `accountancy`.`currencies`.`title`     AS `currency_title`,
+    `accountancy`.`types`.`title`          AS `type_title`
+  FROM (((`accountancy`.`accounts`
+    JOIN `accountancy`.`banks` ON ((`accountancy`.`banks`.`id` = `accountancy`.`accounts`.`bank_id`))) JOIN
+    `accountancy`.`currencies`
+      ON ((`accountancy`.`currencies`.`id` = `accountancy`.`accounts`.`currency_id`))) JOIN `accountancy`.`types`
+      ON ((`accountancy`.`types`.`id` = `accountancy`.`accounts`.`type_id`)));
 
 CREATE VIEW view_entries AS
   SELECT
-    `compta`.`entries`.`id`                  AS `id`,
-    `compta`.`entries`.`title`               AS `title`,
-    `compta`.`entries`.`amount`              AS `amount`,
-    `compta`.`entries`.`date`                AS `date`,
-    `compta`.`categories`.`title`            AS `category`,
-    `compta`.`subcategories`.`title`         AS `subcategory`,
+    `accountancy`.`entries`.`id`             AS `id`,
+    `accountancy`.`entries`.`title`          AS `title`,
+    `accountancy`.`entries`.`amount`         AS `amount`,
+    `accountancy`.`entries`.`date`           AS `date`,
+    `accountancy`.`categories`.`title`       AS `category`,
+    `accountancy`.`subcategories`.`title`    AS `subcategory`,
     concat(`view_accounts`.`bank_title`, ' - ', `view_accounts`.`title`, ' - ',
            `view_accounts`.`currency_title`) AS `accout`
-  FROM (((`compta`.`entries`
-    LEFT JOIN `compta`.`subcategories`
-      ON ((`compta`.`subcategories`.`id` = `compta`.`entries`.`sub_category_id`))) LEFT JOIN `compta`.`categories`
-      ON ((`compta`.`categories`.`id` = `compta`.`subcategories`.`category_id`))) LEFT JOIN `compta`.`view_accounts`
-      ON ((`view_accounts`.`id` = `compta`.`entries`.`account_id`)));
+  FROM (((`accountancy`.`entries`
+    LEFT JOIN `accountancy`.`subcategories`
+      ON ((`accountancy`.`subcategories`.`id` = `accountancy`.`entries`.`sub_category_id`))) LEFT JOIN
+    `accountancy`.`categories`
+      ON ((`accountancy`.`categories`.`id` = `accountancy`.`subcategories`.`category_id`))) LEFT JOIN
+    `accountancy`.`view_accounts`
+      ON ((`view_accounts`.`id` = `accountancy`.`entries`.`account_id`)));
 
 CREATE VIEW view_entries_structure AS
   SELECT
-    `compta`.`entries`.`id`              AS `id`,
-    `compta`.`entries`.`title`           AS `title`,
-    `compta`.`entries`.`amount`          AS `amount`,
-    `compta`.`entries`.`date`            AS `date`,
-    `compta`.`categories`.`id`           AS `category_id`,
-    `compta`.`entries`.`sub_category_id` AS `sub_category_id`,
-    `compta`.`entries`.`account_id`      AS `account_id`,
-    `view_accounts`.`bank_id`            AS `bank_id`,
-    `view_accounts`.`currency_id`        AS `currency_id`,
-    `view_accounts`.`type_id`            AS `type_id`
-  FROM (((`compta`.`entries`
-    JOIN `compta`.`subcategories` ON ((`compta`.`subcategories`.`id` = `compta`.`entries`.`sub_category_id`))) JOIN
-    `compta`.`categories` ON ((`compta`.`categories`.`id` = `compta`.`subcategories`.`category_id`))) JOIN
-    `compta`.`view_accounts` ON ((`view_accounts`.`id` = `compta`.`entries`.`account_id`)));
+    `accountancy`.`entries`.`id`              AS `id`,
+    `accountancy`.`entries`.`title`           AS `title`,
+    `accountancy`.`entries`.`amount`          AS `amount`,
+    `accountancy`.`entries`.`date`            AS `date`,
+    `accountancy`.`categories`.`id`           AS `category_id`,
+    `accountancy`.`entries`.`sub_category_id` AS `sub_category_id`,
+    `accountancy`.`entries`.`account_id`      AS `account_id`,
+    `view_accounts`.`bank_id`                 AS `bank_id`,
+    `view_accounts`.`currency_id`             AS `currency_id`,
+    `view_accounts`.`type_id`                 AS `type_id`
+  FROM (((`accountancy`.`entries`
+    JOIN `accountancy`.`subcategories`
+      ON ((`accountancy`.`subcategories`.`id` = `accountancy`.`entries`.`sub_category_id`))) JOIN
+    `accountancy`.`categories`
+      ON ((`accountancy`.`categories`.`id` = `accountancy`.`subcategories`.`category_id`))) JOIN
+    `accountancy`.`view_accounts` ON ((`view_accounts`.`id` = `accountancy`.`entries`.`account_id`)));
 
 CREATE VIEW view_entries_global AS
   SELECT
-    `compta`.`entries`.`id`                                                        AS `id`,
-    `compta`.`entries`.`title`                                                     AS `title`,
-    `compta`.`entries`.`amount`                                                    AS `amount`,
-    `compta`.`entries`.`date`                                                      AS `date`,
-    `compta`.`categories`.`id`                                                     AS `category_id`,
-    `compta`.`entries`.`sub_category_id`                                           AS `sub_category_id`,
-    `compta`.`entries`.`account_id`                                                AS `account_id`,
-    `view_accounts`.`bank_id`                                                      AS `bank_id`,
-    `view_accounts`.`currency_id`                                                  AS `currency_id`,
-    `view_accounts`.`type_id`                                                      AS `type_id`,
-    concat(`compta`.`categories`.`title`, ' - ', `compta`.`subcategories`.`title`) AS `category`,
+    `accountancy`.`entries`.`id`                                                             AS `id`,
+    `accountancy`.`entries`.`title`                                                          AS `title`,
+    `accountancy`.`entries`.`amount`                                                         AS `amount`,
+    `accountancy`.`entries`.`date`                                                           AS `date`,
+    `accountancy`.`categories`.`id`                                                          AS `category_id`,
+    `accountancy`.`entries`.`sub_category_id`                                                AS `sub_category_id`,
+    `accountancy`.`entries`.`account_id`                                                     AS `account_id`,
+    `view_accounts`.`bank_id`                                                                AS `bank_id`,
+    `view_accounts`.`currency_id`                                                            AS `currency_id`,
+    `view_accounts`.`type_id`                                                                AS `type_id`,
+    concat(`accountancy`.`categories`.`title`, ' - ', `accountancy`.`subcategories`.`title`) AS `category`,
     concat(`view_accounts`.`bank_title`, ' - ', `view_accounts`.`title`, ' - ',
-           `view_accounts`.`currency_title`)                                       AS `account`
-  FROM `compta`.`entries`
-    JOIN `compta`.`subcategories` ON `compta`.`subcategories`.`id` = `compta`.`entries`.`sub_category_id`
-    JOIN `compta`.`categories` ON `compta`.`categories`.`id` = `compta`.`subcategories`.`category_id`
-    JOIN `compta`.`view_accounts` ON `view_accounts`.`id` = `compta`.`entries`.`account_id`;
+           `view_accounts`.`currency_title`)                                                 AS `account`
+  FROM `accountancy`.`entries`
+    JOIN `accountancy`.`subcategories` ON `accountancy`.`subcategories`.`id` = `accountancy`.`entries`.`sub_category_id`
+    JOIN `accountancy`.`categories` ON `accountancy`.`categories`.`id` = `accountancy`.`subcategories`.`category_id`
+    JOIN `accountancy`.`view_accounts` ON `view_accounts`.`id` = `accountancy`.`entries`.`account_id`;
 
 SET foreign_key_checks = 1;

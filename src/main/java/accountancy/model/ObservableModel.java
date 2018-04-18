@@ -11,9 +11,9 @@ import java.util.ConcurrentModificationException;
  */
 public abstract class ObservableModel implements Observable {
 
-    private       boolean             hasUnpublishedChanges = false;
-    private       boolean             onTransaction         = false;
-    private final ArrayList<Observer> listObserver          = new ArrayList<>();
+    private transient final ArrayList<Observer> listObserver          = new ArrayList<>();
+    private transient       boolean             hasUnpublishedChanges = false;
+    private transient       boolean             onTransaction         = false;
 
     @Override public void addObserver(Observer observer) {
 
