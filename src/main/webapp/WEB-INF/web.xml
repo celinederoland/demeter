@@ -20,6 +20,15 @@
         <servlet-name>Accounts</servlet-name>
         <servlet-class>accountancy.server.Accounts</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Categories</servlet-name>
+        <servlet-class>accountancy.server.Categories</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubCategories</servlet-name>
+        <servlet-class>accountancy.server.SubCategories</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>AllData</servlet-name>
         <url-pattern>/all</url-pattern>
@@ -39,5 +48,13 @@
     <servlet-mapping>
         <servlet-name>Accounts</servlet-name>
         <url-pattern>/account/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Categories</servlet-name>
+        <url-pattern>/category/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubCategories</servlet-name>
+        <url-pattern>/subcategory/*</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -1,5 +1,7 @@
 package accountancy.repository.rest;
 
+import accountancy.model.Entity;
+import accountancy.model.Json;
 import accountancy.model.base.*;
 import accountancy.repository.AbstractBaseRepository;
 import accountancy.repository.BaseRepository;
@@ -8,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class RestBaseRepository extends AbstractBaseRepository implements BaseRepository {
 
@@ -69,18 +72,7 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
         for (JsonElement category : json.get("categories").getAsJsonArray()) {
 
-            JsonObject jsonCategory = category.getAsJsonObject();
-            int        id           = jsonCategory.get("id").getAsInt();
-            String     title        = jsonCategory.get("title").getAsString();
-
-            Category categoryObject = new Category(id, title);
-            for (JsonElement subCategory : jsonCategory.get("subCategories").getAsJsonArray()) {
-
-                JsonObject jsonSubCategory  = subCategory.getAsJsonObject();
-                int        subCategoryId    = jsonSubCategory.get("id").getAsInt();
-                String     subCategoryTitle = jsonSubCategory.get("title").getAsString();
-                categoryObject.subCategories().add(new SubCategory(subCategoryId, subCategoryTitle));
-            }
+            Category categoryObject = Json.gson().fromJson(category, Category.class);
             this.categories().add(categoryObject);
         }
 
@@ -161,20 +153,43 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     @Override public void save(Category category) {
 
+        String response = this.requester.executePost("/category", category);
+        assert response != null;
     }
 
     @Override public Category create(Category category) {
 
-        return null;
+        String response = this.requester.executePut("/category", category);
+        assert response != null;
+        JsonParser parser      = new JsonParser();
+        JsonObject json        = parser.parse(response).getAsJsonObject();
+        int        id          = json.get("id").getAsInt();
+        String     title       = json.get("title").getAsString();
+        Category   newCategory = new Category(id, title);
+        this.categories().add(newCategory);
+        return newCategory;
     }
 
     @Override public void save(SubCategory subCategory) {
 
+        String response = this.requester.executePost("/subcategory", subCategory);
+        assert response != null;
     }
 
     @Override public SubCategory create(SubCategory subCategory, Category category) {
 
-        return null;
+        HashMap<String, Entity> request = new HashMap<>();
+        request.put("subcategory", subCategory);
+        request.put("category", category);
+        String response = this.requester.executePut("/subcategory", request);
+        assert response != null;
+        JsonParser  parser         = new JsonParser();
+        JsonObject  json           = parser.parse(response).getAsJsonObject();
+        int         id             = json.get("id").getAsInt();
+        String      title          = json.get("title").getAsString();
+        SubCategory newSubCategory = new SubCategory(id, title);
+        category.subCategories().add(newSubCategory);
+        return newSubCategory;
     }
 
     @Override public void save(Bank bank) {

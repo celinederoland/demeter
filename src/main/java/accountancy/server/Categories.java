@@ -1,13 +1,13 @@
 package accountancy.server;
 
-import accountancy.model.base.Currency;
+import accountancy.model.base.Category;
 import accountancy.server.errors.HttpError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class Currencies extends AppServlet {
+public class Categories extends AppServlet {
 
     /**
      * Route POST /currency
@@ -21,21 +21,16 @@ public class Currencies extends AppServlet {
 
         response.setContentType("application/json");
 
-        Currency currency = gson.fromJson(request.getReader(), Currency.class);
+        Category category = gson.fromJson(request.getReader(), Category.class);
 
-        if (currency.title().length() > 3) {
-            new HttpError(401, "Currency title must have maximum 3 caracters", response);
-            return;
-        }
-
-        if (currency.id() == 0) {
+        if (category.id() == 0) {
             new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
             return;
         }
 
-        repository.save(currency);
+        repository.save(category);
 
-        response.getWriter().println(gson.toJson(currency));
+        response.getWriter().println(gson.toJson(category));
     }
 
     /**
@@ -50,19 +45,15 @@ public class Currencies extends AppServlet {
 
         response.setContentType("application/json");
 
-        Currency currency = gson.fromJson(request.getReader(), Currency.class);
+        Category category = gson.fromJson(request.getReader(), Category.class);
 
-        if (currency.title().length() > 3) {
-            new HttpError(401, "Currency title must have maximum 3 caracters", response);
-            return;
-        }
-        if (currency.id() > 0) {
+        if (category.id() > 0) {
             new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
             return;
         }
 
-        currency = repository.create(currency);
+        category = repository.create(category);
 
-        response.getWriter().println(gson.toJson(currency));
+        response.getWriter().println(gson.toJson(category));
     }
 }

@@ -1,6 +1,6 @@
 package accountancy.repository.rest;
 
-import com.google.gson.Gson;
+import accountancy.model.Json;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -75,7 +75,7 @@ public class Requester {
                 "application/json"
             );
 
-            String json = (new Gson()).toJson(urlParameters);
+            String json = Json.gson().toJson(urlParameters);
             connection.setRequestProperty(
                 "Content-Length",
                 Integer.toString(json.getBytes().length)

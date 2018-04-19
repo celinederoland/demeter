@@ -2,7 +2,6 @@ package accountancy.server;
 
 import accountancy.model.base.Bank;
 import accountancy.server.errors.HttpError;
-import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,6 @@ public class Banks extends AppServlet {
 
         response.setContentType("application/json");
 
-        Gson gson = new Gson();
         Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
         if (bank.id() == 0) {
@@ -47,7 +45,6 @@ public class Banks extends AppServlet {
 
         response.setContentType("application/json");
 
-        Gson gson = new Gson();
         Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
         if (bank.id() > 0) {
