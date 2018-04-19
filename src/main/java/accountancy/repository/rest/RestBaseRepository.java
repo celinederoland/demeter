@@ -55,8 +55,8 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
             int        id          = jsonAccount.get("id").getAsInt();
             String     title       = jsonAccount.get("title").getAsString();
             int        currency_id = jsonAccount.get("currency").getAsJsonObject().get("id").getAsInt();
-            int        bank_id     = jsonAccount.get("currency").getAsJsonObject().get("id").getAsInt();
-            int        type_id     = jsonAccount.get("currency").getAsJsonObject().get("id").getAsInt();
+            int        bank_id     = jsonAccount.get("bank").getAsJsonObject().get("id").getAsInt();
+            int        type_id     = jsonAccount.get("type").getAsJsonObject().get("id").getAsInt();
             this.accounts().add(
                 new Account(
                     id, title,
@@ -133,11 +133,21 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     @Override public void save(Currency currency) {
 
+        String response = this.requester.executePost("/currency", currency);
+        assert response != null;
     }
 
     @Override public Currency create(Currency currency) {
 
-        return null;
+        String response = this.requester.executePut("/currency", currency);
+        assert response != null;
+        JsonParser parser      = new JsonParser();
+        JsonObject json        = parser.parse(response).getAsJsonObject();
+        int        id          = json.get("id").getAsInt();
+        String     title       = json.get("title").getAsString();
+        Currency   newCurrency = new Currency(id, title);
+        this.currencies().add(newCurrency);
+        return newCurrency;
     }
 
     @Override public void save(Transaction transaction) {
@@ -188,10 +198,30 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     @Override public void save(Account account) {
 
+        String response = this.requester.executePost("/account", account);
+        assert response != null;
     }
 
     @Override public Account create(Account account) {
 
-        return null;
+        String response = this.requester.executePut("/account", account);
+        assert response != null;
+        JsonParser parser      = new JsonParser();
+        JsonObject json        = parser.parse(response).getAsJsonObject();
+        int        id          = json.get("id").getAsInt();
+        String     title       = json.get("title").getAsString();
+        int        currency_id = json.get("currency").getAsJsonObject().get("id").getAsInt();
+        int        bank_id     = json.get("bank").getAsJsonObject().get("id").getAsInt();
+        int        type_id     = json.get("type").getAsJsonObject().get("id").getAsInt();
+
+        Account newAccount = new Account(
+            id, title,
+            (Currency) this.currencies().getOne(currency_id),
+            (Bank) this.banks().getOne(bank_id),
+            (Type) this.types().getOne(type_id)
+        );
+
+        this.accounts().add(newAccount);
+        return newAccount;
     }
 }

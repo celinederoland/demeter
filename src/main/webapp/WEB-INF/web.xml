@@ -12,6 +12,14 @@
         <servlet-name>Banks</servlet-name>
         <servlet-class>accountancy.server.Banks</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Currencies</servlet-name>
+        <servlet-class>accountancy.server.Currencies</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Accounts</servlet-name>
+        <servlet-class>accountancy.server.Accounts</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AllData</servlet-name>
         <url-pattern>/all</url-pattern>
@@ -23,5 +31,13 @@
     <servlet-mapping>
         <servlet-name>Banks</servlet-name>
         <url-pattern>/bank/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Currencies</servlet-name>
+        <url-pattern>/currency/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Accounts</servlet-name>
+        <url-pattern>/account/*</url-pattern>
     </servlet-mapping>
 </web-app>

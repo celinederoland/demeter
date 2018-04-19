@@ -43,4 +43,16 @@ public class RestBaseRepositoryTest extends RepositoryTest {
 
         (new AnyRepositoryTest(repository)).banks();
     }
+
+    @Test
+    public void currencies() throws Exception {
+
+        (new AnyRepositoryTest(repository)).currencies();
+    }
+
+    @Test
+    public void accounts() throws Exception {
+
+        (new AnyRepositoryTest(repository)).accounts();
+    }
 }
