@@ -4,8 +4,16 @@
         <servlet-name>AllData</servlet-name>
         <servlet-class>accountancy.server.AllData</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Types</servlet-name>
+        <servlet-class>accountancy.server.Types</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AllData</servlet-name>
         <url-pattern>/all</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Types</servlet-name>
+        <url-pattern>/type/*</url-pattern>
     </servlet-mapping>
 </web-app>

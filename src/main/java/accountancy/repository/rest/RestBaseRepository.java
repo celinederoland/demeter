@@ -11,9 +11,16 @@ import java.util.Date;
 
 public class RestBaseRepository extends AbstractBaseRepository implements BaseRepository {
 
+    private Requester requester;
+
+    public RestBaseRepository(String url) {
+
+        this.requester = new Requester(url);
+    }
+
     @Override public void findAll() {
 
-        String     response = Requester.executeGet("/all");
+        String     response = this.requester.executeGet("/all");
         JsonParser parser   = new JsonParser();
         assert response != null;
         JsonObject json = parser.parse(response).getAsJsonObject();
@@ -111,7 +118,15 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     @Override public Type create(Type type) {
 
-        return null;
+        String response = this.requester.executePut("/type", type);
+        assert response != null;
+        JsonParser parser  = new JsonParser();
+        JsonObject json    = parser.parse(response).getAsJsonObject();
+        int        id      = json.get("id").getAsInt();
+        String     title   = json.get("title").getAsString();
+        Type       newType = new Type(id, title);
+        this.types().add(newType);
+        return newType;
     }
 
     @Override public void save(Currency currency) {

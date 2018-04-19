@@ -11,11 +11,16 @@ import java.net.URL;
 
 public class Requester {
 
-    private static String base = "http://accountancy.localhost";
+    private String baseURL;
 
-    public static String executeGet(String targetURL) {
+    public Requester(String baseURL) {
 
-        targetURL = base + targetURL;
+        this.baseURL = baseURL;
+    }
+
+    public String executeGet(String targetURL) {
+
+        targetURL = baseURL + targetURL;
 
         HttpURLConnection connection = null;
 
@@ -28,9 +33,6 @@ public class Requester {
 
             connection.setUseCaches(false);
             connection.setDoOutput(false);
-
-            System.out.println(connection.getRequestMethod());
-
 
             //Get Response
             InputStream    is       = connection.getInputStream();
@@ -53,16 +55,21 @@ public class Requester {
         }
     }
 
-    public static String executePost(String targetURL, Object urlParameters) {
+    public String executePost(String targetURL, Object urlParameters) {
 
-        targetURL = base + targetURL;
+        return executeMethod("POST", targetURL, urlParameters);
+    }
+
+    private String executeMethod(String method, String targetURL, Object urlParameters) {
+
+        targetURL = baseURL + targetURL;
         HttpURLConnection connection = null;
 
         try {
             //Create connection
             URL url = new URL(targetURL);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(method);
             connection.setRequestProperty(
                 "Content-Type",
                 "application/json"
@@ -103,5 +110,15 @@ public class Requester {
                 connection.disconnect();
             }
         }
+    }
+
+    public String executePut(String targetURL, Object urlParameters) {
+
+        return executeMethod("PUT", targetURL, urlParameters);
+    }
+
+    public String executeDelete(String targetURL, Object urlParameters) {
+
+        return executeMethod("DELETE", targetURL, urlParameters);
     }
 }

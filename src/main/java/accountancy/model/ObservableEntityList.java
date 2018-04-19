@@ -13,6 +13,7 @@ public abstract class ObservableEntityList extends ObservableModel implements En
 
     public ObservableEntityList() {
 
+        super();
         this.entities = new HashMap<>();
     }
 

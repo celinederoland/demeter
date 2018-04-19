@@ -1,6 +1,7 @@
 package accountancy.repository.sql;
 
 import accountancy.model.base.*;
+import accountancy.repository.AnyRepositoryTest;
 import accountancy.repository.BaseRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,11 +12,11 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class BaseRepositoryTest extends RepositoryTest {
+public class SqlBaseRepositoryTest extends RepositoryTest {
 
     protected BaseRepository repository;
 
-    public BaseRepositoryTest() throws Exception {
+    public SqlBaseRepositoryTest() throws Exception {
 
         super();
         ScriptRunner scriptRunner = new ScriptRunner(connectionProvider.getConnection(), true, true);
@@ -36,26 +37,7 @@ public class BaseRepositoryTest extends RepositoryTest {
     @Test
     public void types() {
 
-        Type current = repository.create(new Type(0, "current"));
-        Type saving  = repository.create(new Type(0, "saving"));
-        Type credit  = repository.create(new Type(0, "credit"));
-
-        assertEquals(1, current.id());
-        assertEquals(2, saving.id());
-        assertEquals(3, credit.id());
-
-        assertEquals(current, repository.types().getOne("current"));
-        assertEquals(saving, repository.types().getOne("saving"));
-        assertEquals(credit, repository.types().getOne("credit"));
-
-        assertEquals(3, repository.types().getAll().size());
-        assertTrue(repository.types().getAll().contains(current));
-        assertTrue(repository.types().getAll().contains(saving));
-        assertTrue(repository.types().getAll().contains(credit));
-
-        current.title("current -b");
-        repository.save(current);
-        assertEquals("current -b", repository.types().getOne(1).title());
+        (new AnyRepositoryTest(repository)).types();
     }
 
     @Test

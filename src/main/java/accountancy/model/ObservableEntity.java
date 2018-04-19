@@ -10,6 +10,7 @@ public abstract class ObservableEntity extends ObservableModel implements Entity
 
     public ObservableEntity(int id, String title) {
 
+        super();
         this.id = id;
         this.title = title;
     }

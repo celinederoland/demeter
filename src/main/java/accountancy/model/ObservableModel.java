@@ -11,21 +11,29 @@ import java.util.ConcurrentModificationException;
  */
 public abstract class ObservableModel implements Observable {
 
-    private transient final ArrayList<Observer> listObserver          = new ArrayList<>();
-    private transient       boolean             hasUnpublishedChanges = false;
-    private transient       boolean             onTransaction         = false;
+    private transient ArrayList<Observer> listObserver          = null;
+    private transient boolean             hasUnpublishedChanges = false;
+    private transient boolean             onTransaction         = false;
 
     @Override public void addObserver(Observer observer) {
 
-        if (!this.listObserver.contains(observer)) {
-            this.listObserver.add(observer);
+        if (!this.listObserver().contains(observer)) {
+            this.listObserver().add(observer);
         }
+    }
+
+    private ArrayList<Observer> listObserver() {
+
+        if (listObserver == null) {
+            listObserver = new ArrayList<>();
+        }
+        return listObserver;
     }
 
     @Override public void removeObserver(Observer observer) {
 
-        if (this.listObserver.contains(observer)) {
-            this.listObserver.remove(observer);
+        if (this.listObserver().contains(observer)) {
+            this.listObserver().remove(observer);
         }
     }
 
@@ -45,7 +53,7 @@ public abstract class ObservableModel implements Observable {
         if (!this.onTransaction) {
             try {
                 this.hasUnpublishedChanges = false;
-                for (Observer obs : this.listObserver) {
+                for (Observer obs : this.listObserver()) {
                     obs.update();
                 }
             } catch (ConcurrentModificationException e) {

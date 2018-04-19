@@ -68,7 +68,6 @@ public class AllData extends AppServlet {
             all.put("types", repository.types().getAll());
             all.put("currencies", repository.currencies().getAll());
 
-            //String json = gsonBuilder.create().toJson(all);
             String json = gson.toJson(all);
             response.getWriter().println(json);
 
