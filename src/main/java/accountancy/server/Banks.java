@@ -1,6 +1,6 @@
 package accountancy.server;
 
-import accountancy.model.base.Type;
+import accountancy.model.base.Bank;
 import accountancy.server.errors.HttpError;
 import com.google.gson.Gson;
 
@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class Types extends AppServlet {
+public class Banks extends AppServlet {
 
     /**
-     * Route POST /type
+     * Route POST /bank
      *
      * @param request  http request
      * @param response http response
@@ -23,20 +23,20 @@ public class Types extends AppServlet {
         response.setContentType("application/json");
 
         Gson gson = new Gson();
-        Type type = gson.fromJson(request.getReader(), Type.class);
+        Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
-        if (type.id() == 0) {
+        if (bank.id() == 0) {
             new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
             return;
         }
 
-        repository.save(type);
+        repository.save(bank);
 
-        response.getWriter().println(gson.toJson(type));
+        response.getWriter().println(gson.toJson(bank));
     }
 
     /**
-     * Route PUT /type
+     * Route PUT /bank
      *
      * @param request  http request
      * @param response http response
@@ -48,15 +48,15 @@ public class Types extends AppServlet {
         response.setContentType("application/json");
 
         Gson gson = new Gson();
-        Type type = gson.fromJson(request.getReader(), Type.class);
+        Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
-        if (type.id() > 0) {
+        if (bank.id() > 0) {
             new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
             return;
         }
 
-        type = repository.create(type);
+        bank = repository.create(bank);
 
-        response.getWriter().println(gson.toJson(type));
+        response.getWriter().println(gson.toJson(bank));
     }
 }

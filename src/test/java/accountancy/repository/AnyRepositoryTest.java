@@ -1,5 +1,6 @@
 package accountancy.repository;
 
+import accountancy.model.base.Bank;
 import accountancy.model.base.Type;
 
 import static org.junit.Assert.assertEquals;
@@ -37,4 +38,25 @@ public class AnyRepositoryTest {
         repository.save(current);
         assertEquals("current -b", repository.types().getOne(1).title());
     }
+
+    public void banks() throws Exception {
+
+        Bank bnk = repository.create(new Bank(0, "BNK"));
+        Bank bn2 = repository.create(new Bank(0, "BN2"));
+
+        assertEquals(1, bnk.id());
+        assertEquals(2, bn2.id());
+
+        assertEquals(bnk, repository.banks().getOne("BNK"));
+        assertEquals(bn2, repository.banks().getOne(2));
+
+        assertEquals(2, repository.banks().getAll().size());
+        assertTrue(repository.banks().getAll().contains(bnk));
+        assertTrue(repository.banks().getAll().contains(bn2));
+
+        bn2.title("BN-2");
+        repository.save(bn2);
+        assertEquals("BN-2", repository.banks().getOne(2).title());
+    }
+
 }

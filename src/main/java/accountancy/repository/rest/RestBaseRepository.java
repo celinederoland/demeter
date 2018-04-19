@@ -114,6 +114,8 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     @Override public void save(Type type) {
 
+        String response = this.requester.executePost("/type", type);
+        assert response != null;
     }
 
     @Override public Type create(Type type) {
@@ -167,11 +169,21 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     @Override public void save(Bank bank) {
 
+        String response = this.requester.executePost("/bank", bank);
+        assert response != null;
     }
 
     @Override public Bank create(Bank bank) {
 
-        return null;
+        String response = this.requester.executePut("/bank", bank);
+        assert response != null;
+        JsonParser parser  = new JsonParser();
+        JsonObject json    = parser.parse(response).getAsJsonObject();
+        int        id      = json.get("id").getAsInt();
+        String     title   = json.get("title").getAsString();
+        Bank       newBank = new Bank(id, title);
+        this.banks().add(newBank);
+        return newBank;
     }
 
     @Override public void save(Account account) {

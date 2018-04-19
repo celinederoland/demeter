@@ -32,7 +32,6 @@ public class AppServlet extends HttpServlet {
             .registerTypeAdapter(Date.class, new DateSerializeAsTimestamp())
             .registerTypeAdapter(Transaction.class, new TransactionSerialize())
             .registerTypeAdapter(Category.class, new CategorySerialize())
-            .registerTypeAdapter(accountancy.model.base.Type.class, new TypeDeserializer())
             .create();
     }
 
@@ -70,18 +69,6 @@ public class AppServlet extends HttpServlet {
             serialized.add("subCategories", subCategories);
 
             return serialized;
-        }
-    }
-
-    protected class TypeDeserializer implements JsonDeserializer<accountancy.model.base.Type> {
-
-        @Override public accountancy.model.base.Type deserialize(
-            JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext
-        ) throws JsonParseException {
-
-            JsonObject object = jsonElement.getAsJsonObject();
-            if (!object.has("id")) object.add("id", new JsonPrimitive(0));
-            return new accountancy.model.base.Type(object.get("id").getAsInt(), object.get("title").getAsString());
         }
     }
 }

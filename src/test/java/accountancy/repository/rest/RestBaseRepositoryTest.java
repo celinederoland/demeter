@@ -38,4 +38,9 @@ public class RestBaseRepositoryTest extends RepositoryTest {
         (new AnyRepositoryTest(repository)).types();
     }
 
+    @Test
+    public void banks() throws Exception {
+
+        (new AnyRepositoryTest(repository)).banks();
+    }
 }

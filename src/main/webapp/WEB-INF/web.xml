@@ -8,6 +8,10 @@
         <servlet-name>Types</servlet-name>
         <servlet-class>accountancy.server.Types</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Banks</servlet-name>
+        <servlet-class>accountancy.server.Banks</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AllData</servlet-name>
         <url-pattern>/all</url-pattern>
@@ -15,5 +19,9 @@
     <servlet-mapping>
         <servlet-name>Types</servlet-name>
         <url-pattern>/type/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Banks</servlet-name>
+        <url-pattern>/bank/*</url-pattern>
     </servlet-mapping>
 </web-app>
