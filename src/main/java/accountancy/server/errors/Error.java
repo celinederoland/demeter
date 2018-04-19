@@ -4,6 +4,7 @@ public class Error {
 
     protected String message;
     protected String status = "error";
+    protected StackTraceElement[] context;
 
     public Error() {
 
@@ -13,5 +14,11 @@ public class Error {
     public Error(String message) {
 
         this.message = message;
+    }
+
+    public Error(String message, StackTraceElement[] context) {
+
+        this.message = message;
+        this.context = context;
     }
 }

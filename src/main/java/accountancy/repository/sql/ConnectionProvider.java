@@ -18,8 +18,9 @@ public class ConnectionProvider {
 
         if (connection == null) {
             try {
+                Class.forName("com.mysql.jdbc.Driver");
                 this.connection = DriverManager.getConnection(source);
-            } catch (SQLException ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }

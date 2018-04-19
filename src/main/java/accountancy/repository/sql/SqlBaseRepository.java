@@ -1,6 +1,7 @@
 package accountancy.repository.sql;
 
 import accountancy.model.base.*;
+import accountancy.repository.AbstractBaseRepository;
 import accountancy.repository.BaseRepository;
 
 import java.sql.PreparedStatement;
@@ -14,18 +15,13 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 /**
  * Request the database to CRUD the model
  */
-public final class SqlBaseRepository extends Repository implements BaseRepository {
+public final class SqlBaseRepository extends AbstractBaseRepository implements BaseRepository {
 
-    private Accounts     accounts;
-    private Banks        banks;
-    private Currencies   currencies;
-    private Categories   categories;
-    private Types        types;
-    private Transactions transactions;
+    protected final ConnectionProvider connectionProvider;
 
     public SqlBaseRepository(ConnectionProvider connectionProvider) {
 
-        super(connectionProvider);
+        this.connectionProvider = connectionProvider;
     }
 
     @Override public void findAll() {
@@ -244,54 +240,6 @@ public final class SqlBaseRepository extends Repository implements BaseRepositor
 
             System.out.println(ex.getMessage());
         }
-    }
-
-    @Override public Types types() {
-
-        if (this.types == null) {
-            this.types = new Types();
-        }
-        return this.types;
-    }
-
-    @Override public Banks banks() {
-
-        if (this.banks == null) {
-            this.banks = new Banks();
-        }
-        return this.banks;
-    }
-
-    @Override public Currencies currencies() {
-
-        if (this.currencies == null) {
-            this.currencies = new Currencies();
-        }
-        return this.currencies;
-    }
-
-    @Override public Accounts accounts() {
-
-        if (this.accounts == null) {
-            this.accounts = new Accounts();
-        }
-        return this.accounts;
-    }
-
-    @Override public Categories categories() {
-
-        if (this.categories == null) {
-            this.categories = new Categories();
-        }
-        return this.categories;
-    }
-
-    @Override public Transactions transactions() {
-
-        if (this.transactions == null) {
-            this.transactions = new Transactions();
-        }
-        return this.transactions;
     }
 
     @Override public void save(Type type) {

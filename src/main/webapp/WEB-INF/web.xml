@@ -1,11 +1,11 @@
 <web-app>
     <display-name>Compta</display-name>
     <servlet>
-        <servlet-name>App</servlet-name>
-        <servlet-class>accountancy.server.App</servlet-class>
+        <servlet-name>AllData</servlet-name>
+        <servlet-class>accountancy.server.AllData</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>App</servlet-name>
-        <url-pattern>/app</url-pattern>
+        <servlet-name>AllData</servlet-name>
+        <url-pattern>/all</url-pattern>
     </servlet-mapping>
 </web-app>
