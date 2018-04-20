@@ -1,7 +1,7 @@
 package accountancy.server;
 
 import accountancy.model.base.Account;
-import accountancy.server.errors.HttpError;
+import accountancy.server.errors.Http403;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +19,11 @@ public class Accounts extends AppServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int     id      = Integer.parseInt(request.getPathInfo().substring(1));
-        Account account = repository.find(new Account(id));
-        response.getWriter().println(gson.toJson(account));
+        action(request, response, () -> {
+
+            int id = Integer.parseInt(request.getPathInfo().substring(1));
+            return repository.find(new Account(id));
+        });
     }
 
     /**
@@ -34,18 +36,18 @@ public class Accounts extends AppServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Account account = gson.fromJson(request.getReader(), Account.class);
+            Account account = gson.fromJson(request.getReader(), Account.class);
 
-        if (account.id() == 0) {
-            new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
-            return;
-        }
+            if (account.id() == 0) {
+                throw new Http403("ResourceDoesntExist - use PUT method instead");
+            }
 
-        repository.save(account);
+            repository.save(account);
 
-        response.getWriter().println(gson.toJson(account));
+            return account;
+        });
     }
 
     /**
@@ -58,17 +60,15 @@ public class Accounts extends AppServlet {
      */
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Account account = gson.fromJson(request.getReader(), Account.class);
+            Account account = gson.fromJson(request.getReader(), Account.class);
 
-        if (account.id() > 0) {
-            new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
-            return;
-        }
+            if (account.id() > 0) {
+                throw new Http403("ResourceAlreadyExist - use POST method instead");
+            }
 
-        account = repository.create(account);
-
-        response.getWriter().println(gson.toJson(account));
+            return repository.create(account);
+        });
     }
 }

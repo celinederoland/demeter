@@ -1,7 +1,8 @@
 package accountancy.server;
 
 import accountancy.model.base.Currency;
-import accountancy.server.errors.HttpError;
+import accountancy.server.errors.Http401;
+import accountancy.server.errors.Http403;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +20,10 @@ public class Currencies extends AppServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int      id       = Integer.parseInt(request.getPathInfo().substring(1));
-        Currency currency = repository.find(new Currency(id));
-        response.getWriter().println(gson.toJson(currency));
+        action(request, response, () -> {
+            int id = Integer.parseInt(request.getPathInfo().substring(1));
+            return repository.find(new Currency(id));
+        });
     }
 
     /**
@@ -34,23 +36,22 @@ public class Currencies extends AppServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Currency currency = gson.fromJson(request.getReader(), Currency.class);
 
-        if (currency.title().length() > 3) {
-            new HttpError(401, "Currency title must have maximum 3 caracters", response);
-            return;
-        }
+            Currency currency = gson.fromJson(request.getReader(), Currency.class);
 
-        if (currency.id() == 0) {
-            new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
-            return;
-        }
+            if (currency.title().length() > 3) {
+                throw new Http401("Currency title must have maximum 3 caracters");
+            }
 
-        repository.save(currency);
+            if (currency.id() == 0) {
+                throw new Http403("ResourceDoesntExist - use PUT method instead");
+            }
 
-        response.getWriter().println(gson.toJson(currency));
+            repository.save(currency);
+            return currency;
+        });
     }
 
     /**
@@ -63,21 +64,18 @@ public class Currencies extends AppServlet {
      */
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Currency currency = gson.fromJson(request.getReader(), Currency.class);
+            Currency currency = gson.fromJson(request.getReader(), Currency.class);
 
-        if (currency.title().length() > 3) {
-            new HttpError(401, "Currency title must have maximum 3 caracters", response);
-            return;
-        }
-        if (currency.id() > 0) {
-            new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
-            return;
-        }
+            if (currency.title().length() > 3) {
+                throw new Http401("Currency title must have maximum 3 caracters");
+            }
+            if (currency.id() > 0) {
+                throw new Http403("ResourceAlreadyExist - use POST method instead");
+            }
 
-        currency = repository.create(currency);
-
-        response.getWriter().println(gson.toJson(currency));
+            return repository.create(currency);
+        });
     }
 }

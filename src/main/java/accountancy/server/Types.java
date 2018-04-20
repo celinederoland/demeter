@@ -1,7 +1,7 @@
 package accountancy.server;
 
 import accountancy.model.base.Type;
-import accountancy.server.errors.HttpError;
+import accountancy.server.errors.Http403;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +19,11 @@ public class Types extends AppServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int  id   = Integer.parseInt(request.getPathInfo().substring(1));
-        Type type = repository.find(new Type(id));
-        response.getWriter().println(gson.toJson(type));
+        action(request, response, () -> {
+
+            int id = Integer.parseInt(request.getPathInfo().substring(1));
+            return repository.find(new Type(id));
+        });
     }
 
     /**
@@ -34,18 +36,17 @@ public class Types extends AppServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Type type = gson.fromJson(request.getReader(), Type.class);
+            Type type = gson.fromJson(request.getReader(), Type.class);
 
-        if (type.id() == 0) {
-            new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
-            return;
-        }
+            if (type.id() == 0) {
+                throw new Http403("ResourceDoesntExist - use PUT method instead");
+            }
 
-        repository.save(type);
-
-        response.getWriter().println(gson.toJson(type));
+            repository.save(type);
+            return type;
+        });
     }
 
     /**
@@ -58,17 +59,16 @@ public class Types extends AppServlet {
      */
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Type type = gson.fromJson(request.getReader(), Type.class);
 
-        if (type.id() > 0) {
-            new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
-            return;
-        }
+            Type type = gson.fromJson(request.getReader(), Type.class);
 
-        type = repository.create(type);
+            if (type.id() > 0) {
+                throw new Http403("ResourceAlreadyExist - use POST method instead");
+            }
 
-        response.getWriter().println(gson.toJson(type));
+            return repository.create(type);
+        });
     }
 }

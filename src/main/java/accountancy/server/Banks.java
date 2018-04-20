@@ -1,7 +1,7 @@
 package accountancy.server;
 
 import accountancy.model.base.Bank;
-import accountancy.server.errors.HttpError;
+import accountancy.server.errors.Http403;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +19,11 @@ public class Banks extends AppServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int  id   = Integer.parseInt(request.getPathInfo().substring(1));
-        Bank bank = repository.find(new Bank(id));
-        response.getWriter().println(gson.toJson(bank));
+        action(request, response, () -> {
+
+            int id = Integer.parseInt(request.getPathInfo().substring(1));
+            return repository.find(new Bank(id));
+        });
     }
 
     /**
@@ -34,18 +36,19 @@ public class Banks extends AppServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Bank bank = gson.fromJson(request.getReader(), Bank.class);
+            response.setContentType("application/json");
 
-        if (bank.id() == 0) {
-            new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
-            return;
-        }
+            Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
-        repository.save(bank);
+            if (bank.id() == 0) {
+                throw new Http403("ResourceDoesntExist - use PUT method instead");
+            }
 
-        response.getWriter().println(gson.toJson(bank));
+            repository.save(bank);
+            return bank;
+        });
     }
 
     /**
@@ -58,17 +61,16 @@ public class Banks extends AppServlet {
      */
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Bank bank = gson.fromJson(request.getReader(), Bank.class);
+            Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
-        if (bank.id() > 0) {
-            new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
-            return;
-        }
+            if (bank.id() > 0) {
+                throw new Http403("ResourceAlreadyExist - use POST method instead");
+            }
 
-        bank = repository.create(bank);
+            return repository.create(bank);
+        });
 
-        response.getWriter().println(gson.toJson(bank));
     }
 }

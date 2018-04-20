@@ -446,7 +446,7 @@ public class AnyRepositoryTest {
             "pel", eur, bnk, saving
         ));
         Account bn2Current = repository.create(new Account(
-            "current", chf, bn2, current
+            "current2", chf, bn2, current
         ));
         Account bnkCredit = repository.create(new Account(
             "immo", chf, bnk, credit

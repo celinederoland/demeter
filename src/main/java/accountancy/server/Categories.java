@@ -1,7 +1,7 @@
 package accountancy.server;
 
 import accountancy.model.base.Category;
-import accountancy.server.errors.HttpError;
+import accountancy.server.errors.Http403;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +19,11 @@ public class Categories extends AppServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int      id       = Integer.parseInt(request.getPathInfo().substring(1));
-        Category category = repository.find(new Category(id));
-        response.getWriter().println(gson.toJson(category));
+        action(request, response, () -> {
+
+            int id = Integer.parseInt(request.getPathInfo().substring(1));
+            return repository.find(new Category(id));
+        });
     }
 
     /**
@@ -34,18 +36,17 @@ public class Categories extends AppServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Category category = gson.fromJson(request.getReader(), Category.class);
+            Category category = gson.fromJson(request.getReader(), Category.class);
 
-        if (category.id() == 0) {
-            new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
-            return;
-        }
+            if (category.id() == 0) {
+                throw new Http403("ResourceDoesntExist - use PUT method instead");
+            }
 
-        repository.save(category);
-
-        response.getWriter().println(gson.toJson(category));
+            repository.save(category);
+            return category;
+        });
     }
 
     /**
@@ -58,17 +59,16 @@ public class Categories extends AppServlet {
      */
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        Category category = gson.fromJson(request.getReader(), Category.class);
+            Category category = gson.fromJson(request.getReader(), Category.class);
 
-        if (category.id() > 0) {
-            new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
-            return;
-        }
+            if (category.id() > 0) {
+                throw new Http403("ResourceAlreadyExist - use POST method instead");
+            }
 
-        category = repository.create(category);
+            return repository.create(category);
+        });
 
-        response.getWriter().println(gson.toJson(category));
     }
 }

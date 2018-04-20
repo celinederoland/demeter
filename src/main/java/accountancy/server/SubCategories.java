@@ -3,7 +3,7 @@ package accountancy.server;
 import accountancy.model.Entity;
 import accountancy.model.base.Category;
 import accountancy.model.base.SubCategory;
-import accountancy.server.errors.HttpError;
+import accountancy.server.errors.Http403;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -24,20 +24,23 @@ public class SubCategories extends AppServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        int         id          = Integer.parseInt(request.getPathInfo().substring(1));
-        SubCategory subCategory = repository.find(new SubCategory(id));
-        Category    category    = null;
-        for (Entity entity : repository.categories().getAll()) {
+        action(request, response, () -> {
 
-            if (((Category) entity).subCategories().getOne(subCategory.id()) != null) {
-                category = (Category) entity;
+            int         id          = Integer.parseInt(request.getPathInfo().substring(1));
+            SubCategory subCategory = repository.find(new SubCategory(id));
+            Category    category    = null;
+            for (Entity entity : repository.categories().getAll()) {
+
+                if (((Category) entity).subCategories().getOne(subCategory.id()) != null) {
+                    category = (Category) entity;
+                }
             }
-        }
 
-        HashMap<String, Object> jsonResponse = new HashMap<>();
-        jsonResponse.put("subcategory", subCategory);
-        jsonResponse.put("category", category);
-        response.getWriter().println(gson.toJson(jsonResponse));
+            HashMap<String, Object> jsonResponse = new HashMap<>();
+            jsonResponse.put("subcategory", subCategory);
+            jsonResponse.put("category", category);
+            return jsonResponse;
+        });
     }
 
     /**
@@ -50,18 +53,17 @@ public class SubCategories extends AppServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        SubCategory subCategory = gson.fromJson(request.getReader(), SubCategory.class);
+            SubCategory subCategory = gson.fromJson(request.getReader(), SubCategory.class);
 
-        if (subCategory.id() == 0) {
-            new HttpError(403, "ResourceDoesntExist - use PUT method instead", response);
-            return;
-        }
+            if (subCategory.id() == 0) {
+                throw new Http403("ResourceDoesntExist - use PUT method instead");
+            }
 
-        repository.save(subCategory);
-
-        response.getWriter().println(gson.toJson(subCategory));
+            repository.save(subCategory);
+            return subCategory;
+        });
     }
 
     /**
@@ -74,27 +76,25 @@ public class SubCategories extends AppServlet {
      */
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
+        action(request, response, () -> {
 
-        JsonParser parser = new JsonParser();
-        JsonObject json   = parser.parse(request.getReader()).getAsJsonObject();
+            JsonParser parser = new JsonParser();
+            JsonObject json   = parser.parse(request.getReader()).getAsJsonObject();
 
-        JsonObject jsonCategory  = json.get("category").getAsJsonObject();
-        int        idCategory    = jsonCategory.get("id").getAsInt();
-        String     titleCategory = jsonCategory.get("title").getAsString();
-        Category   category      = new Category(idCategory, titleCategory);
+            JsonObject jsonCategory  = json.get("category").getAsJsonObject();
+            int        idCategory    = jsonCategory.get("id").getAsInt();
+            String     titleCategory = jsonCategory.get("title").getAsString();
+            Category   category      = new Category(idCategory, titleCategory);
 
-        JsonObject  jsonSubCategory  = json.get("subcategory").getAsJsonObject();
-        String      titleSubCategory = jsonSubCategory.get("title").getAsString();
-        SubCategory subCategory      = new SubCategory(titleSubCategory);
+            JsonObject  jsonSubCategory  = json.get("subcategory").getAsJsonObject();
+            String      titleSubCategory = jsonSubCategory.get("title").getAsString();
+            SubCategory subCategory      = new SubCategory(titleSubCategory);
 
-        if (subCategory.id() > 0) {
-            new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);
-            return;
-        }
+            if (subCategory.id() > 0) {
+                throw new Http403("ResourceAlreadyExist - use POST method instead");
+            }
 
-        subCategory = repository.create(subCategory, category);
-
-        response.getWriter().println(gson.toJson(subCategory));
+            return repository.create(subCategory, category);
+        });
     }
 }

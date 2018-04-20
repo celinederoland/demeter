@@ -12,17 +12,17 @@ public class Criteria {
     private final ArrayList<Entity> subCategories        = new ArrayList<>();
     private final ArrayList<Entity> excludeSubCategories = new ArrayList<>();
     private final ArrayList<Entity> accounts             = new ArrayList<>();
-    private final ArrayList<Entity> excludeAccounts   = new ArrayList<>();
-    private final ArrayList<Entity> types             = new ArrayList<>();
-    private final ArrayList<Entity> excludeTypes      = new ArrayList<>();
-    private final ArrayList<Entity> banks             = new ArrayList<>();
-    private final ArrayList<Entity> excludeBanks      = new ArrayList<>();
-    private final ArrayList<Entity> currencies        = new ArrayList<>();
-    private final ArrayList<Entity> excludeCurrencies = new ArrayList<>();
-    private       boolean           positive          = false;
-    private       boolean           negative          = false;
-    private       boolean           absolute          = false;
-    private       boolean           cumulative        = false;
+    private final ArrayList<Entity> excludeAccounts      = new ArrayList<>();
+    private final ArrayList<Entity> types                = new ArrayList<>();
+    private final ArrayList<Entity> excludeTypes         = new ArrayList<>();
+    private final ArrayList<Entity> banks                = new ArrayList<>();
+    private final ArrayList<Entity> excludeBanks         = new ArrayList<>();
+    private final ArrayList<Entity> currencies           = new ArrayList<>();
+    private final ArrayList<Entity> excludeCurrencies    = new ArrayList<>();
+    private       boolean           positive             = false;
+    private       boolean           negative             = false;
+    private       boolean           absolute             = false;
+    private       boolean           cumulative           = false;
 
     /**
      * Criteria getter : the category of the transaction must be one of the added category

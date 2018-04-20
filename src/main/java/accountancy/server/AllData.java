@@ -1,7 +1,6 @@
 package accountancy.server;
 
 import accountancy.model.Entity;
-import accountancy.server.errors.HttpError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,13 +20,13 @@ public class AllData extends AppServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        try {
-
-            response.setContentType("application/json");
-
+        action(request, response, () -> {
             this.repository.findAll();
 
             HashMap<String, ArrayList<Entity>> all = new HashMap<>();
+            /*for(Entity account : repository.accounts().getAll()) {
+                response.getWriter().println(((Account) account).type().id() + " " + ((Account) account).type().title());
+            }*/
             all.put("accounts", repository.accounts().getAll());
             all.put("transactions", repository.transactions().getAll());
             all.put("banks", repository.banks().getAll());
@@ -35,13 +34,8 @@ public class AllData extends AppServlet {
             all.put("currencies", repository.currencies().getAll());
             all.put("categories", repository.categories().getAll());
 
-            String json = gson.toJson(all);
-            response.getWriter().println(json);
-
-        } catch (Exception e) {
-
-            new HttpError(e, response);
-        }
+            return all;
+        });
     }
 
     /**
@@ -55,9 +49,7 @@ public class AllData extends AppServlet {
     public void doDelete(HttpServletRequest request, HttpServletResponse response)
         throws IOException {
 
-        try {
-
-            response.setContentType("application/json");
+        action(request, response, () -> {
 
             this.repository.clean();
             this.repository.findAll();
@@ -70,12 +62,7 @@ public class AllData extends AppServlet {
             all.put("currencies", repository.currencies().getAll());
             all.put("categories", repository.categories().getAll());
 
-            String json = gson.toJson(all);
-            response.getWriter().println(json);
-
-        } catch (Exception e) {
-
-            new HttpError(e, response);
-        }
+            return all;
+        });
     }
 }
