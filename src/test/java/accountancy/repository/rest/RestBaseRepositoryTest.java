@@ -61,4 +61,10 @@ public class RestBaseRepositoryTest extends RepositoryTest {
 
         (new AnyRepositoryTest(repository)).categories();
     }
+
+    @Test
+    public void transactions() throws Exception {
+
+        (new AnyRepositoryTest(repository)).transactions();
+    }
 }

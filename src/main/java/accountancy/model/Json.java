@@ -1,8 +1,10 @@
 package accountancy.model;
 
+import accountancy.model.base.Account;
 import accountancy.model.base.Category;
 import accountancy.model.base.SubCategory;
 import accountancy.model.base.Transaction;
+import accountancy.repository.BaseRepository;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
@@ -10,9 +12,9 @@ import java.util.Date;
 
 public class Json {
 
-    public static Gson gson() {
+    public static Gson gson(BaseRepository repository) {
 
-        return GsonHolder.gson;
+        return GsonHolder.gson(repository);
     }
 
     private static class GsonHolder {
@@ -20,12 +22,16 @@ public class Json {
         /**
          * Instance unique non préinitialisée
          */
-        private final static Gson gson = (new GsonBuilder())
-            .registerTypeAdapter(Date.class, new DateSerializeAsTimestamp())
-            .registerTypeAdapter(Transaction.class, new TransactionSerialize())
-            .registerTypeAdapter(Category.class, new CategorySerialize())
-            .registerTypeAdapter(Category.class, new CategoryDeserialize())
-            .create();
+        private static Gson gson(BaseRepository repository) {
+
+            return (new GsonBuilder())
+                .registerTypeAdapter(Date.class, new DateSerializeAsTimestamp())
+                .registerTypeAdapter(Transaction.class, new TransactionSerialize())
+                .registerTypeAdapter(Transaction.class, new TransactionDeserialize(repository))
+                .registerTypeAdapter(Category.class, new CategorySerialize())
+                .registerTypeAdapter(Category.class, new CategoryDeserialize())
+                .create();
+        }
     }
 
     private static class DateSerializeAsTimestamp implements JsonSerializer<Date> {
@@ -47,6 +53,42 @@ public class Json {
             serialized.remove("date");
             serialized.add("date", new JsonPrimitive(transaction.date().getTime()));
             return serialized;
+        }
+    }
+
+    private static class TransactionDeserialize implements JsonDeserializer<Transaction> {
+
+        private final BaseRepository repository;
+
+        public TransactionDeserialize(BaseRepository repository) {
+
+            this.repository = repository;
+        }
+
+        @Override public Transaction deserialize(
+            JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext
+        ) throws JsonParseException {
+
+            JsonObject json = jsonElement.getAsJsonObject();
+            int        id;
+            if (json.has("id")) id = json.get("id").getAsInt();
+            else id = 0;
+            String title          = json.get("title").getAsString();
+            Double amount         = json.get("amount").getAsDouble();
+            Date   date           = new Date(json.get("date").getAsInt());
+            int    account_id     = json.get("account").getAsJsonObject().get("id").getAsInt();
+            int    category_id    = json.get("category").getAsJsonObject().get("id").getAsInt();
+            int    subcategory_id = json.get("subCategory").getAsJsonObject().get("id").getAsInt();
+
+            return new Transaction(
+                id, title, amount, date,
+                (Account) repository.accounts().getOne(account_id),
+                (Category) repository.categories().getOne(category_id),
+                (SubCategory) ((Category) repository.categories().getOne(category_id))
+                    .subCategories()
+                    .getOne(subcategory_id)
+            );
+
         }
     }
 
@@ -88,4 +130,6 @@ public class Json {
             return categoryObject;
         }
     }
+
+
 }

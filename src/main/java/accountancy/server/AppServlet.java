@@ -25,6 +25,6 @@ public class AppServlet extends HttpServlet {
         this.connectionProvider = (new ConnectionProvider()).source("jdbc:mysql://" + db);
         this.repository = new SqlBaseRepository(connectionProvider);
 
-        this.gson = Json.gson();
+        this.gson = Json.gson(repository);
     }
 }

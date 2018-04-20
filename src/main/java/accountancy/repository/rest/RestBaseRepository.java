@@ -18,7 +18,7 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     public RestBaseRepository(String url) {
 
-        this.requester = new Requester(url);
+        this.requester = new Requester(url, this);
     }
 
     @Override public void findAll() {
@@ -72,7 +72,7 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
         for (JsonElement category : json.get("categories").getAsJsonArray()) {
 
-            Category categoryObject = Json.gson().fromJson(category, Category.class);
+            Category categoryObject = Json.gson(this).fromJson(category, Category.class);
             this.categories().add(categoryObject);
         }
 
@@ -144,11 +144,35 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
 
     @Override public void save(Transaction transaction) {
 
+        String response = this.requester.executePost("/transaction", transaction);
+        assert response != null;
     }
 
     @Override public Transaction create(Transaction transaction) {
 
-        return null;
+        String response = this.requester.executePut("/transaction", transaction);
+        assert response != null;
+        JsonParser parser         = new JsonParser();
+        JsonObject json           = parser.parse(response).getAsJsonObject();
+        int        id             = json.get("id").getAsInt();
+        String     title          = json.get("title").getAsString();
+        Double     amount         = json.get("amount").getAsDouble();
+        Date       date           = new Date(json.get("date").getAsInt());
+        int        account_id     = json.get("account").getAsJsonObject().get("id").getAsInt();
+        int        category_id    = json.get("category").getAsJsonObject().get("id").getAsInt();
+        int        subcategory_id = json.get("subCategory").getAsJsonObject().get("id").getAsInt();
+
+        Transaction newTransaction = new Transaction(
+            id, title, amount, date,
+            (Account) this.accounts().getOne(account_id),
+            (Category) this.categories().getOne(category_id),
+            (SubCategory) ((Category) this.categories().getOne(category_id))
+                .subCategories()
+                .getOne(subcategory_id)
+        );
+
+        this.transactions().add(newTransaction);
+        return newTransaction;
     }
 
     @Override public void save(Category category) {

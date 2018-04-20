@@ -28,6 +28,10 @@
         <servlet-name>SubCategories</servlet-name>
         <servlet-class>accountancy.server.SubCategories</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Transactions</servlet-name>
+        <servlet-class>accountancy.server.Transactions</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>AllData</servlet-name>
@@ -56,5 +60,9 @@
     <servlet-mapping>
         <servlet-name>SubCategories</servlet-name>
         <url-pattern>/subcategory/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Transactions</servlet-name>
+        <url-pattern>/transaction/*</url-pattern>
     </servlet-mapping>
 </web-app>

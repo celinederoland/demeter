@@ -1,6 +1,7 @@
 package accountancy.repository.rest;
 
 import accountancy.model.Json;
+import accountancy.repository.BaseRepository;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -11,11 +12,13 @@ import java.net.URL;
 
 public class Requester {
 
-    private String baseURL;
+    private final BaseRepository repository;
+    private       String         baseURL;
 
-    public Requester(String baseURL) {
+    public Requester(String baseURL, BaseRepository repository) {
 
         this.baseURL = baseURL;
+        this.repository = repository;
     }
 
     public String executeGet(String targetURL) {
@@ -75,7 +78,7 @@ public class Requester {
                 "application/json"
             );
 
-            String json = Json.gson().toJson(urlParameters);
+            String json = Json.gson(repository).toJson(urlParameters);
             connection.setRequestProperty(
                 "Content-Length",
                 Integer.toString(json.getBytes().length)
