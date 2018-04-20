@@ -10,6 +10,21 @@ import java.io.IOException;
 public class Currencies extends AppServlet {
 
     /**
+     * Route GET /currency/{id}
+     *
+     * @param request  http request
+     * @param response http response
+     *
+     * @throws IOException ioException
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int      id       = Integer.parseInt(request.getPathInfo().substring(1));
+        Currency currency = repository.find(new Currency(id, ""));
+        response.getWriter().println(gson.toJson(currency));
+    }
+
+    /**
      * Route POST /currency
      *
      * @param request  http request

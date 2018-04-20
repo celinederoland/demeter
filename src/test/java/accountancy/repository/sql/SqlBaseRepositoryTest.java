@@ -72,4 +72,16 @@ public class SqlBaseRepositoryTest extends RepositoryTest {
         (new AnyRepositoryTest(repository)).findAll(new SqlBaseRepository(connectionProvider));
     }
 
+    @Test
+    public void find() throws Exception {
+
+        (new AnyRepositoryTest(repository)).find(new SqlBaseRepository(connectionProvider));
+    }
+
+    @Test
+    public void clean() throws Exception {
+
+        (new AnyRepositoryTest(repository)).clean();
+    }
+
 }

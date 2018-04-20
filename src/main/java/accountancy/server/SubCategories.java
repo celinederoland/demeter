@@ -1,5 +1,6 @@
 package accountancy.server;
 
+import accountancy.model.Entity;
 import accountancy.model.base.Category;
 import accountancy.model.base.SubCategory;
 import accountancy.server.errors.HttpError;
@@ -9,11 +10,38 @@ import com.google.gson.JsonParser;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class SubCategories extends AppServlet {
 
     /**
-     * Route POST /currency
+     * Route GET /subcategory/{id}
+     *
+     * @param request  http request
+     * @param response http response
+     *
+     * @throws IOException ioException
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int         id          = Integer.parseInt(request.getPathInfo().substring(1));
+        SubCategory subCategory = repository.find(new SubCategory(id, ""));
+        Category    category    = null;
+        for (Entity entity : repository.categories().getAll()) {
+
+            if (((Category) entity).subCategories().getOne(subCategory.id()) != null) {
+                category = (Category) entity;
+            }
+        }
+
+        HashMap<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("subcategory", subCategory);
+        jsonResponse.put("category", category);
+        response.getWriter().println(gson.toJson(jsonResponse));
+    }
+
+    /**
+     * Route POST /subcategory
      *
      * @param request  http request
      * @param response http response
@@ -37,7 +65,7 @@ public class SubCategories extends AppServlet {
     }
 
     /**
-     * Route PUT /currency
+     * Route PUT /subcategory
      *
      * @param request  http request
      * @param response http response

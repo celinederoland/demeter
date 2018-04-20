@@ -141,6 +141,12 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
                 this.accounts().remove(id);
             }
 
+            statement.executeUpdate(
+                "DELETE accounts FROM accounts " +
+                "LEFT JOIN entries ON entries.account_id = accounts.id " +
+                "WHERE entries.id IS NULL "
+            );
+
             resultSet = statement.executeQuery(
                 "SELECT types.id FROM types " +
                 "LEFT JOIN accounts ON accounts.type_id = types.id " +
@@ -151,6 +157,12 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
                 int id = resultSet.getInt("id");
                 this.types().remove(id);
             }
+
+            statement.executeUpdate(
+                "DELETE types FROM types " +
+                "LEFT JOIN accounts ON accounts.type_id = types.id " +
+                "WHERE accounts.id IS NULL "
+            );
 
             resultSet = statement.executeQuery(
                 "SELECT currencies.id FROM currencies " +
@@ -163,6 +175,12 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
                 this.currencies().remove(id);
             }
 
+            statement.executeUpdate(
+                "DELETE currencies FROM currencies " +
+                "LEFT JOIN accounts ON accounts.currency_id = currencies.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
             resultSet = statement.executeQuery(
                 "SELECT banks.id FROM banks " +
                 "LEFT JOIN accounts ON accounts.bank_id = banks.id " +
@@ -174,6 +192,12 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
                 this.banks().remove(id);
             }
 
+            statement.executeUpdate(
+                "DELETE banks FROM banks " +
+                "LEFT JOIN accounts ON accounts.bank_id = banks.id " +
+                "WHERE accounts.id IS NULL "
+            );
+
             resultSet = statement.executeQuery(
                 "SELECT subcategories.id, subcategories.category_id FROM subcategories " +
                 "LEFT JOIN entries ON entries.sub_category_id = subcategories.id " +
@@ -183,8 +207,16 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
             while (resultSet.next()) {
                 int id         = resultSet.getInt("id");
                 int categoryId = resultSet.getInt("category_id");
-                ((Category) this.categories().getOne(categoryId)).subCategories().remove(id);
+                if (this.categories().getOne(categoryId) != null) {
+                    ((Category) this.categories().getOne(categoryId)).subCategories().remove(id);
+                }
             }
+
+            statement.executeUpdate(
+                "DELETE subcategories FROM subcategories " +
+                "LEFT JOIN entries ON entries.sub_category_id = subcategories.id " +
+                "WHERE entries.id IS NULL "
+            );
 
             resultSet = statement.executeQuery(
                 "SELECT categories.id FROM categories " +
@@ -196,36 +228,6 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
                 int id = resultSet.getInt("id");
                 this.categories().remove(id);
             }
-
-            statement.executeUpdate(
-                "DELETE accounts FROM accounts " +
-                "LEFT JOIN entries ON entries.account_id = accounts.id " +
-                "WHERE entries.id IS NULL "
-            );
-
-            statement.executeUpdate(
-                "DELETE types FROM types " +
-                "LEFT JOIN accounts ON accounts.type_id = types.id " +
-                "WHERE accounts.id IS NULL "
-            );
-
-            statement.executeUpdate(
-                "DELETE currencies FROM currencies " +
-                "LEFT JOIN accounts ON accounts.currency_id = currencies.id " +
-                "WHERE accounts.id IS NULL "
-            );
-
-            statement.executeUpdate(
-                "DELETE banks FROM banks " +
-                "LEFT JOIN accounts ON accounts.bank_id = banks.id " +
-                "WHERE accounts.id IS NULL "
-            );
-
-            statement.executeUpdate(
-                "DELETE subcategories FROM subcategories " +
-                "LEFT JOIN entries ON entries.sub_category_id = subcategories.id " +
-                "WHERE entries.id IS NULL "
-            );
 
             statement.executeUpdate(
                 "DELETE categories FROM categories " +
@@ -240,6 +242,38 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
 
             System.out.println(ex.getMessage());
         }
+    }
+
+    @Override public Type find(Type type) {
+
+        if (this.types().getOne(type.id()) != null) {
+            return (Type) this.types().getOne(type.id());
+        }
+
+        PreparedStatement statement;
+        ResultSet         resultSet;
+        try {
+
+            statement = this.connectionProvider.getConnection().prepareStatement(
+                "SELECT * FROM types WHERE id = ?"
+            );
+            statement.setInt(1, type.id());
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int    id    = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                this.types().add(new Type(id, title));
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return (Type) this.types().getOne(type.id());
     }
 
     @Override public void save(Type type) {
@@ -300,6 +334,38 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         return type;
     }
 
+    @Override public Currency find(Currency currency) {
+
+        if (this.currencies().getOne(currency.id()) != null) {
+            return (Currency) this.currencies().getOne(currency.id());
+        }
+
+        PreparedStatement statement;
+        ResultSet         resultSet;
+        try {
+
+            statement = this.connectionProvider.getConnection().prepareStatement(
+                "SELECT * FROM currencies WHERE id = ?"
+            );
+            statement.setInt(1, currency.id());
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int    id    = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                this.currencies().add(new Currency(id, title));
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return (Currency) this.currencies().getOne(currency.id());
+    }
+
     @Override public void save(Currency currency) {
 
         PreparedStatement statement;
@@ -356,6 +422,52 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         }
 
         return currency;
+    }
+
+    @Override public Transaction find(Transaction transaction) {
+
+        if (this.transactions().getOne(transaction.id()) != null) {
+            return (Transaction) this.transactions().getOne(transaction.id());
+        }
+
+        PreparedStatement statement;
+        ResultSet         resultSet;
+        try {
+
+            statement = this.connectionProvider.getConnection().prepareStatement(
+                "SELECT entries.*, categories.id AS categoryId FROM entries " +
+                "LEFT JOIN subcategories ON subcategories.id = entries.sub_category_id " +
+                "LEFT JOIN categories ON categories.id = subcategories.category_id WHERE entries.id = ?"
+            );
+            statement.setInt(1, transaction.id());
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+
+                int    id            = resultSet.getInt("id");
+                String title         = resultSet.getString("title");
+                Double amount        = resultSet.getDouble("amount");
+                Date   date          = resultSet.getDate("date");
+                int    accountId     = resultSet.getInt("account_id");
+                int    subCategoryId = resultSet.getInt("sub_category_id");
+                int    categoryId    = resultSet.getInt("categoryId");
+
+                this.transactions().add(new Transaction(
+                    id, title, amount, date,
+                    this.find(new Account(accountId, "", null, null, null)),
+                    this.find(new Category(categoryId, "")),
+                    this.find(new SubCategory(subCategoryId, ""))
+                ));
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return (Transaction) this.transactions().getOne(transaction.id());
     }
 
     @Override public void save(Transaction transaction) {
@@ -429,6 +541,50 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         return transaction;
     }
 
+    @Override public Category find(Category category) {
+
+        if (this.categories().getOne(category.id()) != null) {
+            return (Category) this.categories().getOne(category.id());
+        }
+
+        PreparedStatement statement;
+        ResultSet         resultSet;
+        try {
+
+            statement = this.connectionProvider.getConnection().prepareStatement(
+                "SELECT categories.*, " +
+                "subcategories.id AS subId, subcategories.title AS subTitle " +
+                "FROM categories " +
+                "LEFT JOIN subcategories ON subcategories.category_id = categories.id " +
+                "WHERE categories.id = ?"
+            );
+            statement.setInt(1, category.id());
+
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                int      categoryId    = resultSet.getInt("id");
+                String   categoryTitle = resultSet.getString("title");
+                Category found         = (Category) this.categories().add(new Category(categoryId, categoryTitle));
+
+                int subCategoryId = resultSet.getInt("subId");
+                if (subCategoryId > 0) {
+                    String subCategoryTitle = resultSet.getString("subTitle");
+                    found.subCategories().add(new SubCategory(subCategoryId, subCategoryTitle));
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return (Category) this.categories().getOne(category.id());
+    }
+
     @Override public void save(Category category) {
 
         PreparedStatement statement;
@@ -485,6 +641,55 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         }
 
         return category;
+    }
+
+    @Override public SubCategory find(SubCategory subCategory) {
+
+        PreparedStatement statement;
+        ResultSet         resultSet;
+        Category          category = null;
+
+        try {
+
+            statement = this.connectionProvider.getConnection().prepareStatement(
+                "SELECT categories.*, " +
+                "subcategories.id AS subId, subcategories.title AS subTitle " +
+                "FROM categories " +
+                "LEFT JOIN subcategories ON subcategories.category_id = categories.id " +
+                "WHERE subcategories.id = ?"
+            );
+            statement.setInt(1, subCategory.id());
+
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                int categoryId = resultSet.getInt("id");
+                category = this.find(new Category(categoryId, ""));
+
+                if (category != null) {
+                    if (category.subCategories().getOne(subCategory.id()) != null) {
+                        return (SubCategory) category.subCategories().getOne(subCategory.id());
+                    }
+
+                    String subTitle      = resultSet.getString("subTitle");
+                    int    subCategoryId = resultSet.getInt("subId");
+                    category.subCategories().add(new SubCategory(subCategoryId, subTitle));
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        if (category == null) {
+            return null;
+        }
+        return (SubCategory) ((Category) this.categories().getOne(category.id())).subCategories().getOne(
+            subCategory.id());
     }
 
     @Override public void save(SubCategory subCategory) {
@@ -546,6 +751,38 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         return subCategory;
     }
 
+    @Override public Bank find(Bank bank) {
+
+        if (this.banks().getOne(bank.id()) != null) {
+            return (Bank) this.banks().getOne(bank.id());
+        }
+
+        PreparedStatement statement;
+        ResultSet         resultSet;
+        try {
+
+            statement = this.connectionProvider.getConnection().prepareStatement(
+                "SELECT * FROM banks WHERE id = ?"
+            );
+            statement.setInt(1, bank.id());
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int    id    = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                this.banks().add(new Bank(id, title));
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return (Bank) this.banks().getOne(bank.id());
+    }
+
     @Override public void save(Bank bank) {
 
         PreparedStatement statement;
@@ -602,6 +839,48 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         }
 
         return bank;
+    }
+
+    @Override public Account find(Account account) {
+
+        if (this.accounts().getOne(account.id()) != null) {
+            return (Account) this.accounts().getOne(account.id());
+        }
+
+        PreparedStatement statement;
+        ResultSet         resultSet;
+        try {
+
+            statement = this.connectionProvider.getConnection().prepareStatement(
+                "SELECT * FROM accounts WHERE accounts.id = ?"
+            );
+            statement.setInt(1, account.id());
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+
+                int    id    = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+
+                int bankId     = resultSet.getInt("bank_id");
+                int currencyId = resultSet.getInt("currency_id");
+                int typeId     = resultSet.getInt("type_id");
+                this.accounts().add(new Account(
+                    id, title,
+                    this.find(new Currency(currencyId, "")),
+                    this.find(new Bank(bankId, "")),
+                    this.find(new Type(typeId, ""))
+                ));
+            }
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return (Account) this.accounts().getOne(account.id());
     }
 
     @Override public void save(Account account) {

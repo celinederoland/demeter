@@ -10,7 +10,22 @@ import java.io.IOException;
 public class Categories extends AppServlet {
 
     /**
-     * Route POST /currency
+     * Route GET /category/{id}
+     *
+     * @param request  http request
+     * @param response http response
+     *
+     * @throws IOException ioException
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int      id       = Integer.parseInt(request.getPathInfo().substring(1));
+        Category category = repository.find(new Category(id, ""));
+        response.getWriter().println(gson.toJson(category));
+    }
+
+    /**
+     * Route POST /category
      *
      * @param request  http request
      * @param response http response
@@ -34,7 +49,7 @@ public class Categories extends AppServlet {
     }
 
     /**
-     * Route PUT /currency
+     * Route PUT /category
      *
      * @param request  http request
      * @param response http response

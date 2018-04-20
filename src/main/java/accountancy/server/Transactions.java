@@ -6,11 +6,27 @@ import accountancy.server.errors.HttpError;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 public class Transactions extends AppServlet {
 
     /**
-     * Route POST /currency
+     * Route GET /transaction/{id}
+     *
+     * @param request  http request
+     * @param response http response
+     *
+     * @throws IOException ioException
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int         id          = Integer.parseInt(request.getPathInfo().substring(1));
+        Transaction transaction = repository.find(new Transaction(id, "", 0, new Date(), null, null, null));
+        response.getWriter().println(gson.toJson(transaction));
+    }
+
+    /**
+     * Route POST /transaction
      *
      * @param request  http request
      * @param response http response
@@ -21,7 +37,6 @@ public class Transactions extends AppServlet {
 
         response.setContentType("application/json");
 
-        repository.findAll();
         Transaction transaction = gson.fromJson(request.getReader(), Transaction.class);
 
         if (transaction.id() == 0) {
@@ -35,7 +50,7 @@ public class Transactions extends AppServlet {
     }
 
     /**
-     * Route PUT /currency
+     * Route PUT /transaction
      *
      * @param request  http request
      * @param response http response
@@ -46,7 +61,6 @@ public class Transactions extends AppServlet {
 
         response.setContentType("application/json");
 
-        repository.findAll();
         Transaction transaction = gson.fromJson(request.getReader(), Transaction.class);
 
         if (transaction.id() > 0) {

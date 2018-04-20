@@ -10,6 +10,21 @@ import java.io.IOException;
 public class Types extends AppServlet {
 
     /**
+     * Route GET /type/{id}
+     *
+     * @param request  http request
+     * @param response http response
+     *
+     * @throws IOException ioException
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int  id   = Integer.parseInt(request.getPathInfo().substring(1));
+        Type type = repository.find(new Type(id, ""));
+        response.getWriter().println(gson.toJson(type));
+    }
+
+    /**
      * Route POST /type
      *
      * @param request  http request

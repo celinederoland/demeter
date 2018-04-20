@@ -35,6 +35,12 @@ public abstract class ObservableEntityList extends ObservableModel implements En
         this.publish();
     }
 
+    public void removeAll() {
+
+        this.entities.clear();
+        this.publish();
+    }
+
     public boolean isEmpty() {
 
         return this.entities.isEmpty();

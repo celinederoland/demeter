@@ -25,6 +25,11 @@ public interface EntityList {
     void remove(int id);
 
     /**
+     * Remove all entities from the list, searching by id
+     */
+    void removeAll();
+
+    /**
      * @return true if the list is empty
      */
     boolean isEmpty();

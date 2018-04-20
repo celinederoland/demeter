@@ -10,6 +10,21 @@ import java.io.IOException;
 public class Banks extends AppServlet {
 
     /**
+     * Route GET /bank/{id}
+     *
+     * @param request  http request
+     * @param response http response
+     *
+     * @throws IOException ioException
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int  id   = Integer.parseInt(request.getPathInfo().substring(1));
+        Bank bank = repository.find(new Bank(id, ""));
+        response.getWriter().println(gson.toJson(bank));
+    }
+
+    /**
      * Route POST /bank
      *
      * @param request  http request

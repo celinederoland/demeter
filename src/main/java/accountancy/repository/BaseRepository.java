@@ -58,6 +58,15 @@ public interface BaseRepository {
     Transactions transactions();
 
     /**
+     * Find one instance of Type
+     *
+     * @param type the type searched (by id)
+     *
+     * @return type the type found
+     */
+    Type find(Type type);
+
+    /**
      * Update a type
      *
      * @param type the modified type
@@ -72,6 +81,15 @@ public interface BaseRepository {
      * @return the new type with it's id set
      */
     Type create(Type type);
+
+    /**
+     * Find one instance of Currency
+     *
+     * @param currency the currency searched (by id)
+     *
+     * @return currency the currency found
+     */
+    Currency find(Currency currency);
 
     /**
      * Update a currency
@@ -90,6 +108,15 @@ public interface BaseRepository {
     Currency create(Currency currency);
 
     /**
+     * Find one instance of Transaction
+     *
+     * @param transaction the transaction searched (by id)
+     *
+     * @return transaction the transaction found
+     */
+    Transaction find(Transaction transaction);
+
+    /**
      * Update a transaction
      *
      * @param transaction the modified transaction
@@ -106,6 +133,15 @@ public interface BaseRepository {
     Transaction create(Transaction transaction);
 
     /**
+     * Find one instance of Category
+     *
+     * @param category the category searched (by id)
+     *
+     * @return category the category found
+     */
+    Category find(Category category);
+
+    /**
      * Update a category
      *
      * @param category the modified category
@@ -120,6 +156,15 @@ public interface BaseRepository {
      * @return the new category with it's id set
      */
     Category create(Category category);
+
+    /**
+     * Find one instance of SubCategory
+     *
+     * @param subCategory the subCategory searched (by id)
+     *
+     * @return subCategory the subCategory found
+     */
+    SubCategory find(SubCategory subCategory);
 
     /**
      * Update a subCategory
@@ -139,6 +184,14 @@ public interface BaseRepository {
     SubCategory create(SubCategory subCategory, Category category);
 
     /**
+     * Find one instance of Bank
+     *
+     * @param bank the bank searched (by id)
+     * @return bank the bank found
+     */
+    Bank find(Bank bank);
+
+    /**
      * Update a bank
      *
      * @param bank the modified bank
@@ -153,6 +206,15 @@ public interface BaseRepository {
      * @return the new bank with it's id set
      */
     Bank create(Bank bank);
+
+    /**
+     * Find one instance of Account
+     *
+     * @param account the account searched (by id)
+     *
+     * @return account the account found
+     */
+    Account find(Account account);
 
     /**
      * Update an account

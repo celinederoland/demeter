@@ -316,6 +316,7 @@ public class AnyRepositoryTest {
         assertEquals(2, newRepository.categories().getAll().size());
         assertTrue(newRepository.categories().getAll().contains(invoices));
         assertTrue(newRepository.categories().getAll().contains(dayToDay));
+
         assertEquals("current -b", newRepository.types().getOne(1).title());
         assertEquals("BN-2", newRepository.banks().getOne(2).title());
         assertEquals("EU", newRepository.currencies().getOne(1).title());
@@ -328,5 +329,165 @@ public class AnyRepositoryTest {
             "state tax",
             ((Category) newRepository.categories().getOne(1)).subCategories().getOne(1).title()
         );
+    }
+
+    public void find(BaseRepository newRepository) {
+
+        Type current = repository.create(new Type(0, "current"));
+        Type saving  = repository.create(new Type(0, "saving"));
+        Type credit  = repository.create(new Type(0, "credit"));
+
+        Bank bnk = repository.create(new Bank(0, "BNK"));
+        Bank bn2 = repository.create(new Bank(0, "BN2"));
+
+        Currency eur = repository.create(new Currency(0, "EUR"));
+        Currency chf = repository.create(new Currency(0, "CHF"));
+
+        Category    invoices = repository.create(new Category(0, "invoices"));
+        SubCategory taxes    = repository.create(new SubCategory(0, "taxes"), invoices);
+        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+
+        Category    dayToDay = repository.create(new Category(0, "day to day"));
+        SubCategory food     = repository.create(new SubCategory(0, "food"), dayToDay);
+        SubCategory medics   = repository.create(new SubCategory(0, "medics"), dayToDay);
+
+        Account bnkCurrent = repository.create(new Account(
+            0, "current", eur, bnk, current
+        ));
+        Account bnkSaving = repository.create(new Account(
+            0, "pel", eur, bnk, saving
+        ));
+        Account bn2Current = repository.create(new Account(
+            0, "current", chf, bn2, current
+        ));
+        Account bnkCredit = repository.create(new Account(
+            0, "immo", chf, bnk, credit
+        ));
+
+        Transaction t1 = repository.create(new Transaction(
+            0, "random 01", -150.43, new Date(),
+            bnkCurrent, invoices, energy
+        ));
+        Transaction t2 = repository.create(new Transaction(
+            0, "random 02", -50.89, new Date(),
+            bnkCurrent, dayToDay, food
+        ));
+        Transaction t3 = repository.create(new Transaction(
+            0, "random 03", -300, new Date(),
+            bn2Current, invoices, taxes
+        ));
+
+        current.title("current -b");
+        repository.save(current);
+        bn2.title("BN-2");
+        repository.save(bn2);
+        eur.title("EU");
+        repository.save(eur);
+        bnkCurrent.currency(chf).bank(bn2).type(credit).title("modified");
+        repository.save(bnkCurrent);
+        invoices.title("bills");
+        repository.save(invoices);
+        taxes.title("state tax");
+        repository.save(taxes);
+
+        assertEquals(bnk, newRepository.find(bnk));
+
+        assertEquals(t1, newRepository.find(t1));
+        assertEquals(bn2Current, newRepository.find(bn2Current));
+        assertEquals(medics, newRepository.find(medics));
+
+        assertEquals(current, newRepository.find(current));
+        assertEquals(saving, newRepository.find(saving));
+        assertEquals(credit, newRepository.find(credit));
+
+        assertEquals(bn2, newRepository.find(bn2));
+
+        assertEquals(eur, newRepository.find(eur));
+        assertEquals(chf, newRepository.find(chf));
+
+        assertEquals(bnkCurrent, newRepository.find(bnkCurrent));
+        assertEquals(bnkSaving, newRepository.find(bnkSaving));
+        assertEquals(bnkCredit, newRepository.find(bnkCredit));
+
+        assertEquals(invoices, newRepository.find(invoices));
+        assertEquals(dayToDay, newRepository.find(dayToDay));
+
+    }
+
+    public void clean() {
+
+        Type current = repository.create(new Type(0, "current"));
+        Type saving  = repository.create(new Type(0, "saving"));
+        Type credit  = repository.create(new Type(0, "credit"));
+
+        Bank bnk = repository.create(new Bank(0, "BNK"));
+        Bank bn2 = repository.create(new Bank(0, "BN2"));
+
+        Currency eur = repository.create(new Currency(0, "EUR"));
+        Currency chf = repository.create(new Currency(0, "CHF"));
+        Currency usd = repository.create(new Currency(0, "USD"));
+
+        Category    invoices = repository.create(new Category(0, "invoices"));
+        SubCategory taxes    = repository.create(new SubCategory(0, "taxes"), invoices);
+        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+
+        Category    dayToDay = repository.create(new Category(0, "day to day"));
+        SubCategory food     = repository.create(new SubCategory(0, "food"), dayToDay);
+        SubCategory medics   = repository.create(new SubCategory(0, "medics"), dayToDay);
+
+        Category    unusedCat  = repository.create(new Category(0, "..."));
+        SubCategory unusedSCat = repository.create(new SubCategory(0, "???"), unusedCat);
+
+
+        Account bnkCurrent = repository.create(new Account(
+            0, "current", eur, bnk, current
+        ));
+        Account bnkSaving = repository.create(new Account(
+            0, "pel", eur, bnk, saving
+        ));
+        Account bn2Current = repository.create(new Account(
+            0, "current", chf, bn2, current
+        ));
+        Account bnkCredit = repository.create(new Account(
+            0, "immo", chf, bnk, credit
+        ));
+
+        Transaction t1 = repository.create(new Transaction(
+            0, "random 01", -150.43, new Date(),
+            bnkCurrent, invoices, energy
+        ));
+        Transaction t2 = repository.create(new Transaction(
+            0, "random 02", -50.89, new Date(),
+            bnkCurrent, dayToDay, food
+        ));
+        Transaction t3 = repository.create(new Transaction(
+            0, "random 03", -300, new Date(),
+            bn2Current, invoices, taxes
+        ));
+
+        repository.clean();
+
+        assertEquals(2, repository.accounts().getAll().size());
+        assertTrue(repository.accounts().getAll().contains(bnkCurrent));
+        assertTrue(repository.accounts().getAll().contains(bn2Current));
+
+        assertEquals(2, repository.banks().getAll().size());
+        assertTrue(repository.banks().getAll().contains(bnk));
+        assertTrue(repository.banks().getAll().contains(bn2));
+
+        assertEquals(2, repository.currencies().getAll().size());
+        assertTrue(repository.currencies().getAll().contains(eur));
+        assertTrue(repository.currencies().getAll().contains(chf));
+
+        assertEquals(2, repository.find(invoices).subCategories().getAll().size());
+        assertEquals(1, repository.find(dayToDay).subCategories().getAll().size());
+
+        assertEquals(2, repository.categories().getAll().size());
+        assertTrue(repository.categories().getAll().contains(invoices));
+        assertTrue(repository.categories().getAll().contains(dayToDay));
+
+        assertEquals(1, repository.types().getAll().size());
+        assertTrue(repository.types().getAll().contains(current));
+
     }
 }

@@ -1,9 +1,6 @@
 package accountancy.model;
 
-import accountancy.model.base.Account;
-import accountancy.model.base.Category;
-import accountancy.model.base.SubCategory;
-import accountancy.model.base.Transaction;
+import accountancy.model.base.*;
 import accountancy.repository.BaseRepository;
 import com.google.gson.*;
 
@@ -14,24 +11,14 @@ public class Json {
 
     public static Gson gson(BaseRepository repository) {
 
-        return GsonHolder.gson(repository);
-    }
-
-    private static class GsonHolder {
-
-        /**
-         * Instance unique non préinitialisée
-         */
-        private static Gson gson(BaseRepository repository) {
-
-            return (new GsonBuilder())
-                .registerTypeAdapter(Date.class, new DateSerializeAsTimestamp())
-                .registerTypeAdapter(Transaction.class, new TransactionSerialize())
-                .registerTypeAdapter(Transaction.class, new TransactionDeserialize(repository))
-                .registerTypeAdapter(Category.class, new CategorySerialize())
-                .registerTypeAdapter(Category.class, new CategoryDeserialize())
-                .create();
-        }
+        return (new GsonBuilder())
+            .registerTypeAdapter(Date.class, new DateSerializeAsTimestamp())
+            .registerTypeAdapter(Transaction.class, new TransactionSerialize())
+            .registerTypeAdapter(Transaction.class, new TransactionDeserialize(repository))
+            .registerTypeAdapter(Account.class, new AccountDeserialize(repository))
+            .registerTypeAdapter(Category.class, new CategorySerialize())
+            .registerTypeAdapter(Category.class, new CategoryDeserialize())
+            .create();
     }
 
     private static class DateSerializeAsTimestamp implements JsonSerializer<Date> {
@@ -42,6 +29,33 @@ public class Json {
         }
     }
 
+    private static class AccountDeserialize implements JsonDeserializer<Account> {
+
+        private final BaseRepository repository;
+
+        public AccountDeserialize(BaseRepository repository) {
+
+            this.repository = repository;
+        }
+
+        @Override public Account deserialize(
+            JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext
+        ) throws JsonParseException {
+
+            JsonObject jsonAccount = jsonElement.getAsJsonObject();
+            int        id          = jsonAccount.get("id").getAsInt();
+            String     title       = jsonAccount.get("title").getAsString();
+            int        currency_id = jsonAccount.get("currency").getAsJsonObject().get("id").getAsInt();
+            int        bank_id     = jsonAccount.get("bank").getAsJsonObject().get("id").getAsInt();
+            int        type_id     = jsonAccount.get("type").getAsJsonObject().get("id").getAsInt();
+            return new Account(
+                id, title,
+                repository.find(new Currency(currency_id, "")),
+                repository.find(new Bank(bank_id, "")),
+                repository.find(new accountancy.model.base.Type(type_id, ""))
+            );
+        }
+    }
 
     private static class TransactionSerialize implements JsonSerializer<Transaction> {
 
@@ -52,6 +66,11 @@ public class Json {
             JsonObject serialized = (new Gson()).toJsonTree(transaction).getAsJsonObject();
             serialized.remove("date");
             serialized.add("date", new JsonPrimitive(transaction.date().getTime()));
+            serialized.remove("category");
+            serialized.add(
+                "category",
+                (new CategorySerialize()).serialize(transaction.category(), type, jsonSerializationContext)
+            );
             return serialized;
         }
     }
@@ -82,11 +101,9 @@ public class Json {
 
             return new Transaction(
                 id, title, amount, date,
-                (Account) repository.accounts().getOne(account_id),
-                (Category) repository.categories().getOne(category_id),
-                (SubCategory) ((Category) repository.categories().getOne(category_id))
-                    .subCategories()
-                    .getOne(subcategory_id)
+                repository.find(new Account(account_id, "", null, null, null)),
+                repository.find(new Category(category_id, "")),
+                repository.find(new SubCategory(subcategory_id, ""))
             );
 
         }

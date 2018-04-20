@@ -13,6 +13,7 @@ import java.io.FileReader;
 public class RestBaseRepositoryTest extends RepositoryTest {
 
     protected BaseRepository repository;
+    private   String         url;
 
     public RestBaseRepositoryTest() throws Exception {
 
@@ -29,7 +30,8 @@ public class RestBaseRepositoryTest extends RepositoryTest {
         String       file         = "datas/fixture-base.sql";
         scriptRunner.runScript(new BufferedReader(new FileReader(file)));
 
-        repository = new RestBaseRepository("http://localhost:8002");
+        url = "http://localhost:8002";
+        repository = new RestBaseRepository(url);
     }
 
     @Test
@@ -66,5 +68,23 @@ public class RestBaseRepositoryTest extends RepositoryTest {
     public void transactions() throws Exception {
 
         (new AnyRepositoryTest(repository)).transactions();
+    }
+
+    @Test
+    public void findAll() throws Exception {
+
+        (new AnyRepositoryTest(repository)).findAll(new RestBaseRepository(url));
+    }
+
+    @Test
+    public void find() throws Exception {
+
+        (new AnyRepositoryTest(repository)).find(new RestBaseRepository(url));
+    }
+
+    @Test
+    public void clean() throws Exception {
+
+        (new AnyRepositoryTest(repository)).clean();
     }
 }

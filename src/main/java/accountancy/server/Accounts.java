@@ -10,7 +10,22 @@ import java.io.IOException;
 public class Accounts extends AppServlet {
 
     /**
-     * Route POST /currency
+     * Route GET /account/{id}
+     *
+     * @param request  http request
+     * @param response http response
+     *
+     * @throws IOException ioException
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        int     id      = Integer.parseInt(request.getPathInfo().substring(1));
+        Account account = repository.find(new Account(id, "", null, null, null));
+        response.getWriter().println(gson.toJson(account));
+    }
+
+    /**
+     * Route POST /account
      *
      * @param request  http request
      * @param response http response
@@ -34,7 +49,7 @@ public class Accounts extends AppServlet {
     }
 
     /**
-     * Route PUT /currency
+     * Route PUT /account
      *
      * @param request  http request
      * @param response http response

@@ -60,6 +60,7 @@ public class AllData extends AppServlet {
             response.setContentType("application/json");
 
             this.repository.clean();
+            this.repository.findAll();
 
             HashMap<String, ArrayList<Entity>> all = new HashMap<>();
             all.put("accounts", repository.accounts().getAll());
@@ -67,6 +68,7 @@ public class AllData extends AppServlet {
             all.put("banks", repository.banks().getAll());
             all.put("types", repository.types().getAll());
             all.put("currencies", repository.currencies().getAll());
+            all.put("categories", repository.categories().getAll());
 
             String json = gson.toJson(all);
             response.getWriter().println(json);
