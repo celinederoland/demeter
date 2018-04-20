@@ -96,7 +96,7 @@ public class CsvRepository {
 
                     Transaction transaction = baseRepository.create(
                         new Transaction(
-                            0, textField.substring(0, Math.min(textField.length(), 250)), amount, date,
+                            textField.substring(0, Math.min(textField.length(), 250)), amount, date,
                             account, category, subCategory
                         )
                     );
@@ -162,12 +162,12 @@ public class CsvRepository {
 
                 Category category = (Category) baseRepository.categories().getOne(categoryField);
                 if (category == null) {
-                    category = baseRepository.create(new Category(0, categoryField));
+                    category = baseRepository.create(new Category(categoryField));
                 }
                 SubCategory subCategory = (SubCategory) category.subCategories().getOne(subCategoryField);
                 if (subCategory == null) {
                     subCategory = baseRepository.create(
-                        new SubCategory(0, subCategoryField), category);
+                        new SubCategory(subCategoryField), category);
                 }
 
                 Account entryAccount = (Account) baseRepository.accounts().getOne(accountField);
@@ -179,21 +179,21 @@ public class CsvRepository {
 
                         Bank bank = (Bank) baseRepository.banks().getOne(bankTitle);
                         if (bank == null) {
-                            bank = baseRepository.create(new Bank(0, bankTitle));
+                            bank = baseRepository.create(new Bank(bankTitle));
                         }
 
                         Currency currency = (Currency) baseRepository.currencies().getOne(currencyField);
                         if (currency == null) {
-                            currency = baseRepository.create(new Currency(0, currencyField));
+                            currency = baseRepository.create(new Currency(currencyField));
                         }
 
                         Type type = (Type) baseRepository.types().getOne(typeField);
                         if (type == null) {
-                            type = baseRepository.create(new Type(0, typeField));
+                            type = baseRepository.create(new Type(typeField));
                         }
 
                         entryAccount = baseRepository.create(
-                            new Account(0, accountField, currency, bank, type)
+                            new Account(accountField, currency, bank, type)
                         );
                     }
                     else {
@@ -204,7 +204,7 @@ public class CsvRepository {
 
                 baseRepository.create(
                     new Transaction(
-                        0, textField.substring(0, Math.min(textField.length(), 250)), amount, date,
+                        textField.substring(0, Math.min(textField.length(), 250)), amount, date,
                         entryAccount, category, subCategory
                     )
                 );

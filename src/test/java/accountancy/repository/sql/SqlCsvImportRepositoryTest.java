@@ -43,16 +43,16 @@ public class SqlCsvImportRepositoryTest extends RepositoryTest {
         csvRepository = new SqlCsvImportRepository(connectionProvider);
 
 
-        Type        current  = repository.create(new Type(0, "current"));
-        Bank        bnk      = repository.create(new Bank(0, "BNK"));
-        Currency    eur      = repository.create(new Currency(0, "EUR"));
-        Category    invoices = repository.create(new Category(0, "invoices"));
-        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+        Type        current  = repository.create(new Type("current"));
+        Bank        bnk      = repository.create(new Bank("BNK"));
+        Currency    eur      = repository.create(new Currency("EUR"));
+        Category    invoices = repository.create(new Category("invoices"));
+        SubCategory energy   = repository.create(new SubCategory("energy"), invoices);
         Account bnkCurrent = repository.create(new Account(
-            0, "current", eur, bnk, current
+            "current", eur, bnk, current
         ));
         Transaction t1 = repository.create(new Transaction(
-            0, "random 01", -150.43, new Date(),
+            "random 01", -150.43, new Date(),
             bnkCurrent, invoices, energy
         ));
         repository.findAll();

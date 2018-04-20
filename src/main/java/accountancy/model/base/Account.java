@@ -11,6 +11,11 @@ public final class Account extends ObservableEntity {
     private Bank     bank;
     private Type     type;
 
+    public Account(int id) {
+
+        this(id, "", null, null, null);
+    }
+
     /**
      * @param id       number of this account
      * @param title    name of this account
@@ -24,6 +29,11 @@ public final class Account extends ObservableEntity {
         this.currency = currency;
         this.bank = bank;
         this.type = type;
+    }
+
+    public Account(String title, Currency currency, Bank bank, Type type) {
+
+        this(0, title, currency, bank, type);
     }
 
     /**

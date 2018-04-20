@@ -20,7 +20,7 @@ public class Banks extends AppServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int  id   = Integer.parseInt(request.getPathInfo().substring(1));
-        Bank bank = repository.find(new Bank(id, ""));
+        Bank bank = repository.find(new Bank(id));
         response.getWriter().println(gson.toJson(bank));
     }
 

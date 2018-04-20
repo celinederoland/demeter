@@ -39,7 +39,7 @@ public class CategoriesInnerPanel extends PPanel implements Observer {
                 add(panelCategory);
             }
 
-            PPanel panelCategory = new CategoryPanel(new Category(0, ""), repository);
+            PPanel panelCategory = new CategoryPanel(new Category(""), repository);
             add(panelCategory);
 
             revalidate();

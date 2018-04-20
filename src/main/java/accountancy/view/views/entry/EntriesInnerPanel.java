@@ -49,7 +49,7 @@ public class EntriesInnerPanel extends PPanel implements Observer {
 
             PPanel panelEntry = new TransactionPanel(
                 new Transaction(
-                    0, "", 0,
+                    "", 0,
                     new Date(),
                     (Account) repository.accounts().getOne(),
                     (Category) repository.categories().getOne(),

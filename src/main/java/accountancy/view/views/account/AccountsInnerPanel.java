@@ -45,7 +45,7 @@ public class AccountsInnerPanel extends PPanel implements Observer {
 
             PPanel panelAccount = new AccountPanel(
                 new Account(
-                    0, "",
+                    "",
                     (Currency) repository.currencies().getOne(),
                     (Bank) repository.banks().getOne(),
                     (Type) repository.types().getOne()

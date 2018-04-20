@@ -69,7 +69,7 @@ public class CategoryPanel extends PPanel implements Observer {
                 subCategoriesPanel.add(panelSubCategory);
             }
 
-            SubCategoryPanel panelSubCategory = new SubCategoryPanel(category, new SubCategory(0, ""), repository);
+            SubCategoryPanel panelSubCategory = new SubCategoryPanel(category, new SubCategory(""), repository);
             subCategoriesPanel.add(panelSubCategory);
 
             revalidate();

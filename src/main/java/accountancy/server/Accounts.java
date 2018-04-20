@@ -20,7 +20,7 @@ public class Accounts extends AppServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int     id      = Integer.parseInt(request.getPathInfo().substring(1));
-        Account account = repository.find(new Account(id, "", null, null, null));
+        Account account = repository.find(new Account(id));
         response.getWriter().println(gson.toJson(account));
     }
 

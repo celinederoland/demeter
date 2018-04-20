@@ -50,9 +50,9 @@ public class Json {
             int        type_id     = jsonAccount.get("type").getAsJsonObject().get("id").getAsInt();
             return new Account(
                 id, title,
-                repository.find(new Currency(currency_id, "")),
-                repository.find(new Bank(bank_id, "")),
-                repository.find(new accountancy.model.base.Type(type_id, ""))
+                repository.find(new Currency(currency_id)),
+                repository.find(new Bank(bank_id)),
+                repository.find(new accountancy.model.base.Type(type_id))
             );
         }
     }
@@ -101,9 +101,9 @@ public class Json {
 
             return new Transaction(
                 id, title, amount, date,
-                repository.find(new Account(account_id, "", null, null, null)),
-                repository.find(new Category(category_id, "")),
-                repository.find(new SubCategory(subcategory_id, ""))
+                repository.find(new Account(account_id)),
+                repository.find(new Category(category_id)),
+                repository.find(new SubCategory(subcategory_id))
             );
 
         }

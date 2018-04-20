@@ -20,7 +20,7 @@ public class Types extends AppServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int  id   = Integer.parseInt(request.getPathInfo().substring(1));
-        Type type = repository.find(new Type(id, ""));
+        Type type = repository.find(new Type(id));
         response.getWriter().println(gson.toJson(type));
     }
 

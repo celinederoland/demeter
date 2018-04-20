@@ -8,11 +8,21 @@ public abstract class ObservableEntity extends ObservableModel implements Entity
     private int    id;
     private String title;
 
+    public ObservableEntity(String title) {
+
+        this(0, title);
+    }
+
     public ObservableEntity(int id, String title) {
 
         super();
         this.id = id;
         this.title = title;
+    }
+
+    public ObservableEntity(int id) {
+
+        this(id, "");
     }
 
     public int id() {

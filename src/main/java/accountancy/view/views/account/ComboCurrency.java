@@ -50,6 +50,6 @@ public class ComboCurrency extends PCombo implements Observer {
         if (this.getSelectedItem() != null && this.getSelectedItem().toString().equals(this.inputField.getText())) {
             return (Currency) this.getSelectedItem();
         }
-        return new Currency(0, this.inputField.getText());
+        return new Currency(this.inputField.getText());
     }
 }

@@ -187,6 +187,7 @@ public interface BaseRepository {
      * Find one instance of Bank
      *
      * @param bank the bank searched (by id)
+     *
      * @return bank the bank found
      */
     Bank find(Bank bank);

@@ -16,6 +16,11 @@ public class Transaction extends ObservableEntity {
     private Category    category;
     private SubCategory subCategory;
 
+    public Transaction(int id) {
+
+        this(id, "", 0, new Date(), null, null, null);
+    }
+
     /**
      * @param id          number
      * @param title       name
@@ -36,6 +41,14 @@ public class Transaction extends ObservableEntity {
         this.account = account;
         this.category = category;
         this.subCategory = subCategory;
+    }
+
+    public Transaction(
+        String title, double amount, Date date,
+        Account account, Category category, SubCategory subCategory
+    ) {
+
+        this(0, title, amount, date, account, category, subCategory);
     }
 
     /**

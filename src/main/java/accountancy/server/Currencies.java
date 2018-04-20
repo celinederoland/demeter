@@ -20,7 +20,7 @@ public class Currencies extends AppServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int      id       = Integer.parseInt(request.getPathInfo().substring(1));
-        Currency currency = repository.find(new Currency(id, ""));
+        Currency currency = repository.find(new Currency(id));
         response.getWriter().println(gson.toJson(currency));
     }
 

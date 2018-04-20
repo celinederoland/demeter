@@ -20,7 +20,7 @@ public class Categories extends AppServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int      id       = Integer.parseInt(request.getPathInfo().substring(1));
-        Category category = repository.find(new Category(id, ""));
+        Category category = repository.find(new Category(id));
         response.getWriter().println(gson.toJson(category));
     }
 

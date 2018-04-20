@@ -7,6 +7,16 @@ import accountancy.model.ObservableEntity;
  */
 public final class Type extends ObservableEntity {
 
+    public Type(int id) {
+
+        super(id);
+    }
+
+    public Type(String title) {
+
+        super(title);
+    }
+
     public Type(int id, String title) {
 
         super(id, title);

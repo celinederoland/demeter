@@ -454,9 +454,9 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
 
                 this.transactions().add(new Transaction(
                     id, title, amount, date,
-                    this.find(new Account(accountId, "", null, null, null)),
-                    this.find(new Category(categoryId, "")),
-                    this.find(new SubCategory(subCategoryId, ""))
+                    this.find(new Account(accountId)),
+                    this.find(new Category(categoryId)),
+                    this.find(new SubCategory(subCategoryId))
                 ));
             }
 
@@ -665,7 +665,7 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
             if (resultSet.next()) {
 
                 int categoryId = resultSet.getInt("id");
-                category = this.find(new Category(categoryId, ""));
+                category = this.find(new Category(categoryId));
 
                 if (category != null) {
                     if (category.subCategories().getOne(subCategory.id()) != null) {
@@ -867,9 +867,9 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
                 int typeId     = resultSet.getInt("type_id");
                 this.accounts().add(new Account(
                     id, title,
-                    this.find(new Currency(currencyId, "")),
-                    this.find(new Bank(bankId, "")),
-                    this.find(new Type(typeId, ""))
+                    this.find(new Currency(currencyId)),
+                    this.find(new Bank(bankId)),
+                    this.find(new Type(typeId))
                 ));
             }
 

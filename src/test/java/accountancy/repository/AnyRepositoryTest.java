@@ -17,9 +17,9 @@ public class AnyRepositoryTest {
 
     public void types() {
 
-        Type current = repository.create(new Type(0, "current"));
-        Type saving  = repository.create(new Type(0, "saving"));
-        Type credit  = repository.create(new Type(0, "credit"));
+        Type current = repository.create(new Type("current"));
+        Type saving  = repository.create(new Type("saving"));
+        Type credit  = repository.create(new Type("credit"));
 
         assertEquals(1, current.id());
         assertEquals(2, saving.id());
@@ -41,8 +41,8 @@ public class AnyRepositoryTest {
 
     public void banks() throws Exception {
 
-        Bank bnk = repository.create(new Bank(0, "BNK"));
-        Bank bn2 = repository.create(new Bank(0, "BN2"));
+        Bank bnk = repository.create(new Bank("BNK"));
+        Bank bn2 = repository.create(new Bank("BN2"));
 
         assertEquals(1, bnk.id());
         assertEquals(2, bn2.id());
@@ -61,8 +61,8 @@ public class AnyRepositoryTest {
 
     public void currencies() throws Exception {
 
-        Currency eur = repository.create(new Currency(0, "EUR"));
-        Currency chf = repository.create(new Currency(0, "CHF"));
+        Currency eur = repository.create(new Currency("EUR"));
+        Currency chf = repository.create(new Currency("CHF"));
 
         assertEquals(1, eur.id());
         assertEquals(2, chf.id());
@@ -82,27 +82,27 @@ public class AnyRepositoryTest {
 
     public void accounts() throws Exception {
 
-        Type current = repository.create(new Type(0, "current"));
-        Type saving  = repository.create(new Type(0, "saving"));
-        Type credit  = repository.create(new Type(0, "credit"));
+        Type current = repository.create(new Type("current"));
+        Type saving  = repository.create(new Type("saving"));
+        Type credit  = repository.create(new Type("credit"));
 
-        Bank bnk = repository.create(new Bank(0, "BNK"));
-        Bank bn2 = repository.create(new Bank(0, "BN2"));
+        Bank bnk = repository.create(new Bank("BNK"));
+        Bank bn2 = repository.create(new Bank("BN2"));
 
-        Currency eur = repository.create(new Currency(0, "EUR"));
-        Currency chf = repository.create(new Currency(0, "CHF"));
+        Currency eur = repository.create(new Currency("EUR"));
+        Currency chf = repository.create(new Currency("CHF"));
 
         Account bnkCurrent = repository.create(new Account(
-            0, "current", eur, bnk, current
+            "current", eur, bnk, current
         ));
         Account bnkSaving = repository.create(new Account(
-            0, "pel", eur, bnk, saving
+            "pel", eur, bnk, saving
         ));
         Account bn2Current = repository.create(new Account(
-            0, "current", chf, bn2, current
+            "current", chf, bn2, current
         ));
         Account bnkCredit = repository.create(new Account(
-            0, "immo", chf, bnk, credit
+            "immo", chf, bnk, credit
         ));
 
         assertEquals(1, bnkCurrent.id());
@@ -131,13 +131,13 @@ public class AnyRepositoryTest {
 
     public void categories() throws Exception {
 
-        Category    invoices = repository.create(new Category(0, "invoices"));
-        SubCategory taxes    = repository.create(new SubCategory(0, "taxes"), invoices);
-        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+        Category    invoices = repository.create(new Category("invoices"));
+        SubCategory taxes    = repository.create(new SubCategory("taxes"), invoices);
+        SubCategory energy   = repository.create(new SubCategory("energy"), invoices);
 
-        Category    dayToDay = repository.create(new Category(0, "day to day"));
-        SubCategory food     = repository.create(new SubCategory(0, "food"), dayToDay);
-        SubCategory medics   = repository.create(new SubCategory(0, "medics"), dayToDay);
+        Category    dayToDay = repository.create(new Category("day to day"));
+        SubCategory food     = repository.create(new SubCategory("food"), dayToDay);
+        SubCategory medics   = repository.create(new SubCategory("medics"), dayToDay);
 
         assertEquals(invoices, repository.categories().getOne(1));
         assertEquals(
@@ -180,47 +180,47 @@ public class AnyRepositoryTest {
 
     public void transactions() throws Exception {
 
-        Type current = repository.create(new Type(0, "current"));
-        Type saving  = repository.create(new Type(0, "saving"));
-        Type credit  = repository.create(new Type(0, "credit"));
+        Type current = repository.create(new Type("current"));
+        Type saving  = repository.create(new Type("saving"));
+        Type credit  = repository.create(new Type("credit"));
 
-        Bank bnk = repository.create(new Bank(0, "BNK"));
-        Bank bn2 = repository.create(new Bank(0, "BN2"));
+        Bank bnk = repository.create(new Bank("BNK"));
+        Bank bn2 = repository.create(new Bank("BN2"));
 
-        Currency eur = repository.create(new Currency(0, "EUR"));
-        Currency chf = repository.create(new Currency(0, "CHF"));
+        Currency eur = repository.create(new Currency("EUR"));
+        Currency chf = repository.create(new Currency("CHF"));
 
-        Category    invoices = repository.create(new Category(0, "invoices"));
-        SubCategory taxes    = repository.create(new SubCategory(0, "taxes"), invoices);
-        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+        Category    invoices = repository.create(new Category("invoices"));
+        SubCategory taxes    = repository.create(new SubCategory("taxes"), invoices);
+        SubCategory energy   = repository.create(new SubCategory("energy"), invoices);
 
-        Category    dayToDay = repository.create(new Category(0, "day to day"));
-        SubCategory food     = repository.create(new SubCategory(0, "food"), dayToDay);
-        SubCategory medics   = repository.create(new SubCategory(0, "medics"), dayToDay);
+        Category    dayToDay = repository.create(new Category("day to day"));
+        SubCategory food     = repository.create(new SubCategory("food"), dayToDay);
+        SubCategory medics   = repository.create(new SubCategory("medics"), dayToDay);
 
         Account bnkCurrent = repository.create(new Account(
-            0, "current", eur, bnk, current
+            "current", eur, bnk, current
         ));
         Account bnkSaving = repository.create(new Account(
-            0, "pel", eur, bnk, saving
+            "pel", eur, bnk, saving
         ));
         Account bn2Current = repository.create(new Account(
-            0, "current", chf, bn2, current
+            "current", chf, bn2, current
         ));
         Account bnkCredit = repository.create(new Account(
-            0, "immo", chf, bnk, credit
+            "immo", chf, bnk, credit
         ));
 
         Transaction t1 = repository.create(new Transaction(
-            0, "random 01", -150.43, new Date(),
+            "random 01", -150.43, new Date(),
             bnkCurrent, invoices, energy
         ));
         Transaction t2 = repository.create(new Transaction(
-            0, "random 02", -50.89, new Date(),
+            "random 02", -50.89, new Date(),
             bnkCurrent, dayToDay, food
         ));
         Transaction t3 = repository.create(new Transaction(
-            0, "random 03", -300, new Date(),
+            "random 03", -300, new Date(),
             bn2Current, invoices, taxes
         ));
 
@@ -240,47 +240,47 @@ public class AnyRepositoryTest {
 
     public void findAll(BaseRepository newRepository) throws Exception {
 
-        Type current = repository.create(new Type(0, "current"));
-        Type saving  = repository.create(new Type(0, "saving"));
-        Type credit  = repository.create(new Type(0, "credit"));
+        Type current = repository.create(new Type("current"));
+        Type saving  = repository.create(new Type("saving"));
+        Type credit  = repository.create(new Type("credit"));
 
-        Bank bnk = repository.create(new Bank(0, "BNK"));
-        Bank bn2 = repository.create(new Bank(0, "BN2"));
+        Bank bnk = repository.create(new Bank("BNK"));
+        Bank bn2 = repository.create(new Bank("BN2"));
 
-        Currency eur = repository.create(new Currency(0, "EUR"));
-        Currency chf = repository.create(new Currency(0, "CHF"));
+        Currency eur = repository.create(new Currency("EUR"));
+        Currency chf = repository.create(new Currency("CHF"));
 
-        Category    invoices = repository.create(new Category(0, "invoices"));
-        SubCategory taxes    = repository.create(new SubCategory(0, "taxes"), invoices);
-        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+        Category    invoices = repository.create(new Category("invoices"));
+        SubCategory taxes    = repository.create(new SubCategory("taxes"), invoices);
+        SubCategory energy   = repository.create(new SubCategory("energy"), invoices);
 
-        Category    dayToDay = repository.create(new Category(0, "day to day"));
-        SubCategory food     = repository.create(new SubCategory(0, "food"), dayToDay);
-        SubCategory medics   = repository.create(new SubCategory(0, "medics"), dayToDay);
+        Category    dayToDay = repository.create(new Category("day to day"));
+        SubCategory food     = repository.create(new SubCategory("food"), dayToDay);
+        SubCategory medics   = repository.create(new SubCategory("medics"), dayToDay);
 
         Account bnkCurrent = repository.create(new Account(
-            0, "current", eur, bnk, current
+            "current", eur, bnk, current
         ));
         Account bnkSaving = repository.create(new Account(
-            0, "pel", eur, bnk, saving
+            "pel", eur, bnk, saving
         ));
         Account bn2Current = repository.create(new Account(
-            0, "current", chf, bn2, current
+            "current", chf, bn2, current
         ));
         Account bnkCredit = repository.create(new Account(
-            0, "immo", chf, bnk, credit
+            "immo", chf, bnk, credit
         ));
 
         Transaction t1 = repository.create(new Transaction(
-            0, "random 01", -150.43, new Date(),
+            "random 01", -150.43, new Date(),
             bnkCurrent, invoices, energy
         ));
         Transaction t2 = repository.create(new Transaction(
-            0, "random 02", -50.89, new Date(),
+            "random 02", -50.89, new Date(),
             bnkCurrent, dayToDay, food
         ));
         Transaction t3 = repository.create(new Transaction(
-            0, "random 03", -300, new Date(),
+            "random 03", -300, new Date(),
             bn2Current, invoices, taxes
         ));
 
@@ -333,47 +333,47 @@ public class AnyRepositoryTest {
 
     public void find(BaseRepository newRepository) {
 
-        Type current = repository.create(new Type(0, "current"));
-        Type saving  = repository.create(new Type(0, "saving"));
-        Type credit  = repository.create(new Type(0, "credit"));
+        Type current = repository.create(new Type("current"));
+        Type saving  = repository.create(new Type("saving"));
+        Type credit  = repository.create(new Type("credit"));
 
-        Bank bnk = repository.create(new Bank(0, "BNK"));
-        Bank bn2 = repository.create(new Bank(0, "BN2"));
+        Bank bnk = repository.create(new Bank("BNK"));
+        Bank bn2 = repository.create(new Bank("BN2"));
 
-        Currency eur = repository.create(new Currency(0, "EUR"));
-        Currency chf = repository.create(new Currency(0, "CHF"));
+        Currency eur = repository.create(new Currency("EUR"));
+        Currency chf = repository.create(new Currency("CHF"));
 
-        Category    invoices = repository.create(new Category(0, "invoices"));
-        SubCategory taxes    = repository.create(new SubCategory(0, "taxes"), invoices);
-        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+        Category    invoices = repository.create(new Category("invoices"));
+        SubCategory taxes    = repository.create(new SubCategory("taxes"), invoices);
+        SubCategory energy   = repository.create(new SubCategory("energy"), invoices);
 
-        Category    dayToDay = repository.create(new Category(0, "day to day"));
-        SubCategory food     = repository.create(new SubCategory(0, "food"), dayToDay);
-        SubCategory medics   = repository.create(new SubCategory(0, "medics"), dayToDay);
+        Category    dayToDay = repository.create(new Category("day to day"));
+        SubCategory food     = repository.create(new SubCategory("food"), dayToDay);
+        SubCategory medics   = repository.create(new SubCategory("medics"), dayToDay);
 
         Account bnkCurrent = repository.create(new Account(
-            0, "current", eur, bnk, current
+            "current", eur, bnk, current
         ));
         Account bnkSaving = repository.create(new Account(
-            0, "pel", eur, bnk, saving
+            "pel", eur, bnk, saving
         ));
         Account bn2Current = repository.create(new Account(
-            0, "current", chf, bn2, current
+            "current", chf, bn2, current
         ));
         Account bnkCredit = repository.create(new Account(
-            0, "immo", chf, bnk, credit
+            "immo", chf, bnk, credit
         ));
 
         Transaction t1 = repository.create(new Transaction(
-            0, "random 01", -150.43, new Date(),
+            "random 01", -150.43, new Date(),
             bnkCurrent, invoices, energy
         ));
         Transaction t2 = repository.create(new Transaction(
-            0, "random 02", -50.89, new Date(),
+            "random 02", -50.89, new Date(),
             bnkCurrent, dayToDay, food
         ));
         Transaction t3 = repository.create(new Transaction(
-            0, "random 03", -300, new Date(),
+            "random 03", -300, new Date(),
             bn2Current, invoices, taxes
         ));
 
@@ -416,52 +416,52 @@ public class AnyRepositoryTest {
 
     public void clean() {
 
-        Type current = repository.create(new Type(0, "current"));
-        Type saving  = repository.create(new Type(0, "saving"));
-        Type credit  = repository.create(new Type(0, "credit"));
+        Type current = repository.create(new Type("current"));
+        Type saving  = repository.create(new Type("saving"));
+        Type credit  = repository.create(new Type("credit"));
 
-        Bank bnk = repository.create(new Bank(0, "BNK"));
-        Bank bn2 = repository.create(new Bank(0, "BN2"));
+        Bank bnk = repository.create(new Bank("BNK"));
+        Bank bn2 = repository.create(new Bank("BN2"));
 
-        Currency eur = repository.create(new Currency(0, "EUR"));
-        Currency chf = repository.create(new Currency(0, "CHF"));
-        Currency usd = repository.create(new Currency(0, "USD"));
+        Currency eur = repository.create(new Currency("EUR"));
+        Currency chf = repository.create(new Currency("CHF"));
+        Currency usd = repository.create(new Currency("USD"));
 
-        Category    invoices = repository.create(new Category(0, "invoices"));
-        SubCategory taxes    = repository.create(new SubCategory(0, "taxes"), invoices);
-        SubCategory energy   = repository.create(new SubCategory(0, "energy"), invoices);
+        Category    invoices = repository.create(new Category("invoices"));
+        SubCategory taxes    = repository.create(new SubCategory("taxes"), invoices);
+        SubCategory energy   = repository.create(new SubCategory("energy"), invoices);
 
-        Category    dayToDay = repository.create(new Category(0, "day to day"));
-        SubCategory food     = repository.create(new SubCategory(0, "food"), dayToDay);
-        SubCategory medics   = repository.create(new SubCategory(0, "medics"), dayToDay);
+        Category    dayToDay = repository.create(new Category("day to day"));
+        SubCategory food     = repository.create(new SubCategory("food"), dayToDay);
+        SubCategory medics   = repository.create(new SubCategory("medics"), dayToDay);
 
-        Category    unusedCat  = repository.create(new Category(0, "..."));
-        SubCategory unusedSCat = repository.create(new SubCategory(0, "???"), unusedCat);
+        Category    unusedCat  = repository.create(new Category("..."));
+        SubCategory unusedSCat = repository.create(new SubCategory("???"), unusedCat);
 
 
         Account bnkCurrent = repository.create(new Account(
-            0, "current", eur, bnk, current
+            "current", eur, bnk, current
         ));
         Account bnkSaving = repository.create(new Account(
-            0, "pel", eur, bnk, saving
+            "pel", eur, bnk, saving
         ));
         Account bn2Current = repository.create(new Account(
-            0, "current", chf, bn2, current
+            "current", chf, bn2, current
         ));
         Account bnkCredit = repository.create(new Account(
-            0, "immo", chf, bnk, credit
+            "immo", chf, bnk, credit
         ));
 
         Transaction t1 = repository.create(new Transaction(
-            0, "random 01", -150.43, new Date(),
+            "random 01", -150.43, new Date(),
             bnkCurrent, invoices, energy
         ));
         Transaction t2 = repository.create(new Transaction(
-            0, "random 02", -50.89, new Date(),
+            "random 02", -50.89, new Date(),
             bnkCurrent, dayToDay, food
         ));
         Transaction t3 = repository.create(new Transaction(
-            0, "random 03", -300, new Date(),
+            "random 03", -300, new Date(),
             bn2Current, invoices, taxes
         ));
 

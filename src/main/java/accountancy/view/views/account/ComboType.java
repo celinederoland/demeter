@@ -50,7 +50,7 @@ public class ComboType extends PCombo implements Observer {
         if (this.getSelectedItem() != null && this.getSelectedItem().toString().equals(this.inputField.getText())) {
             return (Type) this.getSelectedItem();
         }
-        return new Type(0, this.inputField.getText());
+        return new Type(this.inputField.getText());
     }
 
 }

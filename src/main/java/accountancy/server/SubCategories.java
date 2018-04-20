@@ -25,7 +25,7 @@ public class SubCategories extends AppServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int         id          = Integer.parseInt(request.getPathInfo().substring(1));
-        SubCategory subCategory = repository.find(new SubCategory(id, ""));
+        SubCategory subCategory = repository.find(new SubCategory(id));
         Category    category    = null;
         for (Entity entity : repository.categories().getAll()) {
 
@@ -86,7 +86,7 @@ public class SubCategories extends AppServlet {
 
         JsonObject  jsonSubCategory  = json.get("subcategory").getAsJsonObject();
         String      titleSubCategory = jsonSubCategory.get("title").getAsString();
-        SubCategory subCategory      = new SubCategory(0, titleSubCategory);
+        SubCategory subCategory      = new SubCategory(titleSubCategory);
 
         if (subCategory.id() > 0) {
             new HttpError(403, "ResourceAlreadyExist - use POST method instead", response);

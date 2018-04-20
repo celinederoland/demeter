@@ -17,12 +17,12 @@ import java.awt.event.FocusEvent;
 public class AccountPanel extends PPanel implements Observer {
 
     private final BaseRepository repository;
-    private       Account        account;
     private final PCombo         comboBank;
     private final PCombo         comboCurrency;
     private final PCombo         comboType;
     private final PTextField     titleField;
     private final PLabel         labelBalance;
+    private       Account        account;
 
     public AccountPanel(Account account, BaseRepository repository) {
 

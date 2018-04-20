@@ -11,6 +11,16 @@ public final class Category extends ObservableEntity {
 
     private final SubCategories subCategories = new SubCategories();
 
+    public Category(int id) {
+
+        super(id);
+    }
+
+    public Category(String title) {
+
+        super(title);
+    }
+
     public Category(int id, String title) {
 
         super(id, title);

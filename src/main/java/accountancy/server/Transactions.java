@@ -6,7 +6,6 @@ import accountancy.server.errors.HttpError;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 
 public class Transactions extends AppServlet {
 
@@ -21,7 +20,7 @@ public class Transactions extends AppServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int         id          = Integer.parseInt(request.getPathInfo().substring(1));
-        Transaction transaction = repository.find(new Transaction(id, "", 0, new Date(), null, null, null));
+        Transaction transaction = repository.find(new Transaction(id));
         response.getWriter().println(gson.toJson(transaction));
     }
 
