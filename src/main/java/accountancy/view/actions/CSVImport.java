@@ -19,6 +19,7 @@ public class CSVImport extends PForm {
     private       ComboAccount        comboAccount;
     private       PPanel              panelFile;
     private       File                file;
+    private       PLoader             loader;
 
     public CSVImport(BaseRepository repository, CsvImportRepository csvImportRepository) {
 
@@ -82,9 +83,10 @@ public class CSVImport extends PForm {
 
         public void run() {
 
-            PLoader loader = new PLoader();
+            SwingUtilities.invokeLater(() -> loader = new PLoader());
+            System.out.println("loader invoke");
             (new CsvRepository(repository, csvImportRepository, file, comboAccount.getValue())).doImport();
-            loader.dispose();
+            SwingUtilities.invokeLater(() -> loader.dispose());
         }
     }
 }

@@ -74,6 +74,21 @@ public class AccountTest {
         assertTrue(observer.hasBeenUpdated());
     }
 
+    @Test
+    public void withSpecialCharacter() {
+
+        Currency eur     = new Currency(3, "EUR");
+        Bank     myBank  = new Bank(4, "Be-My-Bank");
+        Type     current = new Type(4, "current");
+
+        Account account = new Account(
+            12, "my – current – account",
+            eur, myBank, current
+        );
+
+        assertEquals("Be-My-Bank - my – current – account", account.toString());
+    }
+
 
     @Test
     public void toStringT() throws Exception {

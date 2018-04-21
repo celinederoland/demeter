@@ -59,9 +59,16 @@ public class ComboCategory extends PCombo implements Observer {
     @Override public void setSelectedItem(Object anObject) {
 
         if (((Category) anObject).subCategories().isEmpty()) {
-            new PAlert(
-                "impossible", "Cette catégorie ne peut pas être sélectionnée car elle n'a pas de sous catégories");
-            return;
+            for (Entity category : repository.categories().getAll()) {
+                if (!((Category) category).subCategories().isEmpty()) {
+                    new PAlert(
+                        "impossible",
+                        "Cette catégorie ne peut pas être sélectionnée car elle n'a pas de sous catégories"
+                    );
+                    super.setSelectedItem(category);
+                    return;
+                }
+            }
         }
         super.setSelectedItem(anObject);
     }

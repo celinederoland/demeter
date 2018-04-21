@@ -48,13 +48,22 @@ public class TransactionsInnerPanel extends PPanel implements Observer {
                 add(panelEntry);
             }
 
+            Category    oneCategory    = (Category) repository.categories().getOne();
+            SubCategory oneSubCategory = null;
+            if (oneCategory != null) {
+                oneSubCategory = (SubCategory) oneCategory.subCategories().getOne();
+                if (oneSubCategory == null)
+                    oneSubCategory = repository.create(new SubCategory(oneCategory.title()), oneCategory);
+            }
+            Account oneAccount = (Account) repository.accounts().getOne();
+
             PPanel panelEntry = new TransactionPanel(
                 new Transaction(
                     "", 0,
                     new Date(),
-                    (Account) repository.accounts().getOne(),
-                    (Category) repository.categories().getOne(),
-                    (SubCategory) ((Category) repository.categories().getOne()).subCategories().getOne()
+                    oneAccount,
+                    oneCategory,
+                    oneSubCategory
                 ), repository);
             add(panelEntry);
 

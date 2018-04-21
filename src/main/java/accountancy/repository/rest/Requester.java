@@ -3,10 +3,7 @@ package accountancy.repository.rest;
 import accountancy.model.Json;
 import accountancy.repository.BaseRepository;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -29,25 +26,13 @@ public class Requester {
 
         try {
             //Create connection
-            URL url = new URL(targetURL);
-            connection = (HttpURLConnection) url.openConnection();
-
-            connection.setRequestProperty("Content-Language", "en-US");
+            connection = this.initConnection(targetURL, "GET");
 
             connection.setUseCaches(false);
             connection.setDoOutput(false);
 
             //Get Response
-            InputStream    is       = connection.getInputStream();
-            BufferedReader rd       = new BufferedReader(new InputStreamReader(is));
-            StringBuilder  response = new StringBuilder();
-            String         line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
+            return getResponse(connection);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -63,6 +48,40 @@ public class Requester {
         return executeMethod("POST", targetURL, urlParameters);
     }
 
+    private HttpURLConnection initConnection(String targetURL, String method) throws IOException {
+
+        URL               url        = new URL(targetURL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(method);
+        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        connection.setRequestProperty("Content-Language", "en-US");
+        return connection;
+    }
+
+    private String getResponse(HttpURLConnection connection) throws IOException {
+
+        InputStream is;
+        try {
+            is = connection.getInputStream();
+        } catch (IOException e) {
+            is = connection.getErrorStream();
+        }
+        BufferedReader rd       = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        StringBuilder  response = new StringBuilder();
+        String         line;
+        while ((line = rd.readLine()) != null) {
+            response.append(line);
+            response.append('\r');
+        }
+        rd.close();
+        return response.toString();
+    }
+
+    public String executePut(String targetURL, Object urlParameters) {
+
+        return executeMethod("PUT", targetURL, urlParameters);
+    }
+
     private String executeMethod(String method, String targetURL, Object urlParameters) {
 
         targetURL = baseURL + targetURL;
@@ -70,41 +89,22 @@ public class Requester {
 
         try {
             //Create connection
-            URL url = new URL(targetURL);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod(method);
-            connection.setRequestProperty(
-                "Content-Type",
-                "application/json"
-            );
+            connection = this.initConnection(targetURL, method);
 
             String json = Json.gson(repository).toJson(urlParameters);
             connection.setRequestProperty(
                 "Content-Length",
                 Integer.toString(json.getBytes().length)
             );
-            connection.setRequestProperty("Content-Language", "en-US");
 
             connection.setUseCaches(false);
             connection.setDoOutput(true);
 
             //Send request
-            DataOutputStream wr = new DataOutputStream(
-                connection.getOutputStream());
-            wr.writeBytes(json);
-            wr.close();
+            sendRequest(connection, json);
 
             //Get Response
-            InputStream    is       = connection.getInputStream();
-            BufferedReader rd       = new BufferedReader(new InputStreamReader(is));
-            StringBuilder  response = new StringBuilder();
-            String         line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
+            return getResponse(connection);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -115,13 +115,19 @@ public class Requester {
         }
     }
 
-    public String executePut(String targetURL, Object urlParameters) {
+    private void sendRequest(HttpURLConnection connection, String json) throws IOException {
 
-        return executeMethod("PUT", targetURL, urlParameters);
+        DataOutputStream wr = new DataOutputStream(
+            connection.getOutputStream());
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(wr, "UTF-8"));
+        writer.write(json);
+        writer.close();
     }
 
     public String executeDelete(String targetURL, Object urlParameters) {
 
         return executeMethod("DELETE", targetURL, urlParameters);
     }
+
+
 }

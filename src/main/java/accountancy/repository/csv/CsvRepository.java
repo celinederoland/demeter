@@ -91,8 +91,14 @@ public class CsvRepository {
 
                 if (!csvRepository.csvLineHasBeenImported(dateField, textField, amount)) {
 
-                    Category    category    = (Category) baseRepository.categories().getOne();
+                    Category category = (Category) baseRepository.categories().getOne("VIDE");
+                    if (category == null)
+                        category = baseRepository.create(new Category("VIDE"));
+
                     SubCategory subCategory = (SubCategory) category.subCategories().getOne();
+                    if (subCategory == null) {
+                        subCategory = baseRepository.create(new SubCategory(category.title()), category);
+                    }
 
                     Transaction transaction = baseRepository.create(
                         new Transaction(

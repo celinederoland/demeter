@@ -34,7 +34,7 @@ public class ComboSubCategory extends PCombo implements Observer {
             revalidate();
             repaint();
 
-            if (previous.id() == 0) {
+            if (previous != null && previous.id() == 0) {
                 setSelectedItem(category.subCategories().getOne(previous.title()));
                 return;
             }

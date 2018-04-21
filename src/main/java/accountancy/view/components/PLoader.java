@@ -8,6 +8,7 @@ public class PLoader extends JFrame {
     public PLoader() {
 
         super("En cours ... ");
+        System.out.println("creating loader");
     }
 
     public PLoader(String title) {

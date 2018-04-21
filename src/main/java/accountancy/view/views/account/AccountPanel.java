@@ -100,7 +100,8 @@ public class AccountPanel extends PPanel implements Observer {
         comboBank.setSelectedItem(account.bank());
         comboCurrency.setSelectedItem(account.currency());
         comboType.setSelectedItem(account.type());
-        labelBalance.setText("Solde : " + account.balance() + " " + account.currency().toString());
+        if (account.currency() != null)
+            labelBalance.setText("Solde : " + account.balance() + " " + account.currency().toString());
     }
 
     public void requestFocus() {
@@ -113,7 +114,8 @@ public class AccountPanel extends PPanel implements Observer {
         if (account.id() > 0) {
             repository.save(account);
         }
-        else if (!account.title().isEmpty()) {
+        else if (!account.title().isEmpty() && account.currency() != null && account.bank() != null &&
+                 account.type() != null) {
             account = repository.create(account);
         }
     }

@@ -13,8 +13,10 @@ public class CurrencyLabel extends PLabel implements Observer {
 
         super("");
         this.account = account;
-        account.addObserver(this);
-        this.update();
+        if (account != null) {
+            account.addObserver(this);
+            this.update();
+        }
     }
 
     @Override public void update() {

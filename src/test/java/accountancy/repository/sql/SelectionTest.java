@@ -5,6 +5,7 @@ import accountancy.model.selection.AmountByDate;
 import accountancy.model.selection.Criteria;
 import accountancy.model.selection.DatesIterator;
 import accountancy.repository.BaseRepository;
+import accountancy.repository.RepositoryTest;
 import accountancy.repository.Selection;
 import org.junit.Before;
 import org.junit.Test;

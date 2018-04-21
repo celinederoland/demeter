@@ -23,6 +23,7 @@ public class App {
         BaseRepository        repository          = new RestBaseRepository("http://accountancy.localhost");
         //BaseRepository        repository          = new SqlBaseRepository(connectionProvider);
         CsvImportRepository   csvImportRepository = new SqlCsvImportRepository(connectionProvider);
+        //CsvImportRepository   csvImportRepository = new RestCsvImportRepository("http://accountancy.localhost", repository);
         SelectionProvider     provider            = new SqlSelectionProvider(connectionProvider, repository);
         AxialSelectionFactory factory             = new MySelectionFactory(provider, repository);
         repository.findAll();

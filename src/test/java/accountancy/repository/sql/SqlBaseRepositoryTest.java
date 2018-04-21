@@ -2,6 +2,7 @@ package accountancy.repository.sql;
 
 import accountancy.repository.AnyRepositoryTest;
 import accountancy.repository.BaseRepository;
+import accountancy.repository.RepositoryTest;
 import org.junit.Before;
 import org.junit.Test;
 

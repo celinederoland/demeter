@@ -42,7 +42,7 @@ public class SqlSelection extends Repository implements Selection {
         try {
 
             statement = connectionProvider.getConnection().createStatement();
-            String query = "SELECT id FROM view_entries_structure AS v " +
+            String query = "SELECT id FROM view_transactions_structure AS v " +
                            "WHERE " + buildWhereQuery() + " ORDER BY v.date ASC, v.id ASC";
             resultSet = statement.executeQuery(
                 query
@@ -80,7 +80,7 @@ public class SqlSelection extends Repository implements Selection {
         try {
 
             statement = connectionProvider.getConnection().createStatement();
-            String query = "SELECT SUM(amount) AS amount FROM view_entries_structure AS v " +
+            String query = "SELECT SUM(amount) AS amount FROM view_transactions_structure AS v " +
                            "WHERE " + buildWhereQuery(start, end);
             resultSet = statement.executeQuery(query);
 

@@ -1,11 +1,11 @@
 SET foreign_key_checks = 0;
 
-DROP VIEW IF EXISTS view_accounts, view_entries, view_entries_structure, view_entries_global;
-DROP TABLE IF EXISTS accounts, banks, categories, currencies, transactions, types, subcategories,
-compound_selections_selections, compound_selections, selections,
-selections_accounts, selections_banks, selections_types,
-selections_categories, selections_sub_categories, selections_currencies,
-stats, csv_remember;
+DROP VIEW IF EXISTS view_accounts, view_transactions, view_transactions_structure, view_transactions_global;
+DROP TABLE IF EXISTS accounts, banks, categories, currencies, transactions, types, subcategories, csv_remember;
+
+ALTER DATABASE accountancy
+CHARACTER SET utf8
+COLLATE utf8_unicode_ci;
 
 CREATE TABLE accounts
 (
@@ -69,7 +69,7 @@ ALTER TABLE accounts
   ADD CONSTRAINT accounts_currencies_id_fk
 FOREIGN KEY (currency_id) REFERENCES currencies (id);
 
-CREATE TABLE entries
+CREATE TABLE transactions
 (
   id              INT AUTO_INCREMENT
     PRIMARY KEY,
@@ -78,16 +78,16 @@ CREATE TABLE entries
   date            DATE           NOT NULL,
   sub_category_id INT            NOT NULL,
   account_id      INT            NOT NULL,
-  CONSTRAINT entries_id_uindex
+  CONSTRAINT transactions_id_uindex
   UNIQUE (id),
-  CONSTRAINT entries_accounts_id_fk
+  CONSTRAINT transactions_accounts_id_fk
   FOREIGN KEY (account_id) REFERENCES accounts (id)
 );
 
-CREATE INDEX entries_accounts_id_fk
+CREATE INDEX transactions_accounts_id_fk
   ON transactions (account_id);
 
-CREATE INDEX entries_subcategories_id_fk
+CREATE INDEX transactions_subcategories_id_fk
   ON transactions (sub_category_id);
 
 CREATE TABLE subcategories
@@ -105,7 +105,7 @@ CREATE TABLE subcategories
 );
 
 ALTER TABLE transactions
-  ADD CONSTRAINT entries_subcategories_id_fk
+  ADD CONSTRAINT transactions_subcategories_id_fk
 FOREIGN KEY (sub_category_id) REFERENCES subcategories (id);
 
 CREATE TABLE types
@@ -139,7 +139,7 @@ CREATE VIEW view_accounts AS
       ON ((`accountancy`.`currencies`.`id` = `accountancy`.`accounts`.`currency_id`))) JOIN `accountancy`.`types`
       ON ((`accountancy`.`types`.`id` = `accountancy`.`accounts`.`type_id`)));
 
-CREATE VIEW view_entries AS
+CREATE VIEW view_transactions AS
   SELECT
     `accountancy`.transactions.`id`          AS `id`,
     `accountancy`.transactions.`title`       AS `title`,
@@ -157,7 +157,7 @@ CREATE VIEW view_entries AS
     `accountancy`.`view_accounts`
       ON ((`view_accounts`.`id` = `accountancy`.transactions.`account_id`)));
 
-CREATE VIEW view_entries_structure AS
+CREATE VIEW view_transactions_structure AS
   SELECT
     `accountancy`.transactions.`id`              AS `id`,
     `accountancy`.transactions.`title`           AS `title`,
@@ -176,7 +176,7 @@ CREATE VIEW view_entries_structure AS
       ON ((`accountancy`.`categories`.`id` = `accountancy`.`subcategories`.`category_id`))) JOIN
     `accountancy`.`view_accounts` ON ((`view_accounts`.`id` = `accountancy`.transactions.`account_id`)));
 
-CREATE VIEW view_entries_global AS
+CREATE VIEW view_transactions_global AS
   SELECT
     `accountancy`.transactions.`id`                                                          AS `id`,
     `accountancy`.transactions.`title`                                                       AS `title`,

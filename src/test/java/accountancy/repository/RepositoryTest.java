@@ -1,4 +1,6 @@
-package accountancy.repository.sql;
+package accountancy.repository;
+
+import accountancy.repository.sql.ConnectionProvider;
 
 public class RepositoryTest {
 

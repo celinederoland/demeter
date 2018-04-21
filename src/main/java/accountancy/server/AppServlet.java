@@ -2,8 +2,10 @@ package accountancy.server;
 
 import accountancy.model.Json;
 import accountancy.repository.BaseRepository;
+import accountancy.repository.CsvImportRepository;
 import accountancy.repository.sql.ConnectionProvider;
 import accountancy.repository.sql.SqlBaseRepository;
+import accountancy.repository.sql.SqlCsvImportRepository;
 import accountancy.server.errors.HttpError;
 import accountancy.server.errors.HttpException;
 import com.google.gson.Gson;
@@ -15,10 +17,11 @@ import java.io.IOException;
 
 public class AppServlet extends HttpServlet {
 
-    protected final String             db;
-    protected final ConnectionProvider connectionProvider;
-    protected       BaseRepository     repository;
-    protected       Gson               gson;
+    protected final String              db;
+    protected final ConnectionProvider  connectionProvider;
+    protected final CsvImportRepository csvImportRepository;
+    protected       BaseRepository      repository;
+    protected       Gson                gson;
 
     public AppServlet() {
 
@@ -28,6 +31,7 @@ public class AppServlet extends HttpServlet {
         else this.db = "localhost:3000/accountancy?user=root&password=secret&useSSL=false";
 
         this.connectionProvider = (new ConnectionProvider()).source("jdbc:mysql://" + db);
+        this.csvImportRepository = new SqlCsvImportRepository(connectionProvider);
     }
 
     protected void action(HttpServletRequest request, HttpServletResponse response, Controller doIt)
