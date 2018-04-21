@@ -5,7 +5,7 @@ import accountancy.model.selection.AmountByDate;
 import accountancy.model.selection.OneAxeSelection;
 import accountancy.repository.BaseRepository;
 import accountancy.view.components.*;
-import accountancy.view.views.entry.TransactionPanel;
+import accountancy.view.views.transaction.TransactionPanel;
 
 import javax.swing.*;
 import java.awt.*;

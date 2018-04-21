@@ -19,8 +19,9 @@ public class App {
     public static void main(String args[]) {
 
         ConnectionProvider connectionProvider = (new ConnectionProvider()).source(
-            "jdbc:mysql://localhost:3306/compta?user=root&password=secret&useSSL=false");
+            "jdbc:mysql://localhost:3000/accountancy?user=root&password=secret&useSSL=false");
         BaseRepository        repository          = new RestBaseRepository("http://accountancy.localhost");
+        //BaseRepository        repository          = new SqlBaseRepository(connectionProvider);
         CsvImportRepository   csvImportRepository = new SqlCsvImportRepository(connectionProvider);
         SelectionProvider     provider            = new SqlSelectionProvider(connectionProvider, repository);
         AxialSelectionFactory factory             = new MySelectionFactory(provider, repository);

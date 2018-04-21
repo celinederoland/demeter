@@ -9,7 +9,7 @@ import accountancy.view.config.Dimensions;
 import accountancy.view.views.account.AccountsOuterPanel;
 import accountancy.view.views.actions.ActionsOuterPanel;
 import accountancy.view.views.category.CategoriesOuterPanel;
-import accountancy.view.views.entry.EntriesOuterPanel;
+import accountancy.view.views.transaction.TransactionsOuterPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +31,7 @@ public class MainWindow extends JFrame {
 
         mainPanel.add(new ActionsOuterPanel(repository, csvImportRepository, selectionFactory), BorderLayout.NORTH);
         mainPanel.add(new PPanelVerticalScroll(new CategoriesOuterPanel(repository)), BorderLayout.EAST);
-        mainPanel.add(new PPanelVerticalScroll(new EntriesOuterPanel(repository)), BorderLayout.CENTER);
+        mainPanel.add(new PPanelVerticalScroll(new TransactionsOuterPanel(repository)), BorderLayout.CENTER);
         mainPanel.add(new PPanelVerticalScroll(new AccountsOuterPanel(repository)), BorderLayout.WEST);
 
         this.setContentPane(mainPanel);

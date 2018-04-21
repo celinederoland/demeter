@@ -14,6 +14,6 @@ CREATE TABLE csv_remember
 
 ALTER TABLE csv_remember
   ADD CONSTRAINT csv_remember_entries_id_fk
-FOREIGN KEY (entry_id) REFERENCES entries (id);
+FOREIGN KEY (entry_id) REFERENCES transactions (id);
 
 SET foreign_key_checks = 1;

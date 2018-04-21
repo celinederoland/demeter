@@ -90,8 +90,8 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
             }
 
             resultSet = statement.executeQuery(
-                "SELECT entries.*, categories.id AS categoryId FROM entries " +
-                "LEFT JOIN subcategories ON subcategories.id = entries.sub_category_id " +
+                "SELECT transactions.*, categories.id AS categoryId FROM transactions " +
+                "LEFT JOIN subcategories ON subcategories.id = transactions.sub_category_id " +
                 "LEFT JOIN categories ON categories.id = subcategories.category_id");
 
             while (resultSet.next()) {
@@ -132,8 +132,8 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
 
             resultSet = statement.executeQuery(
                 "SELECT accounts.id FROM accounts " +
-                "LEFT JOIN entries ON entries.account_id = accounts.id " +
-                "WHERE entries.id IS NULL "
+                "LEFT JOIN transactions ON transactions.account_id = accounts.id " +
+                "WHERE transactions.id IS NULL "
             );
 
             while (resultSet.next()) {
@@ -143,8 +143,8 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
 
             statement.executeUpdate(
                 "DELETE accounts FROM accounts " +
-                "LEFT JOIN entries ON entries.account_id = accounts.id " +
-                "WHERE entries.id IS NULL "
+                "LEFT JOIN transactions ON transactions.account_id = accounts.id " +
+                "WHERE transactions.id IS NULL "
             );
 
             resultSet = statement.executeQuery(
@@ -200,8 +200,8 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
 
             resultSet = statement.executeQuery(
                 "SELECT subcategories.id, subcategories.category_id FROM subcategories " +
-                "LEFT JOIN entries ON entries.sub_category_id = subcategories.id " +
-                "WHERE entries.id IS NULL "
+                "LEFT JOIN transactions ON transactions.sub_category_id = subcategories.id " +
+                "WHERE transactions.id IS NULL "
             );
 
             while (resultSet.next()) {
@@ -214,8 +214,8 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
 
             statement.executeUpdate(
                 "DELETE subcategories FROM subcategories " +
-                "LEFT JOIN entries ON entries.sub_category_id = subcategories.id " +
-                "WHERE entries.id IS NULL "
+                "LEFT JOIN transactions ON transactions.sub_category_id = subcategories.id " +
+                "WHERE transactions.id IS NULL "
             );
 
             resultSet = statement.executeQuery(
@@ -435,9 +435,9 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         try {
 
             statement = this.connectionProvider.getConnection().prepareStatement(
-                "SELECT entries.*, categories.id AS categoryId FROM entries " +
-                "LEFT JOIN subcategories ON subcategories.id = entries.sub_category_id " +
-                "LEFT JOIN categories ON categories.id = subcategories.category_id WHERE entries.id = ?"
+                "SELECT transactions.*, categories.id AS categoryId FROM transactions " +
+                "LEFT JOIN subcategories ON subcategories.id = transactions.sub_category_id " +
+                "LEFT JOIN categories ON categories.id = subcategories.category_id WHERE transactions.id = ?"
             );
             statement.setInt(1, transaction.id());
 
@@ -477,7 +477,7 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         try {
 
             statement = this.connectionProvider.getConnection().prepareStatement(
-                "UPDATE entries SET " +
+                "UPDATE transactions SET " +
                 "title = ?, amount = ?, date = ?, account_id = ?, sub_category_id = ? " +
                 "WHERE id = ?"
             );
@@ -506,7 +506,7 @@ public final class SqlBaseRepository extends AbstractBaseRepository implements B
         try {
 
             statement = this.connectionProvider.getConnection().prepareStatement(
-                "INSERT INTO entries VALUES (NULL, ?, ?, ?, ?, ?)",
+                "INSERT INTO transactions VALUES (NULL, ?, ?, ?, ?, ?)",
                 RETURN_GENERATED_KEYS
             );
 

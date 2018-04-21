@@ -4,7 +4,7 @@ import accountancy.repository.BaseRepository;
 import accountancy.repository.CsvImportRepository;
 import accountancy.repository.csv.CsvRepository;
 import accountancy.view.components.*;
-import accountancy.view.views.entry.ComboAccount;
+import accountancy.view.views.transaction.ComboAccount;
 
 import javax.swing.*;
 import java.awt.*;

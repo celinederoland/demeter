@@ -18,6 +18,7 @@ public class CategoriesInnerPanel extends PPanel implements Observer {
     public CategoriesInnerPanel(BaseRepository repository) {
 
         this.repository = repository;
+        this.repository.categories().addObserver(this);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         update();
     }

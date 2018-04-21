@@ -4,7 +4,7 @@ DELETE FROM accounts;
 DELETE FROM banks;
 DELETE FROM categories;
 DELETE FROM currencies;
-DELETE FROM entries;
+DELETE FROM transactions;
 DELETE FROM types;
 DELETE FROM subcategories;
 

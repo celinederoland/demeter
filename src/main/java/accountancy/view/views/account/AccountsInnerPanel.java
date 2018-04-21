@@ -19,6 +19,7 @@ public class AccountsInnerPanel extends PPanel implements Observer {
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.repository = repository;
+        this.repository.accounts().addObserver(this);
         update();
     }
 

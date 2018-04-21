@@ -1,4 +1,4 @@
-package accountancy.view.views.entry;
+package accountancy.view.views.transaction;
 
 
 import accountancy.model.base.Account;

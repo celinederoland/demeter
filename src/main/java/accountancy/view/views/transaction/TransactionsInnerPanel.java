@@ -1,4 +1,4 @@
-package accountancy.view.views.entry;
+package accountancy.view.views.transaction;
 
 import accountancy.model.Entity;
 import accountancy.model.base.Account;
@@ -16,13 +16,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
 
-public class EntriesInnerPanel extends PPanel implements Observer {
+public class TransactionsInnerPanel extends PPanel implements Observer {
 
     private final BaseRepository repository;
 
-    public EntriesInnerPanel(BaseRepository repository) {
+    public TransactionsInnerPanel(BaseRepository repository) {
 
         this.repository = repository;
+        this.repository.transactions().addObserver(this);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         update();
     }

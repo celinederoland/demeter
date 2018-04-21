@@ -1,7 +1,7 @@
 SET foreign_key_checks = 0;
 
 DROP VIEW IF EXISTS view_accounts, view_entries, view_entries_structure, view_entries_global;
-DROP TABLE IF EXISTS accounts, banks, categories, currencies, entries, types, subcategories,
+DROP TABLE IF EXISTS accounts, banks, categories, currencies, transactions, types, subcategories,
 compound_selections_selections, compound_selections, selections,
 selections_accounts, selections_banks, selections_types,
 selections_categories, selections_sub_categories, selections_currencies,
@@ -85,10 +85,10 @@ CREATE TABLE entries
 );
 
 CREATE INDEX entries_accounts_id_fk
-  ON entries (account_id);
+  ON transactions (account_id);
 
 CREATE INDEX entries_subcategories_id_fk
-  ON entries (sub_category_id);
+  ON transactions (sub_category_id);
 
 CREATE TABLE subcategories
 (
@@ -104,7 +104,7 @@ CREATE TABLE subcategories
   FOREIGN KEY (category_id) REFERENCES categories (id)
 );
 
-ALTER TABLE entries
+ALTER TABLE transactions
   ADD CONSTRAINT entries_subcategories_id_fk
 FOREIGN KEY (sub_category_id) REFERENCES subcategories (id);
 
@@ -141,59 +141,60 @@ CREATE VIEW view_accounts AS
 
 CREATE VIEW view_entries AS
   SELECT
-    `accountancy`.`entries`.`id`             AS `id`,
-    `accountancy`.`entries`.`title`          AS `title`,
-    `accountancy`.`entries`.`amount`         AS `amount`,
-    `accountancy`.`entries`.`date`           AS `date`,
+    `accountancy`.transactions.`id`          AS `id`,
+    `accountancy`.transactions.`title`       AS `title`,
+    `accountancy`.transactions.`amount`      AS `amount`,
+    `accountancy`.transactions.`date`        AS `date`,
     `accountancy`.`categories`.`title`       AS `category`,
     `accountancy`.`subcategories`.`title`    AS `subcategory`,
     concat(`view_accounts`.`bank_title`, ' - ', `view_accounts`.`title`, ' - ',
            `view_accounts`.`currency_title`) AS `accout`
-  FROM (((`accountancy`.`entries`
+  FROM (((`accountancy`.transactions
     LEFT JOIN `accountancy`.`subcategories`
-      ON ((`accountancy`.`subcategories`.`id` = `accountancy`.`entries`.`sub_category_id`))) LEFT JOIN
+      ON ((`accountancy`.`subcategories`.`id` = `accountancy`.transactions.`sub_category_id`))) LEFT JOIN
     `accountancy`.`categories`
       ON ((`accountancy`.`categories`.`id` = `accountancy`.`subcategories`.`category_id`))) LEFT JOIN
     `accountancy`.`view_accounts`
-      ON ((`view_accounts`.`id` = `accountancy`.`entries`.`account_id`)));
+      ON ((`view_accounts`.`id` = `accountancy`.transactions.`account_id`)));
 
 CREATE VIEW view_entries_structure AS
   SELECT
-    `accountancy`.`entries`.`id`              AS `id`,
-    `accountancy`.`entries`.`title`           AS `title`,
-    `accountancy`.`entries`.`amount`          AS `amount`,
-    `accountancy`.`entries`.`date`            AS `date`,
-    `accountancy`.`categories`.`id`           AS `category_id`,
-    `accountancy`.`entries`.`sub_category_id` AS `sub_category_id`,
-    `accountancy`.`entries`.`account_id`      AS `account_id`,
-    `view_accounts`.`bank_id`                 AS `bank_id`,
-    `view_accounts`.`currency_id`             AS `currency_id`,
-    `view_accounts`.`type_id`                 AS `type_id`
-  FROM (((`accountancy`.`entries`
+    `accountancy`.transactions.`id`              AS `id`,
+    `accountancy`.transactions.`title`           AS `title`,
+    `accountancy`.transactions.`amount`          AS `amount`,
+    `accountancy`.transactions.`date`            AS `date`,
+    `accountancy`.`categories`.`id`              AS `category_id`,
+    `accountancy`.transactions.`sub_category_id` AS `sub_category_id`,
+    `accountancy`.transactions.`account_id`      AS `account_id`,
+    `view_accounts`.`bank_id`                    AS `bank_id`,
+    `view_accounts`.`currency_id`                AS `currency_id`,
+    `view_accounts`.`type_id`                    AS `type_id`
+  FROM (((`accountancy`.transactions
     JOIN `accountancy`.`subcategories`
-      ON ((`accountancy`.`subcategories`.`id` = `accountancy`.`entries`.`sub_category_id`))) JOIN
+      ON ((`accountancy`.`subcategories`.`id` = `accountancy`.transactions.`sub_category_id`))) JOIN
     `accountancy`.`categories`
       ON ((`accountancy`.`categories`.`id` = `accountancy`.`subcategories`.`category_id`))) JOIN
-    `accountancy`.`view_accounts` ON ((`view_accounts`.`id` = `accountancy`.`entries`.`account_id`)));
+    `accountancy`.`view_accounts` ON ((`view_accounts`.`id` = `accountancy`.transactions.`account_id`)));
 
 CREATE VIEW view_entries_global AS
   SELECT
-    `accountancy`.`entries`.`id`                                                             AS `id`,
-    `accountancy`.`entries`.`title`                                                          AS `title`,
-    `accountancy`.`entries`.`amount`                                                         AS `amount`,
-    `accountancy`.`entries`.`date`                                                           AS `date`,
+    `accountancy`.transactions.`id`                                                          AS `id`,
+    `accountancy`.transactions.`title`                                                       AS `title`,
+    `accountancy`.transactions.`amount`                                                      AS `amount`,
+    `accountancy`.transactions.`date`                                                        AS `date`,
     `accountancy`.`categories`.`id`                                                          AS `category_id`,
-    `accountancy`.`entries`.`sub_category_id`                                                AS `sub_category_id`,
-    `accountancy`.`entries`.`account_id`                                                     AS `account_id`,
+    `accountancy`.transactions.`sub_category_id`                                             AS `sub_category_id`,
+    `accountancy`.transactions.`account_id`                                                  AS `account_id`,
     `view_accounts`.`bank_id`                                                                AS `bank_id`,
     `view_accounts`.`currency_id`                                                            AS `currency_id`,
     `view_accounts`.`type_id`                                                                AS `type_id`,
     concat(`accountancy`.`categories`.`title`, ' - ', `accountancy`.`subcategories`.`title`) AS `category`,
     concat(`view_accounts`.`bank_title`, ' - ', `view_accounts`.`title`, ' - ',
            `view_accounts`.`currency_title`)                                                 AS `account`
-  FROM `accountancy`.`entries`
-    JOIN `accountancy`.`subcategories` ON `accountancy`.`subcategories`.`id` = `accountancy`.`entries`.`sub_category_id`
+  FROM `accountancy`.transactions
+    JOIN `accountancy`.`subcategories`
+      ON `accountancy`.`subcategories`.`id` = `accountancy`.transactions.`sub_category_id`
     JOIN `accountancy`.`categories` ON `accountancy`.`categories`.`id` = `accountancy`.`subcategories`.`category_id`
-    JOIN `accountancy`.`view_accounts` ON `view_accounts`.`id` = `accountancy`.`entries`.`account_id`;
+    JOIN `accountancy`.`view_accounts` ON `view_accounts`.`id` = `accountancy`.transactions.`account_id`;
 
 SET foreign_key_checks = 1;
