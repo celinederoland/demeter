@@ -1,17 +1,10 @@
-package accountancy.repository.sql;
+package accountancy.repository;
 
 import accountancy.model.base.*;
 import accountancy.model.selection.AmountByDate;
 import accountancy.model.selection.Criteria;
 import accountancy.model.selection.DatesIterator;
-import accountancy.repository.BaseRepository;
-import accountancy.repository.RepositoryTest;
-import accountancy.repository.Selection;
-import org.junit.Before;
-import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,40 +13,24 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("RedundantCast") public class SelectionTest extends RepositoryTest {
+@SuppressWarnings("RedundantCast") public class AnySelectionTest {
 
-    protected BaseRepository repository;
+    private final BaseRepository    repository;
+    private final SelectionProvider provider;
 
-    public SelectionTest() throws Exception {
+    public AnySelectionTest(BaseRepository repository, SelectionProvider provider) {
 
-        super();
-        ScriptRunner scriptRunner = new ScriptRunner(connectionProvider.getConnection(), true, true);
-        String       file         = "datas/schema-base.sql";
-        scriptRunner.runScript(new BufferedReader(new FileReader(file)));
+        this.repository = repository;
+        this.provider = provider;
     }
 
-    @Before
-    public void setUp() throws Exception {
-
-        ScriptRunner scriptRunner = new ScriptRunner(connectionProvider.getConnection(), true, true);
-        String       file         = "datas/fixture-base.sql";
-        scriptRunner.runScript(new BufferedReader(new FileReader(file)));
-
-        String file2 = "datas/fixture-selection.sql";
-        scriptRunner.runScript(new BufferedReader(new FileReader(file2)));
-
-        repository = new SqlBaseRepository(connectionProvider);
-        repository.findAll();
-    }
-
-    @Test
     public void test1() throws Exception {
 
         //Define a criteria, check the selection transactions and amount.
         Criteria criteria = (new Criteria()).addAccount((Account) repository.accounts().getOne(1))
                                             .addAccount((Account) repository.accounts().getOne(6))
                                             .addCategory((Category) repository.categories().getOne(2));
-        Selection selection = new SqlSelection(connectionProvider, repository, criteria);
+        Selection selection = provider.makeSelection(criteria);
 
         ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(5, transactions.size());
@@ -81,12 +58,11 @@ import static org.junit.Assert.*;
 
     }
 
-    @Test
     public void test2() throws ParseException {
 
         //Define a wide criteria to take have full result
         Criteria               criteria        = new Criteria();
-        Selection              selection       = new SqlSelection(connectionProvider, repository, criteria);
+        Selection              selection       = provider.makeSelection(criteria);
         ArrayList<Transaction> allTransactions = selection.getTransactions();
         assertEquals(50, allTransactions.size(), 0);
 
@@ -97,14 +73,13 @@ import static org.junit.Assert.*;
         assertEquals(607.26, amountAll, 0);
     }
 
-    @Test
     public void test3() throws ParseException {
 
         //Define a criteria
         Criteria criteria = (new Criteria()).excludeAccount((Account) repository.accounts().getOne(1))
                                             .excludeAccount((Account) repository.accounts().getOne(6))
                                             .excludeCategory((Category) repository.categories().getOne(2));
-        Selection selection = new SqlSelection(connectionProvider, repository, criteria);
+        Selection selection = provider.makeSelection(criteria);
 
         ArrayList<Transaction> inverseTransactions = selection.getTransactions();
         assertEquals(27, inverseTransactions.size());
@@ -120,7 +95,6 @@ import static org.junit.Assert.*;
         assertEquals(-713.14, amount, 0);
     }
 
-    @Test
     public void test4() throws Exception {
 
         //Define a criteria
@@ -128,7 +102,7 @@ import static org.junit.Assert.*;
                                             .excludeType((Type) repository.types().getOne(2))
                                             .excludeCurrency((Currency) repository.currencies().getOne(3))
                                             .setAbsolute();
-        Selection selection = new SqlSelection(connectionProvider, repository, criteria);
+        Selection selection = provider.makeSelection(criteria);
 
         ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(17, transactions.size());
@@ -139,7 +113,6 @@ import static org.junit.Assert.*;
         assertEquals(656.77, amount, 0);
     }
 
-    @Test
     public void test5() throws Exception {
 
         Criteria criteria = (new Criteria()).excludeBank((Bank) repository.banks().getOne(1))
@@ -148,7 +121,7 @@ import static org.junit.Assert.*;
                                             .addCurrency((Currency) repository.currencies().getOne(1))
                                             .addCurrency((Currency) repository.currencies().getOne(2));
 
-        Selection selection = new SqlSelection(connectionProvider, repository, criteria);
+        Selection selection = provider.makeSelection(criteria);
 
         ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(17, transactions.size());
@@ -170,7 +143,6 @@ import static org.junit.Assert.*;
 
     }
 
-    @Test
     public void test6() throws Exception {
 
         Criteria criteria = (new Criteria())
@@ -180,7 +152,7 @@ import static org.junit.Assert.*;
             .excludeCategory((Category) repository.categories().getOne(2))
             .setCumulative();
 
-        Selection selection = new SqlSelection(connectionProvider, repository, criteria);
+        Selection selection = provider.makeSelection(criteria);
 
         ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(14, transactions.size());
@@ -203,7 +175,6 @@ import static org.junit.Assert.*;
         assertEquals(amountIterated, amount, 0);
     }
 
-    @Test
     public void test7() throws Exception {
 
         Criteria criteria = (new Criteria())
@@ -211,7 +182,7 @@ import static org.junit.Assert.*;
             .addSubCategory((SubCategory) ((Category) repository.categories().getOne(3)).subCategories().getOne(6))
             .setCumulative();
 
-        Selection selection = new SqlSelection(connectionProvider, repository, criteria);
+        Selection selection = provider.makeSelection(criteria);
 
         ArrayList<Transaction> transactions = selection.getTransactions();
         assertEquals(14, transactions.size());
@@ -232,7 +203,6 @@ import static org.junit.Assert.*;
         assertEquals(amountIterated, amount, 0);
     }
 
-    @Test
     public void testAmountByDate() throws Exception {
 
         Criteria criteria = (new Criteria())
@@ -240,7 +210,7 @@ import static org.junit.Assert.*;
             .addSubCategory((SubCategory) ((Category) repository.categories().getOne(3)).subCategories().getOne(6))
             .setCumulative();
 
-        Selection selection = new SqlSelection(connectionProvider, repository, criteria);
+        Selection selection = provider.makeSelection(criteria);
 
         Date start = (new SimpleDateFormat("yyyy-MM-dd")).parse("2017-01-01");
         Date end   = (new SimpleDateFormat("yyyy-MM-dd")).parse("2018-01-01");

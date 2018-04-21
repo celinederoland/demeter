@@ -50,7 +50,7 @@ public class SqlSelection extends Repository implements Selection {
 
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
-                transactions.add((Transaction) repository.transactions().getOne(id));
+                transactions.add(repository.find(new Transaction(id)));
             }
 
             resultSet.close();

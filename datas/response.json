@@ -1,0 +1,38 @@
+{
+  "criteria": {
+    "categories": [],
+    "excludeCategories": [
+      {
+        "id": 2,
+        "title": "Transferts",
+        "subCategories": [
+          {
+            "id": 3,
+            "title": "Transferts"
+          }
+        ]
+      }
+    ],
+    "subCategories": [],
+    "excludeSubCategories": [],
+    "accounts": [],
+    "excludeAccounts": [],
+    "types": [],
+    "excludeTypes": [
+      {
+        "id": 3,
+        "title": "Crédit"
+      }
+    ],
+    "banks": [],
+    "excludeBanks": [],
+    "currencies": [],
+    "excludeCurrencies": [],
+    "positive": true,
+    "negative": false,
+    "absolute": false,
+    "cumulative": false
+  },
+  "start": 1483263946602,
+  "end": 1485942346602
+}

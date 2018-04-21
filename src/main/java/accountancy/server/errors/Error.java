@@ -2,8 +2,8 @@ package accountancy.server.errors;
 
 public class Error {
 
-    protected String message;
-    protected String status = "error";
+    protected String message = "vide";
+    protected String status  = "error";
     protected StackTraceElement[] context;
 
     public Error() {

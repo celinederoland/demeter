@@ -6,51 +6,24 @@ import accountancy.model.selection.AxialSelection;
 import accountancy.model.selection.OneAxeSelection;
 import accountancy.model.selection.TwoAxesSelection;
 import accountancy.repository.BaseRepository;
-import accountancy.repository.RepositoryTest;
 import accountancy.repository.SelectionProvider;
-import accountancy.repository.sql.ScriptRunner;
-import accountancy.repository.sql.SqlBaseRepository;
-import accountancy.repository.sql.SqlSelectionProvider;
-import org.junit.Before;
-import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 
-public class MySelectionFactoryTest extends RepositoryTest {
+public class AnySelectionFactoryTest {
 
     protected BaseRepository    repository;
     protected SelectionProvider provider;
 
-    public MySelectionFactoryTest() throws Exception {
+    public AnySelectionFactoryTest(BaseRepository repository, SelectionProvider provider) {
 
-        super();
-        ScriptRunner scriptRunner = new ScriptRunner(connectionProvider.getConnection(), true, true);
-        String       file         = "datas/schema-base.sql";
-        scriptRunner.runScript(new BufferedReader(new FileReader(file)));
+        this.repository = repository;
+        this.provider = provider;
     }
 
-    @Before
-    public void setUp() throws Exception {
-
-        ScriptRunner scriptRunner = new ScriptRunner(connectionProvider.getConnection(), true, true);
-        String       file         = "datas/fixture-base.sql";
-        scriptRunner.runScript(new BufferedReader(new FileReader(file)));
-
-        String file2 = "datas/fixture-myselection.sql";
-        scriptRunner.runScript(new BufferedReader(new FileReader(file2)));
-
-        repository = new SqlBaseRepository(connectionProvider);
-        repository.findAll();
-
-        provider = new SqlSelectionProvider(connectionProvider, repository);
-    }
-
-    @Test
     public void selections() throws Exception {
 
         MySelectionFactory                    factory    = new MySelectionFactory(provider, repository);

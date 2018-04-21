@@ -1,6 +1,7 @@
 package accountancy.model;
 
 import accountancy.model.base.*;
+import accountancy.model.selection.Criteria;
 import accountancy.repository.BaseRepository;
 import com.google.gson.*;
 
@@ -18,6 +19,7 @@ public class Json {
             .registerTypeAdapter(Account.class, new AccountDeserialize(repository))
             .registerTypeAdapter(Category.class, new CategorySerialize())
             .registerTypeAdapter(Category.class, new CategoryDeserialize())
+            .registerTypeAdapter(Criteria.class, new CriteriaDeserialize(repository))
             .create();
     }
 
@@ -25,7 +27,7 @@ public class Json {
 
         @Override public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
 
-            return new JsonPrimitive(src.getTime());
+            return new JsonPrimitive(src.getTime() / 1000);
         }
     }
 
@@ -65,7 +67,7 @@ public class Json {
 
             JsonObject serialized = (new Gson()).toJsonTree(transaction).getAsJsonObject();
             serialized.remove("date");
-            serialized.add("date", new JsonPrimitive(transaction.date().getTime()));
+            serialized.add("date", new JsonPrimitive(transaction.date().getTime() / 1000));
             serialized.remove("category");
             serialized.add(
                 "category",
@@ -94,7 +96,7 @@ public class Json {
             else id = 0;
             String title          = json.get("title").getAsString();
             Double amount         = json.get("amount").getAsDouble();
-            Date   date           = new Date(json.get("date").getAsInt());
+            Date   date           = new Date(json.get("date").getAsInt() * 1000);
             int    account_id     = json.get("account").getAsJsonObject().get("id").getAsInt();
             int    category_id    = json.get("category").getAsJsonObject().get("id").getAsInt();
             int    subcategory_id = json.get("subCategory").getAsJsonObject().get("id").getAsInt();
@@ -126,7 +128,6 @@ public class Json {
 
     private static class CategoryDeserialize implements JsonDeserializer<Category> {
 
-
         @Override public Category deserialize(
             JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext
         ) throws JsonParseException {
@@ -148,5 +149,97 @@ public class Json {
         }
     }
 
+
+    private static class CriteriaDeserialize implements JsonDeserializer<Criteria> {
+
+        private final BaseRepository repository;
+
+        public CriteriaDeserialize(BaseRepository repository) {
+
+            this.repository = repository;
+        }
+
+        @Override public Criteria deserialize(
+            JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext
+        ) throws JsonParseException {
+
+            Criteria   criteria     = new Criteria();
+            JsonObject jsonCriteria = jsonElement.getAsJsonObject();
+
+            JsonArray jsonCategories = jsonCriteria.get("categories").getAsJsonArray();
+            for (JsonElement json : jsonCategories) {
+                criteria.addCategory(repository.find(new Category(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonExcludeCategories = jsonCriteria.get("excludeCategories").getAsJsonArray();
+            for (JsonElement json : jsonExcludeCategories) {
+                criteria.excludeCategory(repository.find(new Category(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonSubCategories = jsonCriteria.get("subCategories").getAsJsonArray();
+            for (JsonElement json : jsonSubCategories) {
+                criteria.addSubCategory(repository.find(new SubCategory(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonExcludeSubCategories = jsonCriteria.get("excludeSubCategories").getAsJsonArray();
+            for (JsonElement json : jsonExcludeSubCategories) {
+                criteria.excludeSubCategory(
+                    repository.find(new SubCategory(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonAccounts = jsonCriteria.get("accounts").getAsJsonArray();
+            for (JsonElement json : jsonAccounts) {
+                criteria.addAccount(repository.find(new Account(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonExcludeAccounts = jsonCriteria.get("excludeAccounts").getAsJsonArray();
+            for (JsonElement json : jsonExcludeAccounts) {
+                criteria.excludeAccount(repository.find(new Account(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonTypes = jsonCriteria.get("types").getAsJsonArray();
+            for (JsonElement json : jsonTypes) {
+                criteria.addType(
+                    repository.find(new accountancy.model.base.Type(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonExcludeTypes = jsonCriteria.get("excludeTypes").getAsJsonArray();
+            for (JsonElement json : jsonExcludeTypes) {
+                criteria.excludeType(
+                    repository.find(new accountancy.model.base.Type(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonBanks = jsonCriteria.get("banks").getAsJsonArray();
+            for (JsonElement json : jsonBanks) {
+                criteria.addBank(repository.find(new Bank(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonExcludeBanks = jsonCriteria.get("excludeBanks").getAsJsonArray();
+            for (JsonElement json : jsonExcludeBanks) {
+                criteria.excludeBank(repository.find(new Bank(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonCurrencies = jsonCriteria.get("currencies").getAsJsonArray();
+            for (JsonElement json : jsonCurrencies) {
+                criteria.addCurrency(repository.find(new Currency(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            JsonArray jsonExcludeCurrencies = jsonCriteria.get("excludeCurrencies").getAsJsonArray();
+            for (JsonElement json : jsonExcludeCurrencies) {
+                criteria.excludeCurrency(repository.find(new Currency(json.getAsJsonObject().get("id").getAsInt())));
+            }
+
+            boolean positive = jsonCriteria.get("positive").getAsBoolean();
+            if (positive) criteria.setPositiveOnly();
+            boolean negative = jsonCriteria.get("negative").getAsBoolean();
+            if (negative) criteria.setNegativeOnly();
+            boolean absolute = jsonCriteria.get("absolute").getAsBoolean();
+            if (absolute) criteria.setAbsolute();
+            boolean cumulative = jsonCriteria.get("cumulative").getAsBoolean();
+            if (cumulative) criteria.setCumulative();
+
+            return criteria;
+        }
+    }
 
 }

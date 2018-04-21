@@ -1,37 +1,32 @@
 package accountancy.model.selection;
 
 import accountancy.model.base.*;
+import accountancy.repository.BaseRepository;
 import accountancy.repository.Selection;
-import accountancy.repository.sql.SelectionTest;
-import accountancy.repository.sql.SqlSelection;
-import org.junit.Before;
-import org.junit.Test;
+import accountancy.repository.SelectionProvider;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 
-public class AxialSelectionTest extends SelectionTest {
+public class AnyAxialSelection {
 
-    public AxialSelectionTest() throws Exception {
+    protected BaseRepository    repository;
+    protected SelectionProvider provider;
 
-        super();
+    public AnyAxialSelection(BaseRepository repository, SelectionProvider provider) {
+
+        this.repository = repository;
+        this.provider = provider;
     }
 
-    @Before
-    @Override public void setUp() throws Exception {
-
-        super.setUp();
-    }
-
-    @Test
     public void oneAxe() throws Exception {
 
         Criteria criteria1 = (new Criteria()).addAccount((Account) repository.accounts().getOne(1))
                                              .addAccount((Account) repository.accounts().getOne(6))
                                              .addCategory((Category) repository.categories().getOne(2));
-        Selection selection1 = new SqlSelection(connectionProvider, repository, criteria1);
+        Selection selection1 = provider.makeSelection(criteria1);
 
 
         Criteria criteria2 = (new Criteria()).addBank((Bank) repository.banks().getOne(2))
@@ -39,7 +34,7 @@ public class AxialSelectionTest extends SelectionTest {
                                              .excludeCurrency((Currency) repository.currencies().getOne(3))
                                              .setAbsolute()
                                              .setCumulative();
-        Selection selection2 = new SqlSelection(connectionProvider, repository, criteria2);
+        Selection selection2 = provider.makeSelection(criteria2);
 
         Criteria criteria3 = (new Criteria())
             .excludeSubCategory((SubCategory) ((Category) repository.categories().getOne(3)).subCategories().getOne(9))
@@ -47,7 +42,7 @@ public class AxialSelectionTest extends SelectionTest {
             .excludeCategory((Category) repository.categories().getOne(1))
             .excludeCategory((Category) repository.categories().getOne(2))
             .setCumulative();
-        Selection selection3 = new SqlSelection(connectionProvider, repository, criteria3);
+        Selection selection3 = provider.makeSelection(criteria3);
 
 
         OneAxeSelection oneAxeSelection = new OneAxeSelection(Styles.BAR);
@@ -86,13 +81,12 @@ public class AxialSelectionTest extends SelectionTest {
         assertEquals(-1215.44, amount3, 0);
     }
 
-    @Test
     public void twoAxes() throws Exception {
 
         Criteria criteria1 = (new Criteria()).addAccount((Account) repository.accounts().getOne(1))
                                              .addAccount((Account) repository.accounts().getOne(6))
                                              .addCategory((Category) repository.categories().getOne(2));
-        Selection selection1 = new SqlSelection(connectionProvider, repository, criteria1);
+        Selection selection1 = provider.makeSelection(criteria1);
 
 
         Criteria criteria2 = (new Criteria()).addBank((Bank) repository.banks().getOne(2))
@@ -100,7 +94,7 @@ public class AxialSelectionTest extends SelectionTest {
                                              .excludeCurrency((Currency) repository.currencies().getOne(3))
                                              .setAbsolute()
                                              .setCumulative();
-        Selection selection2 = new SqlSelection(connectionProvider, repository, criteria2);
+        Selection selection2 = provider.makeSelection(criteria2);
 
         Criteria criteria3 = (new Criteria())
             .excludeSubCategory((SubCategory) ((Category) repository.categories().getOne(3)).subCategories().getOne(9))
@@ -108,7 +102,7 @@ public class AxialSelectionTest extends SelectionTest {
             .excludeCategory((Category) repository.categories().getOne(1))
             .excludeCategory((Category) repository.categories().getOne(2))
             .setCumulative();
-        Selection selection3 = new SqlSelection(connectionProvider, repository, criteria3);
+        Selection selection3 = provider.makeSelection(criteria3);
 
 
         OneAxeSelection oneAxeSelection1 = new OneAxeSelection(Styles.LINE);
@@ -124,8 +118,8 @@ public class AxialSelectionTest extends SelectionTest {
 
         assertEquals(Styles.LINE, twoAxesSelection.style());
 
-        LinkedHashMap<String, LinkedHashMap<String, ArrayList<AmountByDate>>> amounts      = twoAxesSelection.amounts();
-        LinkedHashMap<String, LinkedHashMap<String, ArrayList<Transaction>>>  transactions =
+        LinkedHashMap<String, LinkedHashMap<String, ArrayList<AmountByDate>>> amounts = twoAxesSelection.amounts();
+        LinkedHashMap<String, LinkedHashMap<String, ArrayList<Transaction>>> transactions =
             twoAxesSelection.transactions();
 
         assertEquals(2, twoAxesSelection.amounts().keySet().size());
@@ -155,5 +149,4 @@ public class AxialSelectionTest extends SelectionTest {
         }
         assertEquals(-1215.44, amount3, 0);
     }
-
 }

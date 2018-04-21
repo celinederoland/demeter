@@ -36,6 +36,14 @@
         <servlet-name>CsvImportHistory</servlet-name>
         <servlet-class>accountancy.server.CsvImportHistory</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SelectionTransactions</servlet-name>
+        <servlet-class>accountancy.server.SelectionTransactions</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SelectionAmounts</servlet-name>
+        <servlet-class>accountancy.server.SelectionAmounts</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>AllData</servlet-name>
@@ -72,5 +80,13 @@
     <servlet-mapping>
         <servlet-name>CsvImportHistory</servlet-name>
         <url-pattern>/csv</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectionTransactions</servlet-name>
+        <url-pattern>/selection/transactions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectionAmounts</servlet-name>
+        <url-pattern>/selection/amounts</url-pattern>
     </servlet-mapping>
 </web-app>
