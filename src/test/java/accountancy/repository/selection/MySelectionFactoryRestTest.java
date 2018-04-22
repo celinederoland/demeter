@@ -35,7 +35,7 @@ public class MySelectionFactoryRestTest extends RepositoryTest {
         String file2 = "datas/fixture-myselection.sql";
         scriptRunner.runScript(new BufferedReader(new FileReader(file2)));
 
-        String url = "http://localhost:8002";
+        String url = System.getenv("ACCOUNTANCY_URL");
         repository = new RestBaseRepository(url);
         repository.findAll();
 

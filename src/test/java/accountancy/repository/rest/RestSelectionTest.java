@@ -35,7 +35,7 @@ public class RestSelectionTest extends RepositoryTest {
         String file2 = "datas/fixture-selection.sql";
         scriptRunner.runScript(new BufferedReader(new FileReader(file2)));
 
-        String url = "http://localhost:8002";
+        String url = System.getenv("ACCOUNTANCY_URL");
         repository = new RestBaseRepository(url);
         provider = new RestSelectionProvider(url, repository);
         repository.findAll();

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class ConnectionProvider {
 
     private java.sql.Connection connection;
-    private String source = "jdbc:mysql://localhost:3306/compta?user=root&password=secret&useSSL=false";
+    private String              source;
 
     public ConnectionProvider source(String source) {
 

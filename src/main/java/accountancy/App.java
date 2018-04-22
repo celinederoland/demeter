@@ -17,11 +17,12 @@ public class App {
 
     public static void main(String args[]) {
 
-        BaseRepository        repository          = new RestBaseRepository("http://accountancy.localhost");
+        String         url        = System.getenv("ACCOUNTANCY_URL");
+        BaseRepository repository = new RestBaseRepository(url);
         CsvImportRepository csvImportRepository   = new RestCsvImportRepository(
-            "http://accountancy.localhost", repository);
+            url, repository);
         SelectionProvider provider                = new RestSelectionProvider(
-            "http://accountancy.localhost", repository);
+            url, repository);
         AxialSelectionFactory factory             = new MySelectionFactory(provider, repository);
         repository.findAll();
 

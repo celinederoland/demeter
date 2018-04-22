@@ -30,7 +30,7 @@ public class RestBaseRepositoryTest extends RepositoryTest {
         String       file         = "datas/fixture-base.sql";
         scriptRunner.runScript(new BufferedReader(new FileReader(file)));
 
-        url = "http://localhost:8002";
+        url = System.getenv("ACCOUNTANCY_URL");
         repository = new RestBaseRepository(url);
     }
 

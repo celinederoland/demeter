@@ -37,8 +37,8 @@ public class RestCsvImportRepositoryTest extends RepositoryTest {
         String file2 = "datas/fixture-csv.sql";
         scriptRunner.runScript(new BufferedReader(new FileReader(file2)));
 
-        repository = new RestBaseRepository("http://localhost:8002");
-        csvRepository = new RestCsvImportRepository("http://localhost:8002", repository);
+        repository = new RestBaseRepository(System.getenv("ACCOUNTANCY_URL"));
+        csvRepository = new RestCsvImportRepository(System.getenv("ACCOUNTANCY_URL"), repository);
 
         (new AnyCsvRepositoryTest()).setUp(repository);
     }
