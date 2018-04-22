@@ -42,7 +42,7 @@ public class AppServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         String header = request.getHeader("Authorization");
-        if (header.substring(7).equals(System.getenv("ACCOUNTANCY_TOKEN"))) {
+        if (header != null && header.substring(7).equals(System.getenv("ACCOUNTANCY_TOKEN"))) {
 
             this.repository = new SqlBaseRepository(connectionProvider);
             this.gson = Json.gson(repository);

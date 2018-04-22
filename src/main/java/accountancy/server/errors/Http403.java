@@ -4,7 +4,7 @@ public class Http403 extends HttpException {
 
     public Http403() {
 
-        super("Aunauthorize");
+        super("UnAuthorized");
         this.code = 403;
     }
 }

@@ -4,7 +4,7 @@ public class Error {
 
     protected String message = "vide";
     protected String status  = "error";
-    protected StackTraceElement[] context;
+    protected transient StackTraceElement[] context;
 
     public Error() {
 

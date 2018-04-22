@@ -8,10 +8,7 @@ public class RepositoryTest {
 
     public RepositoryTest() throws Exception {
 
-        String db;
-        String env = System.getenv("ACCOUNTANCY_DATABASE");
-        if (env != null) db = env;
-        else db = "localhost:3001/accountancy?user=root&password=secret&useSSL=false";
+        String db = System.getenv("ACCOUNTANCY_DATABASE");
         connectionProvider = (new ConnectionProvider()).source("jdbc:mysql://" + db);
     }
 
