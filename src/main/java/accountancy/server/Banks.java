@@ -1,7 +1,7 @@
 package accountancy.server;
 
 import accountancy.model.base.Bank;
-import accountancy.server.errors.Http403;
+import accountancy.server.errors.Http422;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +43,7 @@ public class Banks extends AppServlet {
             Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
             if (bank.id() == 0) {
-                throw new Http403("ResourceDoesntExist - use PUT method instead");
+                throw new Http422("ResourceDoesntExist - use PUT method instead");
             }
 
             repository.save(bank);
@@ -66,7 +66,7 @@ public class Banks extends AppServlet {
             Bank bank = gson.fromJson(request.getReader(), Bank.class);
 
             if (bank.id() > 0) {
-                throw new Http403("ResourceAlreadyExist - use POST method instead");
+                throw new Http422("ResourceAlreadyExist - use POST method instead");
             }
 
             return repository.create(bank);

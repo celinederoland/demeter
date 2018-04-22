@@ -2,9 +2,9 @@ package accountancy.server.errors;
 
 public class Http403 extends HttpException {
 
-    public Http403(String message) {
+    public Http403() {
 
-        super(message);
+        super("Aunauthorize");
         this.code = 403;
     }
 }

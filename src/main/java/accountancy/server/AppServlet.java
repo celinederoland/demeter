@@ -6,6 +6,7 @@ import accountancy.repository.CsvImportRepository;
 import accountancy.repository.sql.ConnectionProvider;
 import accountancy.repository.sql.SqlBaseRepository;
 import accountancy.repository.sql.SqlCsvImportRepository;
+import accountancy.server.errors.Http403;
 import accountancy.server.errors.HttpError;
 import accountancy.server.errors.HttpException;
 import com.google.gson.Gson;
@@ -39,20 +40,28 @@ public class AppServlet extends HttpServlet {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        this.repository = new SqlBaseRepository(connectionProvider);
-        this.gson = Json.gson(repository);
 
-        try {
+        String header = request.getHeader("Authorization");
+        if (header.substring(7).equals(System.getenv("ACCOUNTANCY_TOKEN"))) {
 
-            Object res  = doIt.run();
-            String json = gson.toJson(res);
-            response.getWriter().println(json);
-        } catch (HttpException e) {
+            this.repository = new SqlBaseRepository(connectionProvider);
+            this.gson = Json.gson(repository);
 
-            new HttpError(e.code(), e.getMessage(), response);
-        } catch (Exception e) {
+            try {
 
-            new HttpError(e, response);
+                Object res  = doIt.run();
+                String json = gson.toJson(res);
+                response.getWriter().println(json);
+            } catch (HttpException e) {
+
+                new HttpError(e.code(), e.getMessage(), response);
+            } catch (Exception e) {
+
+                new HttpError(e, response);
+            }
+        }
+        else {
+            new HttpError(new Http403(), response);
         }
     }
 }

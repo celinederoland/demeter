@@ -3,7 +3,7 @@ package accountancy.server;
 import accountancy.model.Entity;
 import accountancy.model.base.Category;
 import accountancy.model.base.SubCategory;
-import accountancy.server.errors.Http403;
+import accountancy.server.errors.Http422;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -58,7 +58,7 @@ public class SubCategories extends AppServlet {
             SubCategory subCategory = gson.fromJson(request.getReader(), SubCategory.class);
 
             if (subCategory.id() == 0) {
-                throw new Http403("ResourceDoesntExist - use PUT method instead");
+                throw new Http422("ResourceDoesntExist - use PUT method instead");
             }
 
             repository.save(subCategory);
@@ -91,7 +91,7 @@ public class SubCategories extends AppServlet {
             SubCategory subCategory      = new SubCategory(titleSubCategory);
 
             if (subCategory.id() > 0) {
-                throw new Http403("ResourceAlreadyExist - use POST method instead");
+                throw new Http422("ResourceAlreadyExist - use POST method instead");
             }
 
             return repository.create(subCategory, category);

@@ -55,6 +55,7 @@ public class Requester {
         connection.setRequestMethod(method);
         connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
         connection.setRequestProperty("Content-Language", "en-US");
+        connection.setRequestProperty("Authorization", "Bearer " + System.getenv("ACCOUNTANCY_TOKEN"));
         return connection;
     }
 

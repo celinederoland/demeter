@@ -1,8 +1,7 @@
 package accountancy.server;
 
 import accountancy.model.base.Currency;
-import accountancy.server.errors.Http401;
-import accountancy.server.errors.Http403;
+import accountancy.server.errors.Http422;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,11 +41,11 @@ public class Currencies extends AppServlet {
             Currency currency = gson.fromJson(request.getReader(), Currency.class);
 
             if (currency.title().length() > 3) {
-                throw new Http401("Currency title must have maximum 3 caracters");
+                throw new Http422("Currency title must have maximum 3 caracters");
             }
 
             if (currency.id() == 0) {
-                throw new Http403("ResourceDoesntExist - use PUT method instead");
+                throw new Http422("ResourceDoesntExist - use PUT method instead");
             }
 
             repository.save(currency);
@@ -69,10 +68,10 @@ public class Currencies extends AppServlet {
             Currency currency = gson.fromJson(request.getReader(), Currency.class);
 
             if (currency.title().length() > 3) {
-                throw new Http401("Currency title must have maximum 3 caracters");
+                throw new Http422("Currency title must have maximum 3 caracters");
             }
             if (currency.id() > 0) {
-                throw new Http403("ResourceAlreadyExist - use POST method instead");
+                throw new Http422("ResourceAlreadyExist - use POST method instead");
             }
 
             return repository.create(currency);
