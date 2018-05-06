@@ -1,6 +1,10 @@
 package accountancy.model.base;
 
 import accountancy.model.ObservableEntity;
+import accountancy.model.selection.Criteria;
+import accountancy.model.selection.DatesIterator;
+import accountancy.repository.Selection;
+import accountancy.repository.SelectionProvider;
 
 /**
  * Represent a bank account
@@ -121,8 +125,10 @@ public final class Account extends ObservableEntity {
         return this.bank.title() + " - " + this.title();
     }
 
-    public double balance() {
+    public double balance(SelectionProvider provider) {
 
-        return 0;
+        Selection     selection     = provider.makeSelection((new Criteria()).addAccount(this));
+        DatesIterator datesIterator = new DatesIterator();
+        return selection.getAmount(datesIterator.min(), datesIterator.max());
     }
 }

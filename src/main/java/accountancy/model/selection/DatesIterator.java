@@ -8,6 +8,7 @@ public class DatesIterator {
 
     private final Calendar calendar = (new GregorianCalendar());
     private final Date     now      = new Date();
+    private final Date start;
 
     public DatesIterator() {
 
@@ -17,6 +18,7 @@ public class DatesIterator {
     public DatesIterator(int year, int month, int day) {
 
         calendar.set(year, month, day);
+        start = calendar.getTime();
     }
 
     public boolean hasNext() {
@@ -33,5 +35,15 @@ public class DatesIterator {
     public Date current() {
 
         return calendar.getTime();
+    }
+
+    public Date min() {
+
+        return start;
+    }
+
+    public Date max() {
+
+        return now;
     }
 }

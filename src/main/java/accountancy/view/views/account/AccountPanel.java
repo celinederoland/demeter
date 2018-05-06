@@ -6,6 +6,7 @@ import accountancy.model.base.Currency;
 import accountancy.model.base.Type;
 import accountancy.observer.Observer;
 import accountancy.repository.BaseRepository;
+import accountancy.repository.SelectionProvider;
 import accountancy.view.components.*;
 import accountancy.view.config.Dimensions;
 
@@ -16,19 +17,22 @@ import java.awt.event.FocusEvent;
 
 public class AccountPanel extends PPanel implements Observer {
 
-    private final BaseRepository repository;
-    private final PCombo         comboBank;
-    private final PCombo         comboCurrency;
-    private final PCombo         comboType;
-    private final PTextField     titleField;
-    private final PLabel         labelBalance;
-    private       Account        account;
+    private final BaseRepository    repository;
+    private final SelectionProvider selectionProvider;
+    private final PCombo            comboBank;
+    private final PCombo            comboCurrency;
+    private final PCombo            comboType;
+    private final PTextField        titleField;
+    private final PLabel            labelBalance;
+    private       Account           account;
 
-    public AccountPanel(Account account, BaseRepository repository) {
+    public AccountPanel(Account account, BaseRepository repository, SelectionProvider selectionProvider) {
 
         super(0, 0, 0, 10);
         this.account = account;
         this.repository = repository;
+        this.selectionProvider = selectionProvider;
+
         account.addObserver(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -101,7 +105,8 @@ public class AccountPanel extends PPanel implements Observer {
         comboCurrency.setSelectedItem(account.currency());
         comboType.setSelectedItem(account.type());
         if (account.currency() != null)
-            labelBalance.setText("Solde : " + account.balance() + " " + account.currency().toString());
+            labelBalance.setText(
+                "Solde : " + account.balance(this.selectionProvider) + " " + account.currency().toString());
     }
 
     public void requestFocus() {
