@@ -26,6 +26,6 @@ public class App {
         AxialSelectionFactory factory             = new MySelectionFactory(provider, repository);
         repository.findAll();
 
-        SwingUtilities.invokeLater(() -> new MainWindow(repository, csvImportRepository, factory));
+        SwingUtilities.invokeLater(() -> new MainWindow(repository, csvImportRepository, factory, provider));
     }
 }

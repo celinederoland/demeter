@@ -3,6 +3,7 @@ package accountancy.view;
 import accountancy.repository.AxialSelectionFactory;
 import accountancy.repository.BaseRepository;
 import accountancy.repository.CsvImportRepository;
+import accountancy.repository.SelectionProvider;
 import accountancy.view.components.PPanel;
 import accountancy.view.components.PPanelVerticalScroll;
 import accountancy.view.config.Dimensions;
@@ -17,7 +18,8 @@ import java.awt.*;
 public class MainWindow extends JFrame {
 
     public MainWindow(
-        BaseRepository repository, CsvImportRepository csvImportRepository, AxialSelectionFactory selectionFactory
+        BaseRepository repository, CsvImportRepository csvImportRepository, AxialSelectionFactory selectionFactory,
+        SelectionProvider selectionProvider
     ) {
 
         this.setTitle("Comptabilité");
@@ -32,7 +34,8 @@ public class MainWindow extends JFrame {
         mainPanel.add(new ActionsOuterPanel(repository, csvImportRepository, selectionFactory), BorderLayout.NORTH);
         mainPanel.add(new PPanelVerticalScroll(new CategoriesOuterPanel(repository)), BorderLayout.EAST);
         mainPanel.add(new PPanelVerticalScroll(new TransactionsOuterPanel(repository)), BorderLayout.CENTER);
-        mainPanel.add(new PPanelVerticalScroll(new AccountsOuterPanel(repository)), BorderLayout.WEST);
+        mainPanel.add(
+            new PPanelVerticalScroll(new AccountsOuterPanel(repository, selectionProvider)), BorderLayout.WEST);
 
         this.setContentPane(mainPanel);
         this.pack();
