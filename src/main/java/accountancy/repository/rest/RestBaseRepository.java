@@ -178,7 +178,7 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
             int    id     = json.get("id").getAsInt();
             String title  = json.get("title").getAsString();
             Double amount = json.get("amount").getAsDouble();
-            Date   date   = new Date(json.get("date").getAsInt());
+            Date   date   = new Date(json.get("date").getAsLong() * 1000);
 
             JsonObject jsonAccount = json.get("account").getAsJsonObject();
 
@@ -245,7 +245,7 @@ public class RestBaseRepository extends AbstractBaseRepository implements BaseRe
         int        id             = json.get("id").getAsInt();
         String     title          = json.get("title").getAsString();
         Double     amount         = json.get("amount").getAsDouble();
-        Date       date           = new Date(json.get("date").getAsInt());
+        Date       date           = new Date(json.get("date").getAsLong() * 1000);
         int        account_id     = json.get("account").getAsJsonObject().get("id").getAsInt();
         int        category_id    = json.get("category").getAsJsonObject().get("id").getAsInt();
         int        subcategory_id = json.get("subCategory").getAsJsonObject().get("id").getAsInt();

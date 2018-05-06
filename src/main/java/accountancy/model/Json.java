@@ -96,7 +96,7 @@ public class Json {
             else id = 0;
             String title          = json.get("title").getAsString();
             Double amount         = json.get("amount").getAsDouble();
-            Date   date           = new Date(json.get("date").getAsInt() * 1000);
+            Date   date           = new Date(json.get("date").getAsLong() * 1000);
             int    account_id     = json.get("account").getAsJsonObject().get("id").getAsInt();
             int    category_id    = json.get("category").getAsJsonObject().get("id").getAsInt();
             int    subcategory_id = json.get("subCategory").getAsJsonObject().get("id").getAsInt();
