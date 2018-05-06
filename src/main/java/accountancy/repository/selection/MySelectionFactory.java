@@ -23,9 +23,9 @@ public class MySelectionFactory implements AxialSelectionFactory {
 
     @Override public LinkedHashMap<String, AxialSelection> selections() {
 
-        if (repository.categories().getOne("Transferts") == null)
-            repository.categories().add(repository.create(new Category("Transferts")));
-        int categoryTransfer = repository.categories().getOne("Transferts").id();
+        if (repository.categories().getOne("Transfert") == null)
+            repository.categories().add(repository.create(new Category("Transfert")));
+        int categoryTransfer = repository.categories().getOne("Transfert").id();
 
         if (repository.categories().getOne("Revenus") == null)
             repository.categories().add(repository.create(new Category("Revenus")));

@@ -29,13 +29,13 @@ INSERT INTO accountancy.accounts (title, bank_id, currency_id, type_id)
 VALUES ('C8', 2, 3, 3);
 
 INSERT INTO accountancy.categories (title) VALUES ('Revenus');
-INSERT INTO accountancy.categories (title) VALUES ('Transferts');
+INSERT INTO accountancy.categories (title) VALUES ('Transfert');
 INSERT INTO accountancy.categories (title) VALUES ('Autres');
 INSERT INTO accountancy.categories (title) VALUES ('Factures');
 
 INSERT INTO accountancy.subcategories (title, category_id) VALUES ('Revenus', 1);
 INSERT INTO accountancy.subcategories (title, category_id) VALUES ('Revenus-b', 1);
-INSERT INTO accountancy.subcategories (title, category_id) VALUES ('Transferts', 2);
+INSERT INTO accountancy.subcategories (title, category_id) VALUES ('Transfert', 2);
 INSERT INTO accountancy.subcategories (title, category_id) VALUES ('Autres-A', 3);
 INSERT INTO accountancy.subcategories (title, category_id) VALUES ('Autres-B', 3);
 INSERT INTO accountancy.subcategories (title, category_id) VALUES ('Autres-C', 3);
